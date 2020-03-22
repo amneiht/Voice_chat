@@ -86,7 +86,7 @@ public class Group {
 			ps.setString(2, id);
 			ResultSet rs = ps.executeQuery();
 			String gson = null ;
-			ArrayList<Friend> ap = new ResultToList<Friend>().progess(rs,Friend.class);
+			ArrayList<Friend> ap = new ResultToList<Friend>(Friend.class).progess(rs);
 			gson = new Gson().toJson(ap);
 			rs.close();
 			ps.close();

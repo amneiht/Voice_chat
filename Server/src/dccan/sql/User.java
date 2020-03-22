@@ -66,7 +66,7 @@ public class User {
 				return false; // da co tai khoan
 			}
 			ps.close();
-			sql = "insert into thongtin(ten , matKhau,email,nguiDung) values(?,?,?,?)";
+			sql = "insert into thongtin(ten , matKhau,email,nguoiDung) values(?,?,?,?)";
 			ps = con.prepareStatement(sql);
 			ps.setString(1, user);
 			ps.setString(2, Info.getMD5(pass));

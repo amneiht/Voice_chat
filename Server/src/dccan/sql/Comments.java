@@ -92,7 +92,7 @@ public class Comments {
 			ps.setString(1, id);
 			ps.setString(2, time);
 			ResultSet rs = ps.executeQuery();
-			ArrayList<Comment> ap = new ResultToList<Comment>().progess(rs, Comment.class);
+			ArrayList<Comment> ap = new ResultToList<Comment>(Comment.class).progess(rs);
 			String gson = new Gson().toJson(ap);	
 			rs.close();
 			ps.close();

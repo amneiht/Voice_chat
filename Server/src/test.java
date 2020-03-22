@@ -1,24 +1,12 @@
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-
-import dccan.suport.Comment;
+import dccan.sql.User;
 
 public class test {
 	public static void main(String[] args) {
-		Class<?> ob = Comment.class;
 		try {
-			Object is = ob.newInstance();
-			ArrayList<Object> res = new ArrayList<Object>();
-			Field[] fl = ob.getDeclaredFields();
-			for (Field obf : fl) {
-				obf.set(is, "tts");
-			}
-			res.add(is);
-			Comment pk = (Comment) is;
+			User.register("test2", "1", "pongvan", "haiho");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 	}
 }

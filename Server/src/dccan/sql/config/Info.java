@@ -6,26 +6,20 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 
 public class Info {
-	public static void main(String[] args) {
-		System.out.println(getMD5(host));
-	}
 	protected static String user = "root";
 	protected static String pass = "";
 	protected static int port = 3306;
 	protected static String db = "chat";
 	protected static String host = "localhost";
-	public static void init() throws ClassNotFoundException
-	{
-		Class.forName("com.mysql.jdbc.Driver");
-	}
 	public static Connection getCon() {
 		try {
-			String url = "jdbc://" + host + ":" + port + "/" + db;
-			
+			//Class.forName("com.mysql.jdbc.Driver");
+			String url = "jdbc:mysql://" + host + ":" + port + "/" + db+"?useSSL=false";	
 			Connection con = DriverManager.getConnection(url, user, pass);
 			return con;
 		} catch (Exception e) {
 			// TODO: handle exception
+			e.printStackTrace();
 			return null;
 		}
 	}

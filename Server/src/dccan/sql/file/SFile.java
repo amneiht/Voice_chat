@@ -11,7 +11,9 @@ import java.sql.SQLException;
 import dccan.sql.config.Info;
 
 public class SFile {
-	public static String createFileId(String user, String date) {
+
+	public static String createFileId(String user) {
+		String date = new Date(System.currentTimeMillis()).toString();
 		int ran = (int) (Math.random() * 10000000);
 		String out = user + date + ran;
 		return Info.getMD5(out);
