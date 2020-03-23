@@ -19,7 +19,8 @@ public class SFile {
 		return Info.getMD5(out);
 	}
 
-	public static boolean insert(String id, InputStream in, String tenfile) {
+	public static String  insert(String id, InputStream in, String tenfile) {
+		String res = "false" ;
 		String sql = "insert into tepTin( idFile , ngayGui , data , tenFile ) values (?,?,?,?)";
 		Connection con = Info.getCon();
 		try {
@@ -35,12 +36,14 @@ public class SFile {
 			}
 			pstm.close();
 			con.close();
-			return d > 0;
+			if(d>0)
+				res="ok";
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return false;
+			
 		}
+		return res;
 	}
 
 	public static InputStream downloadFile(String id) {

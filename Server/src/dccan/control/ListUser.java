@@ -6,7 +6,11 @@ import java.util.List;
 
 public class ListUser {
 	private static List<Member> map = Collections.synchronizedList(new ArrayList<Member>());
-
+/**
+ * lay ra user tu danh sach bang token
+ * @param token
+ * @return ten user neu co
+ */
 	public static String getUserByToken(String token) {
 		// thuat toan tim kiem nhi phan
 		// synchronized (map)
@@ -28,21 +32,22 @@ public class ListUser {
 
 	}
 
-	public static void addNew(String id, String ip) {
+	public static String addNew(String id, String ip) {
 		Member np = new Member(ip, id);
+		String token = np.token;
 		// synchronized (map)
 		{
 			int d = 0, c = map.size() - 1;
 			if (c == -1) {
 				map.add(np);
-				return ;
+				return token;
 			} else if (c == 0) {
 				int dem = stringCompare(np.token, map.get(0).token);
 				if (dem > 0)
 					map.add(np);
 				else
 					map.add(0, np);
-				return;
+				return token;
 			}
 
 			int g = 0;
@@ -56,6 +61,7 @@ public class ListUser {
 				}
 			}
 			map.add(g + 1, np);
+			return token;
 		}
 	}
 

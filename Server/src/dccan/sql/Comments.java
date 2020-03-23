@@ -27,7 +27,8 @@ public class Comments {
 	 * @param idFile
 	 *            id cua fle gui
 	 */
-	public static void upFcoment(String idnhan, String idGui, String noiDung, String idFile) {
+	public static String upFcoment(String idnhan, String idGui, String noiDung, String idFile) {
+		String res = "false";
 		try {
 			Connection con = Info.getCon();
 			Long tm = System.currentTimeMillis();
@@ -41,11 +42,12 @@ public class Comments {
 			ps.executeUpdate();
 			ps.close();
 			con.close();
-
+			res = "ok";
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
 		}
+		return res;
 	}
 
 	/**
@@ -57,8 +59,10 @@ public class Comments {
 	 *            id nguoi gui
 	 * @param noiDung
 	 *            noi dung tin nhan
+	 * @return
 	 */
-	public static void up(String idnhan, String idGui, String noiDung) {
+	public static String up(String idnhan, String idGui, String noiDung) {
+		String res = "false";
 		try {
 			Connection con = Info.getCon();
 			Long tm = System.currentTimeMillis();
@@ -71,20 +75,25 @@ public class Comments {
 			ps.executeUpdate();
 			ps.close();
 			con.close();
-
+			res = "ok";
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
 		}
+		return res;
 	}
 
 	private final static String getSql = "select * from tinNhan where idNhan = ? and ngayGui < ? limit 30";
-/**
- * lay ve cac thong tin trong bang tin nhan
- * @param id  nguoi nhan
- * @param time thoi diem muon lay 
- * @return tra ve chuoi json
- */
+
+	/**
+	 * lay ve cac thong tin trong bang tin nhan
+	 * 
+	 * @param id
+	 *            nguoi nhan
+	 * @param time
+	 *            thoi diem muon lay
+	 * @return tra ve chuoi json
+	 */
 	public static String getChat(String id, String time) {
 		try {
 			Connection con = Info.getCon();
@@ -93,7 +102,7 @@ public class Comments {
 			ps.setString(2, time);
 			ResultSet rs = ps.executeQuery();
 			ArrayList<Comment> ap = new ResultToList<Comment>(Comment.class).progess(rs);
-			String gson = new Gson().toJson(ap);	
+			String gson = new Gson().toJson(ap);
 			rs.close();
 			ps.close();
 			con.close();
@@ -102,6 +111,6 @@ public class Comments {
 			// TODO: handle exception
 			e.printStackTrace();
 		}
-		return time;
+		return "false";
 	}
 }
