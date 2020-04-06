@@ -1,9 +1,7 @@
 package test;
 import javax.sound.sampled.*;
 
-import amneiht.media.Afomart;
-import amneiht.media.PlayMedia;
-import amneiht.media.Recorder;
+import amneiht.media.NetAudioFormat;
 
 import java.io.*;
  
@@ -12,28 +10,83 @@ import java.io.*;
  * author: www.codejava.net
  */
 public class JavaSoundRecorder {
-   public static void main(String[] args) {
-	AudioFormat af = Afomart.getG729AudioFormat();
-	try {
-		System.out.println(af.getFrameRate());
-		Recorder rp = new Recorder(af,1);
-		PlayMedia pl = new PlayMedia(af);
-		byte [][] res = new byte[20][];
-		for(int i=0;i<res.length;i++)
-		{
-			res[i]=rp.getSound();
-			System.out.println(res[i].length);
-		}
-		for(int i=0;i<res.length;i++)
-		{
-			pl.play(res[i]);
-		}
-		rp.stop();
-		pl.stop();
-	} catch (LineUnavailableException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
-	
-}
+    // record duration, in milliseconds
+    static final long RECORD_TIME = 20000;  // 1 minute
+ 
+    // path of the wav file
+    File wavFile = new File("/home/dccan/Music/record.wav");
+ 
+    // format of audio file
+    AudioFileFormat.Type fileType = AudioFileFormat.Type.WAVE;
+ 
+    // the line from which audio data is captured
+    TargetDataLine line;
+ 
+    
+    /**
+     * Captures the sound and record into a WAV file
+     */
+    void start() {
+        try {
+            AudioFormat format = NetAudioFormat.getG729AudioFormat();
+            DataLine.Info info = new DataLine.Info(TargetDataLine.class, format);
+ 
+            // checks if system supports the data line
+            if (!AudioSystem.isLineSupported(info)) {
+                System.out.println("Line not supported");
+                System.exit(0);
+            }
+            line = (TargetDataLine) AudioSystem.getLine(info);
+            line.open(format);
+            line.start();   // start capturing
+ 
+            System.out.println("Start capturing...");
+ 
+            AudioInputStream ais = new AudioInputStream(line);
+ 
+            System.out.println("Start recording...");
+ 
+            // start recording
+            AudioSystem.write(ais, fileType, wavFile);
+ 
+        } catch (LineUnavailableException ex) {
+            ex.printStackTrace();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+    }
+ 
+    /**
+     * Closes the target data line to finish capturing and recording
+     */
+    void finish() {
+        line.stop();
+        line.close();
+        System.out.println("Finished");
+    }
+ 
+    /**
+     * Entry to run the program
+     */
+    public static void main(String[] args) {
+        final JavaSoundRecorder recorder = new JavaSoundRecorder();
+ 
+        // creates a new thread that waits for a specified
+        // of time before stopping
+        Thread stopper = new Thread(new Runnable() {
+            public void run() {
+                try {
+                    Thread.sleep(RECORD_TIME);
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
+                recorder.finish();
+            }
+        });
+ 
+        stopper.start();
+ 
+        // start recording
+        recorder.start();
+    }
 }

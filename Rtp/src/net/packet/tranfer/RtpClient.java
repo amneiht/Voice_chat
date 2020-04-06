@@ -147,7 +147,7 @@ public class RtpClient {
 			ret[0] = (byte) (ret[0] | 0b10000); // bat bit extended
 			ret[1] = (byte) (pack.getPayloadtype() & 0x7f); // them playload type
 			PWrite.copyArray(Time.getTimeStamp(), ret, 4);// them nhan thoi gian
-			PWrite.addLongToArray(ret, ssrc, 8);// them ma nguon dong bo
+			PWrite._32bitToArray(ret, ssrc, 8);// them ma nguon dong bo
 			PWrite._16bitToArray(ret, size, 14);
 			PWrite.copyArray(ext, ret, 16);
 		} else {
@@ -157,11 +157,11 @@ public class RtpClient {
 				ret[0] = (byte) (ret[0] | 0b100000); // bat bit padding
 			ret[1] = (byte) (pack.getPayloadtype() & 0x7f); // them playload type
 			PWrite.copyArray(Time.getTimeStamp(), ret, 4);// them nhan thoi gian
-			PWrite.addLongToArray(ret, ssrc, 8);// them ma nguon dong bo
+			PWrite._32bitToArray(ret, ssrc, 8);// them ma nguon dong bo
 		}
 		return ret;
 	}
 
-	// copy cac mang vo nhau
+	// copy cac mang vao nhau
 
 }

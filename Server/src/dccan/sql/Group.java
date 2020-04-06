@@ -42,7 +42,7 @@ public class Group {
 		return res;
 	}
 
-	private static final String getMem = "select ten,nguoiDung from thongTin , tvNhom where ten = idTV and idNhom = ?";
+	private static final String getMem = "select ten,nguoiDung from thongtin , tvNhom where ten = idTV and idNhom = ?";
 
 	/**
 	 * lay thong tin thanh vien

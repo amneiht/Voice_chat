@@ -16,8 +16,9 @@ import javax.sound.sampled.SourceDataLine;
 
 import org.mobicents.media.server.impl.dsp.audio.g729.Encoder;
 
-import amneiht.media.Afomart;
+import amneiht.media.NetAudioFormat;
 import amneiht.media.PlayMedia;
+import amneiht.media.Recorder;
 
 public class UdpRead {
 	public static void main(String[] args) {
@@ -42,46 +43,49 @@ public class UdpRead {
 	 */
 	public void playSound(String filename) throws Exception {
 
-		String strFilename = filename;
-
-		try {
-			soundFile = new File(strFilename);
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.exit(1);
-		}
-
-		try {
-			audioStream = AudioSystem.getAudioInputStream(soundFile);
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.exit(1);
-		}
+//		String strFilename = filename;
+//
+//		try {
+//			soundFile = new File(strFilename);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			System.exit(1);
+//		}
+//
+//		try {
+//			audioStream = AudioSystem.getAudioInputStream(soundFile);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			System.exit(1);
+//		}
 		DatagramPacket dp;
 		DatagramSocket client = new DatagramSocket();
-		audioFormat = audioStream.getFormat();
-		InetAddress inet = InetAddress.getByName("localhost");
+//		audioFormat = audioStream.getFormat();
+		InetAddress inet = InetAddress.getByName("192.169.1.2");
 		int port = 9981;
-		DataLine.Info info = new DataLine.Info(SourceDataLine.class, audioFormat);
-		try {
-			sourceLine = (SourceDataLine) AudioSystem.getLine(info);
-			sourceLine.open(audioFormat);
-		} catch (LineUnavailableException e) {
-			e.printStackTrace();
-			System.exit(1);
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.exit(1);
-		}
-		PlayMedia pm = new PlayMedia(audioFormat);
-		sourceLine.start();
+//		DataLine.Info info = new DataLine.Info(SourceDataLine.class, audioFormat);
+//		try {
+//			sourceLine = (SourceDataLine) AudioSystem.getLine(info);
+//			sourceLine.open(audioFormat);
+//		} catch (LineUnavailableException e) {
+//			e.printStackTrace();
+//			System.exit(1);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			System.exit(1);
+//		}
+		AudioFormat af = NetAudioFormat.getG729AudioFormat();
+		Recorder rc = new Recorder(af);
+		//PlayMedia pm = new PlayMedia(audioFormat);
+		//sourceLine.start();
 		Encoder en  = new Encoder();
 		int nBytesRead = 0;
 		byte[] abData = new byte[160];
 		while (nBytesRead != -1) {
 			try {
-				nBytesRead = audioStream.read(abData, 0, abData.length);
-			} catch (IOException e) {
+			//	nBytesRead = audioStream.read(abData, 0, abData.length);
+				abData = rc.getSound();
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			if (nBytesRead >= 0) {
@@ -89,12 +93,14 @@ public class UdpRead {
 				// int nBytesWritten = sourceLine.write(abData, 0, nBytesRead);
 				byte [] eb = en.process(abData);
 				dp = new DatagramPacket(eb, eb.length, inet, port);
+			//	if(d%10!=0)
 				client.send(dp);
-				Thread.sleep(13);
+				Thread.sleep(10);
 //				pm.play(abData);
 			}
 		}
-		pm.stop();
+//		pm.stop();
+		rc.stop();
 		client.close();
 		sourceLine.drain();
 		sourceLine.close();

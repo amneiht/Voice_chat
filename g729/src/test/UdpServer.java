@@ -7,12 +7,12 @@ import javax.sound.sampled.AudioFormat;
 
 import org.mobicents.media.server.impl.dsp.audio.g729.Decoder;
 
-import amneiht.media.Afomart;
+import amneiht.media.NetAudioFormat;
 import amneiht.media.PlayMedia;
 
 public class UdpServer {
 public static void main(String[] args) {
-	AudioFormat af = Afomart.getG729AudioFormat();
+	AudioFormat af = NetAudioFormat.getG729AudioFormat();
 	try {
 		PlayMedia pm = new PlayMedia(af);
 		byte [] in =new byte[7000];

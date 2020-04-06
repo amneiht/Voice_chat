@@ -38,7 +38,7 @@ public class Recorder {
 	}
 
 	public byte[] getSound() {
-		byte[] data = new byte[count];
+		byte[] data = new byte[160];
 		microphone.read(data, 0, count);
 		return data;
 	}
