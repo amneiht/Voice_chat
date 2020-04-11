@@ -1,4 +1,4 @@
-package dccan.sql.config;
+package dccan.server.sql.config;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

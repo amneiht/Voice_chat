@@ -1,4 +1,4 @@
-package dccan.sql;
+package dccan.server.sql;
 
 import java.lang.reflect.Field;
 import java.sql.ResultSet;

@@ -1,4 +1,4 @@
-package dccan.sql;
+package dccan.server.sql;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 import com.google.gson.Gson;
 
-import dccan.sql.config.Info;
+import dccan.server.sql.config.Info;
 import dccan.suport.Comment;
 
 public class Comments {

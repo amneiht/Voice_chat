@@ -1,4 +1,4 @@
-import dccan.sql.User;
+import dccan.server.sql.User;
 
 public class test {
 	public static void main(String[] args) {

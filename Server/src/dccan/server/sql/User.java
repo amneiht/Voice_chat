@@ -1,10 +1,10 @@
-package dccan.sql;
+package dccan.server.sql;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-import dccan.sql.config.Info;
+import dccan.server.sql.config.Info;
 
 public class User {
 	/**
@@ -61,6 +61,7 @@ public class User {
 			ResultSet rs = ps.executeQuery();
 			rs.beforeFirst();// dich con tro
 			if (rs.next()) {
+				System.out.println("user :"+user+" da co tk");
 				ps.close();
 				con.close();
 				return false; // da co tai khoan
@@ -75,7 +76,7 @@ public class User {
 			ps.executeUpdate();
 			ps.close();
 			con.close();
-			return false;
+			return true;
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();

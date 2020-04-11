@@ -1,4 +1,4 @@
-package dccan.control;
+package dccan.server.control;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -13,10 +13,10 @@ import java.util.Map;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import dccan.sql.Comments;
-import dccan.sql.Group;
-import dccan.sql.User;
-import dccan.sql.file.SFile;
+import dccan.server.sql.Comments;
+import dccan.server.sql.Group;
+import dccan.server.sql.User;
+import dccan.server.sql.file.SFile;
 
 public class Manager implements Runnable {
 	Socket sock;
@@ -32,7 +32,7 @@ public class Manager implements Runnable {
 			ListType = new TypeToken<List<String>>() {
 			}.getType();
 			Des.init("can 1234");
-			ServerSocket sc = new ServerSocket();
+			ServerSocket sc = new ServerSocket(8888);
 			int dem = 0;
 			while (run) {
 				dem++;
@@ -69,6 +69,7 @@ public class Manager implements Runnable {
 			if (task.equals("login")) {
 				dologin(mp);
 			} else if (task.equals("register")) {
+				System.out.println("client register");
 				doregis(mp);
 			} else if (task.equals("getComment")) {
 				doGetComment(mp);
@@ -88,13 +89,56 @@ public class Manager implements Runnable {
 				doGetMember(mp);
 			} else if (task.equals("addMember")) {
 				doAddMember(mp);
+			} else if (task.equals("deleteMember")) {
+				doDeleteMember(mp);
+			}else if (task.equals("deleteFriend")) {
+				doDeleteFriend(mp);
+			} else {
+				System.out.println("chuc nang" + task + " quen chua lam");
 			}
 			in.close();
 			sock.close();
-		} catch (Exception e) {
+		} catch (
+
+		Exception e) {
 			e.printStackTrace();
 		}
 
+	}
+
+	private void doDeleteFriend(Map<String, String> mp) throws Exception {
+		String token = mp.get("token");
+		String user = ListUser.getUserByToken(token);
+		DataOutputStream out = new DataOutputStream(sock.getOutputStream());
+		if (user == null) {
+			out.writeUTF(Des.encrypt("false"));// loi dang nhap
+			out.close();
+			return;
+		}
+		String group = mp.get("group");
+		String id = mp.get("member");
+		
+		String res = Group.deleteFriend(id, group);
+		out.writeUTF(Des.encrypt(res));
+		out.close();
+		
+	}
+
+	private void doDeleteMember(Map<String, String> mp) throws IOException, Exception {
+		String token = mp.get("token");
+		String user = ListUser.getUserByToken(token);
+		DataOutputStream out = new DataOutputStream(sock.getOutputStream());
+		if (user == null) {
+			out.writeUTF(Des.encrypt("false"));// loi dang nhap
+			out.close();
+			return;
+		}
+		String group = mp.get("group");
+		String id = mp.get("member");
+		
+		String res = Group.deleteMember(id, group);
+		out.writeUTF(Des.encrypt(res));
+		out.close();
 	}
 
 	private void doAddMember(Map<String, String> mp) throws Exception {
@@ -272,9 +316,10 @@ public class Manager implements Runnable {
 		String email = mp.get("email");
 		String hoten = mp.get("nguoiDung");
 		boolean td = User.register(user, pass, email, hoten);
-		if (td)
-			out.writeUTF(Des.encrypt("ok"));
-		else
+		if (td) {
+			String token = ListUser.addNew(user, sock.getInetAddress().toString());
+			out.writeUTF(Des.encrypt(token));
+		} else
 			out.writeUTF(Des.encrypt("false"));
 		out.close();
 

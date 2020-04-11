@@ -1,4 +1,4 @@
-package dccan.control.chat;
+package dccan.server.control.chat;
 
 import java.io.IOException;
 import java.net.DatagramPacket;

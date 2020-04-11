@@ -1,4 +1,4 @@
-package dccan.control;
+package dccan.server.control;
 
 import java.util.Base64;
 

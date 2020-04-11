@@ -1,4 +1,4 @@
-package dccan.sql.file;
+package dccan.server.sql.file;
 
 import java.io.InputStream;
 import java.sql.Blob;
@@ -8,7 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import dccan.sql.config.Info;
+import dccan.server.sql.config.Info;
 
 public class SFile {
 

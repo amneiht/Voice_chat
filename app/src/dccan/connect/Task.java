@@ -56,6 +56,46 @@ public class Task {
 		try {
 			token = Sts.getString(host, gs);
 		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		if (token == null)
+			return "false";
+		else
+			return token;
+	}
+	/**
+	 * xoa 1 nguoi ban
+	 * @param id
+	 * @return
+	 */
+	public String deleteFiend(String id) {
+		Map<String, String> mp = new HashMap<String, String>();
+		mp.put("task", "deleteFriend");
+		mp.put("token", token);
+		mp.put("id", id);
+		String gs = this.gson.toJson(mp);
+		String token = null;
+		try {
+			token = Sts.getString(host, gs);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		if (token == null)
+			return "false";
+		else
+			return token;
+	}
+	public String deleteMember(String id,String mb) {
+		Map<String, String> mp = new HashMap<String, String>();
+		mp.put("task", "deleteMenber");
+		mp.put("token", token);
+		mp.put("group", id);
+		mp.put("member", mb);
+		String gs = this.gson.toJson(mp);
+		String token = null;
+		try {
+			token = Sts.getString(host, gs);
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -64,7 +104,6 @@ public class Task {
 		else
 			return token;
 	}
-
 	/**
 	 * tai file va luu vao url
 	 * 

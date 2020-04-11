@@ -1,4 +1,4 @@
-package dccan.control.chat;
+package dccan.server.control.chat;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -8,7 +8,7 @@ import java.net.SocketException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import dccan.suport.rtp.ReadPacket;
+import dccan.server.suport.rtp.ReadPacket;
 
 public class RctpServer {
 	int port = 8889;

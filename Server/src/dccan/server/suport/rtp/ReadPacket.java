@@ -1,4 +1,4 @@
-package dccan.suport.rtp;
+package dccan.server.suport.rtp;
 
 public class ReadPacket {
 	public static int getLeng(byte[] ls) {

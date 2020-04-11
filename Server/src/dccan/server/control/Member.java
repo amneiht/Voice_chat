@@ -1,4 +1,4 @@
-package dccan.control;
+package dccan.server.control;
 
 import org.apache.commons.lang3.RandomStringUtils;
 

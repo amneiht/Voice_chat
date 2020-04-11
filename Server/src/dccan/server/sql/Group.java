@@ -1,8 +1,9 @@
-package dccan.sql;
+package dccan.server.sql;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +11,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 
 import com.google.gson.Gson;
 
-import dccan.sql.config.Info;
+import dccan.server.sql.config.Info;
 import dccan.suport.Friend;
 import dccan.suport.GroupInfo;
 
@@ -36,7 +37,6 @@ public class Group {
 			ps.close();
 			con.close();
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 		}
 		return res;
@@ -63,7 +63,6 @@ public class Group {
 			ps.close();
 			con.close();
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 		}
 		return res;
@@ -93,7 +92,6 @@ public class Group {
 			con.close();
 			res = "ok";
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 		}
 		return res;
@@ -133,7 +131,6 @@ public class Group {
 			con.close();
 			res = "ok";
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 		}
 		return res;
@@ -163,7 +160,6 @@ public class Group {
 			con.close();
 			res = "ok";
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 		}
 		return res;
@@ -199,10 +195,25 @@ public class Group {
 			}
 			rs.close();
 			ps.close();
+			ps = con.prepareStatement(addSql1);
+			String nhom = RandomStringUtils.randomAlphanumeric(32);
+			ps.setString(1, nhom);
+			ps.setString(2, id1);
+			ps.setString(3, id1 + "_" + id2);
+			ps.executeUpdate();
+			ps.close();
+			ps = con.prepareStatement(addSql2);
+			ps.setString(1, nhom);
+			ps.setString(2, id1);
+			ps.executeUpdate();
+			ps.setString(1, nhom);
+			ps.setString(2, id2);
+			ps.executeUpdate();
+			ps.close();
 			con.close();
 
 		} catch (Exception e) {
-			// TODO: handle exception
+
 			System.err.println(e);
 		}
 		return res;
@@ -233,9 +244,53 @@ public class Group {
 			con.close();
 			return gson;
 		} catch (Exception e) {
-			// TODO: handle exception
 			System.err.println(e);
-			return null;
+			return "false";
 		}
+	}
+
+	/**
+	 * xoa 1 thanh viên khoi nhom
+	 * 
+	 * @param id
+	 * @param group
+	 * @return
+	 */
+	public static String deleteMember(String id, String group) {
+		String sql = "delete from tvNhom where idNhom = ? and idTV = ?";
+
+		try {
+			Connection con = Info.getCon();
+			PreparedStatement ps = con.prepareStatement(sql);
+			ps.setString(1, group);
+			ps.setString(2, id);
+			ps.executeUpdate();
+			ps.close();
+			con.close();
+			return "true";
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return "false";
+	}
+
+	public static String deleteFriend(String id1, String id2) {
+		String sql = "delete from banBe where (id1 = ? and id2 = ?) or (id1 = ? and id2 = ?)";
+
+		try {
+			Connection con = Info.getCon();
+			PreparedStatement ps = con.prepareStatement(sql);
+			ps.setString(1, id1);
+			ps.setString(2, id2);
+			ps.setString(3, id2);
+			ps.setString(4, id1);
+			ps.executeUpdate();
+			ps.close();
+			con.close();
+			return "true";
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return "false";
 	}
 }

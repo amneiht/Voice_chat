@@ -1,55 +1,166 @@
---<ScriptOptions statementTerminator=";"/>
+-- phpMyAdmin SQL Dump
+-- version 5.0.1
+-- https://www.phpmyadmin.net/
+--
+-- Host: db
+-- Generation Time: Apr 09, 2020 at 02:16 AM
+-- Server version: 5.7.29
+-- PHP Version: 7.4.3
 
-CREATE TABLE thongtin (
-	nguoiDung VARCHAR(70) NOT NULL,
-	email VARCHAR(50) NOT NULL,
-	ten VARCHAR(35) NOT NULL,
-	matKhau VARCHAR(500) NOT NULL,
-	PRIMARY KEY (ten)
-) ENGINE=InnoDB;
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
+SET time_zone = "+00:00";
 
-CREATE TABLE banBe (
-	id1 VARCHAR(35) NOT NULL,
-	id2 VARCHAR(35) NOT NULL
-) ENGINE=InnoDB;
 
-CREATE TABLE tinNhan (
-	idNhan VARCHAR(35) NOT NULL,
-	idGui VARCHAR(35) NOT NULL,
-	noiDung VARCHAR(500) NOT NULL,
-	idFile VARCHAR(300),
-	ngayGui TIMESTAMP DEFAULT 'CURRENT_TIMESTAMP' NOT NULL
-) ENGINE=InnoDB;
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
 
-CREATE TABLE tepTin (
-	idFile VARCHAR(35) NOT NULL,
-	data MEDIUMBLOB NOT NULL,
-	ngayGui DATE,
-	tenFile VARCHAR(50) NOT NULL
-) ENGINE=InnoDB;
+--
+-- Database: `chat`
+--
 
-CREATE TABLE tvNhom (
-	idNhom VARCHAR(35) NOT NULL,
-	idTV VARCHAR(35) NOT NULL,
-	quyen VARCHAR(10)
-) ENGINE=InnoDB;
+-- --------------------------------------------------------
 
-CREATE TABLE nhom (
-	idNhom VARCHAR(35) NOT NULL,
-	nguoiTao VARCHAR(70) NOT NULL,
-	hinhAnh VARCHAR(70),
-	note VARCHAR(500),
-	tenNhom VARCHAR(70) NOT NULL,
-	PRIMARY KEY (idNhom)
-) ENGINE=InnoDB;
+--
+-- Table structure for table `banBe`
+--
 
-CREATE INDEX idGui ON tinNhan (idGui ASC);
+CREATE TABLE `banBe` (
+  `id1` varchar(35) COLLATE utf8_unicode_ci NOT NULL,
+  `id2` varchar(35) COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-CREATE INDEX id1 ON banBe (id1 ASC);
+-- --------------------------------------------------------
 
-CREATE INDEX idTV ON tvNhom (idTV ASC);
+--
+-- Table structure for table `nhom`
+--
 
-CREATE INDEX idNhom ON tvNhom (idNhom ASC);
+CREATE TABLE `nhom` (
+  `idNhom` varchar(35) COLLATE utf8_unicode_ci NOT NULL,
+  `nguoiTao` varchar(70) COLLATE utf8_unicode_ci NOT NULL,
+  `hinhAnh` varchar(70) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `note` varchar(500) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `tenNhom` varchar(70) COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-CREATE INDEX id2 ON banBe (id2 ASC);
+-- --------------------------------------------------------
 
+--
+-- Table structure for table `tepTin`
+--
+
+CREATE TABLE `tepTin` (
+  `idFile` varchar(35) COLLATE utf8_unicode_ci NOT NULL,
+  `data` mediumblob NOT NULL,
+  `ngayGui` date DEFAULT NULL,
+  `tenFile` varchar(50) COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `thongtin`
+--
+
+CREATE TABLE `thongtin` (
+  `nguoiDung` varchar(70) COLLATE utf8_unicode_ci NOT NULL,
+  `email` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `ten` varchar(35) COLLATE utf8_unicode_ci NOT NULL,
+  `matKhau` varchar(500) COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tinNhan`
+--
+
+CREATE TABLE `tinNhan` (
+  `idNhan` varchar(35) COLLATE utf8_unicode_ci NOT NULL,
+  `idGui` varchar(35) COLLATE utf8_unicode_ci NOT NULL,
+  `noiDung` varchar(500) COLLATE utf8_unicode_ci NOT NULL,
+  `idFile` varchar(300) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `ngayGui` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tvNhom`
+--
+
+CREATE TABLE `tvNhom` (
+  `idNhom` varchar(35) COLLATE utf8_unicode_ci NOT NULL,
+  `idTV` varchar(35) COLLATE utf8_unicode_ci NOT NULL,
+  `quyen` varchar(10) COLLATE utf8_unicode_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `banBe`
+--
+ALTER TABLE `banBe`
+  ADD KEY `id1` (`id1`),
+  ADD KEY `id2` (`id2`);
+
+--
+-- Indexes for table `nhom`
+--
+ALTER TABLE `nhom`
+  ADD PRIMARY KEY (`idNhom`);
+
+--
+-- Indexes for table `thongtin`
+--
+ALTER TABLE `thongtin`
+  ADD PRIMARY KEY (`ten`);
+
+--
+-- Indexes for table `tinNhan`
+--
+ALTER TABLE `tinNhan`
+  ADD KEY `idGui` (`idGui`);
+
+--
+-- Indexes for table `tvNhom`
+--
+ALTER TABLE `tvNhom`
+  ADD PRIMARY KEY (`idNhom`,`idTV`),
+  ADD KEY `idTV` (`idTV`);
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `banBe`
+--
+ALTER TABLE `banBe`
+  ADD CONSTRAINT `banBe_ibfk_1` FOREIGN KEY (`id1`) REFERENCES `thongtin` (`ten`),
+  ADD CONSTRAINT `banBe_ibfk_2` FOREIGN KEY (`id2`) REFERENCES `thongtin` (`ten`);
+
+--
+-- Constraints for table `tinNhan`
+--
+ALTER TABLE `tinNhan`
+  ADD CONSTRAINT `tinNhan_ibfk_1` FOREIGN KEY (`idGui`) REFERENCES `thongtin` (`ten`),
+  ADD CONSTRAINT `tinNhan_ibfk_2` FOREIGN KEY (`idGui`) REFERENCES `thongtin` (`ten`);
+
+--
+-- Constraints for table `tvNhom`
+--
+ALTER TABLE `tvNhom`
+  ADD CONSTRAINT `tvNhom_ibfk_1` FOREIGN KEY (`idNhom`) REFERENCES `nhom` (`idNhom`),
+  ADD CONSTRAINT `tvNhom_ibfk_2` FOREIGN KEY (`idTV`) REFERENCES `thongtin` (`ten`);
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
