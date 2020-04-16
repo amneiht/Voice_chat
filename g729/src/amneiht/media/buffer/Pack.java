@@ -1,7 +1,7 @@
 package amneiht.media.buffer;
 
 public class Pack {
-	long sq;
+	public long sq;
 	byte[] data;
 
 	public Pack(long q, byte[] dat) {

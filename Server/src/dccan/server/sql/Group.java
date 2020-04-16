@@ -16,7 +16,7 @@ import dccan.suport.Friend;
 import dccan.suport.GroupInfo;
 
 public class Group {
-	private final static String getGroup = "select idNhom , tenNhom from nhom ,tvNhom where nhom.idNhom = tvNhom.idNhom and idTV=?";
+	private final static String getGroup = "select nhom.idNhom as idNhom, tenNhom from nhom ,tvNhom where nhom.idNhom = tvNhom.idNhom and idTV=?";
 
 	/**
 	 * lay thong tin cac nhom chat
@@ -192,9 +192,16 @@ public class Group {
 				ps.executeUpdate();
 
 				res = "ok";
+			}else
+			{
+				rs.close();
+				ps.close();
+				con.close();
+				return "false";
 			}
 			rs.close();
 			ps.close();
+			
 			ps = con.prepareStatement(addSql1);
 			String nhom = RandomStringUtils.randomAlphanumeric(32);
 			ps.setString(1, nhom);
@@ -202,6 +209,7 @@ public class Group {
 			ps.setString(3, id1 + "_" + id2);
 			ps.executeUpdate();
 			ps.close();
+			
 			ps = con.prepareStatement(addSql2);
 			ps.setString(1, nhom);
 			ps.setString(2, id1);
@@ -219,7 +227,7 @@ public class Group {
 		return res;
 	}
 
-	private static final String getFlist = "select ten,nguoiDung from banBe,thongtin where ( banBe.id1 = thongtin.ten or banBe.id2 = thongtin.ten)  and ( banBe.id1=? or banBe.id2=?)";
+	private static final String getFlist = "SELECT ten,nguoiDung FROM banBe , thongtin where id1 = ? and id2 = ten UNION SELECT ten,nguoiDung FROM banBe , thongtin where id2 = ? and id1 = ten ";
 
 	/**
 	 * lay danh sanh ban be

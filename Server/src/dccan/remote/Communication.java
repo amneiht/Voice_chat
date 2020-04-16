@@ -21,10 +21,11 @@ public interface Communication extends Remote {
 
 	public byte[] dowload(String idFile) throws RemoteException;
 
-	public boolean upload(String name, byte[] data, int length) throws RemoteException;
+	public boolean upload(String name, byte[] data, String group) throws RemoteException;
 
 	public boolean deleteMember(String group, String mem) throws RemoteException;
 
 	public boolean createGroup(String name, List<String> member) throws RemoteException;
-
+	
+	public boolean addMember(String id , String group) throws RemoteException;;
 }

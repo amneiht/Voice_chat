@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
@@ -11,10 +12,7 @@
    		<left>
    			<ScrollPane prefHeight="515.0" prefWidth="139.0" BorderPane.alignment="CENTER">
    				<content>
-   					<VBox prefHeight="501.0" prefWidth="124.0">
-                     <children>
-                        <Button fx:id="testBtn" mnemonicParsing="false" prefHeight="25.0" prefWidth="101.0" text="Button" />
-                     </children></VBox>
+   					<VBox fx:id="group" prefHeight="501.0" prefWidth="124.0" />
    				</content>
    			</ScrollPane>
    		</left>
@@ -43,21 +41,13 @@
    			<BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
    				<center>
    					<ScrollPane fx:id="chatview" prefHeight="366.0" prefWidth="681.0" BorderPane.alignment="CENTER">
-   						<content>
-   							<VBox fx:id="mainBox" prefHeight="487.0" prefWidth="666.0" />
-   						</content>
-   					</ScrollPane>
+                     <content>
+                        <VBox fx:id="mainBox" prefHeight="490.0" prefWidth="678.0" />
+                     </content></ScrollPane>
    				</center>
-   				<bottom>
-   					<FlowPane prefHeight="25.0" prefWidth="681.0" BorderPane.alignment="CENTER">
-   						<children>
-   							<Button mnemonicParsing="false" text="File" />
-   							<Button mnemonicParsing="false" text="Call" />
-   							<TextField prefHeight="25.0" prefWidth="550.0" />
-   							<Button mnemonicParsing="false" text="Gui" />
-   						</children>
-   					</FlowPane>
-   				</bottom>
+               <bottom>
+                  <HBox fx:id="cbar" prefHeight="26.0" prefWidth="681.0" BorderPane.alignment="CENTER" />
+               </bottom>
    			</BorderPane>
    		</center>
    	</BorderPane>

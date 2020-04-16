@@ -18,6 +18,7 @@ public class StackList implements Runnable {
 			d.addList(p);
 		} else {
 			try {
+				
 				NoControl nc = new NoControl();
 				nc.addList(p);
 				new Thread(nc).start();

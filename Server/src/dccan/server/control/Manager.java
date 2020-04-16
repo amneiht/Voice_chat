@@ -298,7 +298,7 @@ public class Manager implements Runnable {
 		String time = mp.get("time");
 		if (time.equals("false"))
 			time = new Timestamp(System.currentTimeMillis()).toString();
-		String kq = Comments.getChat(id, time);
+		String kq = Comments.getOldChat(id, time);
 		out.writeUTF(Des.encrypt(kq));
 		out.close();
 	}

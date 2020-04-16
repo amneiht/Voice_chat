@@ -1,13 +1,13 @@
 package dccan.suport;
 
 public class GroupInfo {
-	private static String idNhom, tenNhom;
+	private String idNhom, tenNhom;
 
-	public static String getIdNhom() {
+	public  String getIdNhom() {
 		return idNhom;
 	}
 
-	public static String getTenNhom() {
+	public  String getTenNhom() {
 		return tenNhom;
 	}
 }

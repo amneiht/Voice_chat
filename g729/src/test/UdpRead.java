@@ -6,35 +6,34 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
+import java.util.LinkedList;
+import java.util.List;
 
-import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.DataLine;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.SourceDataLine;
 
+import org.mobicents.media.server.impl.dsp.audio.g729.Decoder;
 import org.mobicents.media.server.impl.dsp.audio.g729.Encoder;
 
 import amneiht.media.NetAudioFormat;
 import amneiht.media.PlayMedia;
-import amneiht.media.Recorder;
 
-public class UdpRead {
+public class UdpRead implements Runnable {
+	private List<byte[]> lp = new LinkedList<byte[]>();
+
 	public static void main(String[] args) {
 		try {
-			new UdpRead().playSound("/home/dccan/Music/rc.wav");
+			UdpRead up = new UdpRead();
+			new Thread(up).start();
+			up.playSound("/home/dccan/Music/rc.wav");
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
-	private final int BUFFER_SIZE = 128000;
+	private final int BUFFER_SIZE = 80 * 2;
 	private File soundFile;
 	private AudioInputStream audioStream;
-	private AudioFormat audioFormat;
-	private SourceDataLine sourceLine;
 
 	/**
 	 * @param filename
@@ -43,66 +42,69 @@ public class UdpRead {
 	 */
 	public void playSound(String filename) throws Exception {
 
-//		String strFilename = filename;
-//
-//		try {
-//			soundFile = new File(strFilename);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			System.exit(1);
-//		}
-//
-//		try {
-//			audioStream = AudioSystem.getAudioInputStream(soundFile);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			System.exit(1);
-//		}
-		DatagramPacket dp;
-		DatagramSocket client = new DatagramSocket();
-//		audioFormat = audioStream.getFormat();
-		InetAddress inet = InetAddress.getByName("192.169.1.2");
-		int port = 9981;
-//		DataLine.Info info = new DataLine.Info(SourceDataLine.class, audioFormat);
-//		try {
-//			sourceLine = (SourceDataLine) AudioSystem.getLine(info);
-//			sourceLine.open(audioFormat);
-//		} catch (LineUnavailableException e) {
-//			e.printStackTrace();
-//			System.exit(1);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			System.exit(1);
-//		}
-		AudioFormat af = NetAudioFormat.getG729AudioFormat();
-		Recorder rc = new Recorder(af);
-		//PlayMedia pm = new PlayMedia(audioFormat);
-		//sourceLine.start();
-		Encoder en  = new Encoder();
-		int nBytesRead = 0;
-		byte[] abData = new byte[160];
-		while (nBytesRead != -1) {
+		@SuppressWarnings("resource")
+
+		String strFilename = filename;
+		try {
+			soundFile = new File(strFilename);
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
+		// Decoder dc = new Decoder();
+		// PlayMedia pm = new PlayMedia(NetAudioFormat.getG729AudioFormat());
+		while (true) {
+
 			try {
-			//	nBytesRead = audioStream.read(abData, 0, abData.length);
-				abData = rc.getSound();
+				audioStream = AudioSystem.getAudioInputStream(soundFile);
 			} catch (Exception e) {
 				e.printStackTrace();
+				System.exit(1);
 			}
-			if (nBytesRead >= 0) {
-				// @SuppressWarnings("unused")
-				// int nBytesWritten = sourceLine.write(abData, 0, nBytesRead);
-				byte [] eb = en.process(abData);
-				dp = new DatagramPacket(eb, eb.length, inet, port);
-			//	if(d%10!=0)
-				client.send(dp);
-				Thread.sleep(10);
-//				pm.play(abData);
+
+			int nBytesRead = 0;
+			byte[] abData = new byte[BUFFER_SIZE];
+			byte[] res;
+			while (nBytesRead != -1) {
+				try {
+					nBytesRead = audioStream.read(abData, 0, abData.length);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				if (nBytesRead >= 0) {
+					lp.add(abData.clone());
+					Thread.sleep(10);
+				}
 			}
+			audioStream.close();
 		}
-//		pm.stop();
-		rc.stop();
-		client.close();
-		sourceLine.drain();
-		sourceLine.close();
 	}
+
+	boolean run = true;
+
+	@Override
+	public void run() {
+		try {
+			DatagramSocket client = new DatagramSocket();
+			InetAddress inet = InetAddress.getByName("127.0.0.1");
+			int port = 9981;
+			Encoder en = new Encoder();
+			DatagramPacket dp;
+			while (run) {
+				if (!lp.isEmpty()) {
+					long t = System.currentTimeMillis();					
+					byte[] res = en.process(lp.remove(0));
+					dp = new DatagramPacket(res, res.length, inet, port);
+					client.send(dp);
+					System.out.println( System.currentTimeMillis()-t);
+				}
+
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
 }

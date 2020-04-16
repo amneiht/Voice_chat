@@ -22,6 +22,7 @@ public class ResultToList<E> {
 			while (rs.next()) {
 				E in =  ob.newInstance();
 				for (Field obf : fl) {
+					obf.setAccessible(true);
 					obf.set(in, rs.getObject(obf.getName()));
 				}
 				res.add(in);
