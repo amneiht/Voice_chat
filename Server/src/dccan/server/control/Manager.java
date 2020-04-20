@@ -14,11 +14,12 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import dccan.server.sql.Comments;
-import dccan.server.sql.Group;
+import dccan.server.sql.Groups;
 import dccan.server.sql.User;
 import dccan.server.sql.file.SFile;
 
-public class Manager implements Runnable {
+public class Manager  {
+	/*
 	Socket sock;
 	static Type mapType;
 	static Type ListType;
@@ -57,7 +58,8 @@ public class Manager implements Runnable {
 		sock = d;
 	}
 
-	@Override
+	
+	
 	public void run() {
 		DataInputStream in;
 		try {
@@ -118,7 +120,7 @@ public class Manager implements Runnable {
 		String group = mp.get("group");
 		String id = mp.get("member");
 		
-		String res = Group.deleteFriend(id, group);
+		String res = Groups.deleteFriend(id, group);
 		out.writeUTF(Des.encrypt(res));
 		out.close();
 		
@@ -136,7 +138,7 @@ public class Manager implements Runnable {
 		String group = mp.get("group");
 		String id = mp.get("member");
 		
-		String res = Group.deleteMember(id, group);
+		String res = Groups.deleteMember(id, group);
 		out.writeUTF(Des.encrypt(res));
 		out.close();
 	}
@@ -153,7 +155,7 @@ public class Manager implements Runnable {
 		String group = mp.get("group");
 		String id = mp.get("id");
 
-		String res = Group.addMember(id, group);
+		String res = Groups.addMember(id, group,user);
 		out.writeUTF(Des.encrypt(res));
 		out.close();
 	}
@@ -168,7 +170,7 @@ public class Manager implements Runnable {
 			return;
 		}
 		String id = mp.get("group");
-		String res = Group.getMember(id);
+		String res = Groups.getMember(id);
 		out.writeUTF(Des.encrypt(res));
 		out.close();
 	}
@@ -182,7 +184,7 @@ public class Manager implements Runnable {
 			out.close();
 			return;
 		}
-		String res = Group.GetGroup(user);
+		String res = Groups.GetGroup(user);
 		out.writeUTF(Des.encrypt(res));
 		out.close();
 	}
@@ -264,7 +266,7 @@ public class Manager implements Runnable {
 		String lt = mp.get("list");
 		List<String> lp = gson.fromJson(lt, ListType);
 		String ten = mp.get("name");
-		String rs = Group.addGroup(user, lp, ten);
+		String rs = Groups.addGroup(user, lp, ten);
 		out.writeUTF(Des.encrypt(rs));
 		out.close();
 	}
@@ -280,7 +282,7 @@ public class Manager implements Runnable {
 			return;
 		}
 		String id2 = mp.get("friend");
-		String rs = Group.addFriend(user, id2);
+		String rs = Groups.addFriend(user, id2);
 		out.writeUTF(Des.encrypt(rs));
 		out.close();
 	}
@@ -303,12 +305,7 @@ public class Manager implements Runnable {
 		out.close();
 	}
 
-	/**
-	 * dang ki len server
-	 * 
-	 * @param mp
-	 * @throws Exception
-	 */
+	
 	private void doregis(Map<String, String> mp) throws Exception {
 		DataOutputStream out = new DataOutputStream(sock.getOutputStream());
 		String user = mp.get("user");
@@ -325,13 +322,7 @@ public class Manager implements Runnable {
 
 	}
 
-	/**
-	 * dang nhap len server <br>
-	 * gui lai ma token cho client
-	 * 
-	 * @param mp
-	 * @throws Exception
-	 */
+	
 	private void dologin(Map<String, String> mp) throws Exception {
 		DataOutputStream out = new DataOutputStream(sock.getOutputStream());
 		String user = mp.get("user");
@@ -345,5 +336,5 @@ public class Manager implements Runnable {
 		}
 		out.close();
 	}
-
+*/
 }

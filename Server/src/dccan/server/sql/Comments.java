@@ -41,7 +41,7 @@ public class Comments {
 			ps.setString(5, idFile);
 			ps.executeUpdate();
 			ps.close();
-			con.close();
+			//con.close();
 			res = "ok";
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -74,7 +74,7 @@ public class Comments {
 			ps.setString(4, time);
 			ps.executeUpdate();
 			ps.close();
-			con.close();
+			//con.close();
 			res = "ok";
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -100,12 +100,13 @@ public class Comments {
 			PreparedStatement ps = con.prepareStatement(getSql);
 			ps.setString(1, id);
 			ps.setString(2, time);
+			System.out.println(ps.toString());
 			ResultSet rs = ps.executeQuery();
 			ArrayList<Comment> ap = new ResultToList<Comment>(Comment.class).progess(rs);
 			String gson = new Gson().toJson(ap);
 			rs.close();
 			ps.close();
-			con.close();
+			//con.close();
 			return gson;
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -135,7 +136,7 @@ public class Comments {
 			String gson = new Gson().toJson(ap);
 			rs.close();
 			ps.close();
-			con.close();
+			//con.close();
 			return gson;
 		} catch (Exception e) {
 			// TODO: handle exception

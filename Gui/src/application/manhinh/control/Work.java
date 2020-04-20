@@ -3,6 +3,7 @@ package application.manhinh.control;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import application.autofill.Popup;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
@@ -13,6 +14,7 @@ import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -30,6 +32,8 @@ public class Work implements Initializable {
 	private VBox group;
 	@FXML
 	private HBox cbar ;
+	@FXML
+	private TextField fill ;
 	public void downloadFile(String idFile) {
 
 	}
@@ -69,7 +73,7 @@ public class Work implements Initializable {
 	}
 
 	public void initialize(URL location, ResourceBundle resources) {
-	       ObservableList<String> data = FXCollections.observableArrayList();
+	       
 	        String[] s = new String[]{"apple","ball","cat","doll","elephant",
 	            "fight","georgeous","height","ice","jug",
 	             "aplogize","bank","call","done","ego",
@@ -78,14 +82,7 @@ public class Work implements Initializable {
 	             "scene","zoo","jumble","auto","text",
 	            "root","box","items","hip-hop","himalaya","nepal",
 	            "kathmandu","kirtipur","everest","buddha","epic","hotel"};
-
-	            for(int j=0; j<s.length; j++){
-	                data.add(s[j]);
-	            }
-
-	        //Layout
-	        AutoFillTextBox<String> box = new AutoFillTextBox<String>(data);
-	        cbar.getChildren().add(box);
+	        fill.setOnKeyReleased(new Popup(s,"@"));
 	}
 
 }

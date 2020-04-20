@@ -1,6 +1,6 @@
 package dccan.suport;
 
-public class GroupInfo {
+public class Group {
 	private String idNhom, tenNhom;
 
 	public  String getIdNhom() {
@@ -9,5 +9,9 @@ public class GroupInfo {
 
 	public  String getTenNhom() {
 		return tenNhom;
+	}
+	public String toString()
+	{
+		return "idNhom : "+idNhom+", tenNhom : "+tenNhom;
 	}
 }

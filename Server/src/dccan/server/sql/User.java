@@ -30,7 +30,7 @@ public class User {
 				id = rs.getString(1);
 			}
 			ps.close();
-			con.close();
+			//con.close();
 			return id;
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -63,7 +63,7 @@ public class User {
 			if (rs.next()) {
 				System.out.println("user :"+user+" da co tk");
 				ps.close();
-				con.close();
+				//con.close();
 				return false; // da co tai khoan
 			}
 			ps.close();
@@ -75,7 +75,7 @@ public class User {
 			ps.setString(4, hoten);
 			ps.executeUpdate();
 			ps.close();
-			con.close();
+			//con.close();
 			return true;
 		} catch (Exception e) {
 			// TODO: handle exception

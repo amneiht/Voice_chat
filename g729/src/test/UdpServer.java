@@ -63,9 +63,9 @@ public class UdpServer implements Runnable {
 			while (run) {
 				if (!lp.isEmpty()) {
 					byte[] dt;
-					long t=System.currentTimeMillis();
+//					long t=System.currentTimeMillis();
 					dt = dec.process(lp.remove(0));
-					System.out.println(System.currentTimeMillis()-t);
+//					System.out.println(System.currentTimeMillis()-t);
 					sl.add(1L, new Pack(sq,dt ));
 					sq++;
 //					pm.play(dec.process(lp.remove(0)));

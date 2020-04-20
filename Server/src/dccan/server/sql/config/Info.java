@@ -4,18 +4,47 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
+
+import org.apache.commons.dbcp2.BasicDataSource;
 
 public class Info {
-	protected static String user = "root";
-	protected static String pass = "";
-	protected static int port = 3306;
-	protected static String db = "chat";
-	protected static String host = "localhost";
+
+	// com.mysql.jdbc.MysqlDataSource es ;
+	private static BasicDataSource ds = new BasicDataSource();
+	public static final String HOST_NAME = "localhost";
+	public static final String DB_NAME = "chat";
+	public static final String DB_PORT = "3306";
+	public static final String USER_NAME = "root";
+	public static final String PASSWORD = "";
+	public static final String DB_DRIVER = "com.mysql.jdbc.Driver";
+	public static final int DB_MIN_CONNECTIONS = 5;
+	public static final int DB_MAX_CONNECTIONS = 10;
+	// jdbc:mysql://hostname:port/dbname
+	public static final String CONNECTION_URL = "jdbc:mysql://" + HOST_NAME + ":" + DB_PORT + "/" + DB_NAME
+			+ "?useSSL=false";
+	static {
+		ds.setDriverClassName(DB_DRIVER);
+		ds.setUrl(CONNECTION_URL);
+		ds.setUsername(USER_NAME);
+		ds.setPassword(PASSWORD);
+		ds.setMinIdle(DB_MIN_CONNECTIONS); // minimum number of idle connections in the pool
+		ds.setInitialSize(DB_MIN_CONNECTIONS);
+		ds.setMaxIdle(DB_MAX_CONNECTIONS); // maximum number of idle connections in the pool
+		ds.setMaxOpenPreparedStatements(100);
+	}
+
+	// dung trong thuc te
+	public static Connection getCon1() throws SQLException {
+		return ds.getConnection();
+	}
+
+	// test hoat dong
 	public static Connection getCon() {
 		try {
-			//Class.forName("com.mysql.jdbc.Driver");
-			String url = "jdbc:mysql://" + host + ":" + port + "/" + db+"?useSSL=false";	
-			Connection con = DriverManager.getConnection(url, user, pass);
+			// Class.forName("com.mysql.jdbc.Driver");
+			String url = "jdbc:mysql://" + HOST_NAME + ":" + DB_PORT + "/" + DB_NAME + "?useSSL=false";
+			Connection con = DriverManager.getConnection(url, USER_NAME, PASSWORD);
 			return con;
 		} catch (Exception e) {
 			// TODO: handle exception

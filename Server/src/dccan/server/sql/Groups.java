@@ -1,5 +1,6 @@
 package dccan.server.sql;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,9 +14,9 @@ import com.google.gson.Gson;
 
 import dccan.server.sql.config.Info;
 import dccan.suport.Friend;
-import dccan.suport.GroupInfo;
+import dccan.suport.Group;
 
-public class Group {
+public class Groups {
 	private final static String getGroup = "select nhom.idNhom as idNhom, tenNhom from nhom ,tvNhom where nhom.idNhom = tvNhom.idNhom and idTV=?";
 
 	/**
@@ -31,11 +32,11 @@ public class Group {
 			PreparedStatement ps = con.prepareStatement(getGroup);
 			ps.setString(1, id);
 			ResultSet rs = ps.executeQuery();
-			List<GroupInfo> gp = new ResultToList<GroupInfo>(GroupInfo.class).progess(rs);
+			List<Group> gp = new ResultToList<Group>(Group.class).progess(rs);
 			res = new Gson().toJson(gp);
 			rs.close();
 			ps.close();
-			con.close();
+			// con.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -61,7 +62,7 @@ public class Group {
 			res = new Gson().toJson(ap);
 			rs.close();
 			ps.close();
-			con.close();
+			// con.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -69,7 +70,7 @@ public class Group {
 	}
 
 	private static final String addSql1 = "insert into nhom(idNhom,nguoiTao,tenNhom) values(?,?,?) ";
-	private static final String addSql2 = "insert into tvNhom(idNhom,idTV) values(?,?) ";
+	private static final String addSql2 = "insert into tvNhom(idNhom,idTV,quyen,idAdd) values(?,?,?,?) ";
 
 	/**
 	 * them moi thanh vien
@@ -80,16 +81,18 @@ public class Group {
 	 *            ma nhom
 	 * @return
 	 */
-	public static String addMember(String id, String group) {
+	public static String addMember(String id, String group, String user) {
 		String res = "false";
+		String sql = "call addMember(?,?,?)";
 		try {
 			Connection con = Info.getCon();
-			PreparedStatement ps = con.prepareStatement(addSql2);
-			ps.setString(1, group);
-			ps.setString(2, id);
-			ps.executeUpdate();
-			ps.close();
-			con.close();
+			CallableStatement cstm = con.prepareCall(sql);
+			cstm.setString(1, group);
+			cstm.setString(2, user);
+			cstm.setString(3, id);
+			cstm.executeUpdate();
+			cstm.close();
+			// con.close();
 			res = "ok";
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -120,15 +123,17 @@ public class Group {
 			ps.close();
 
 			ps = con.prepareStatement(addSql2);
+			ps.setString(4, id);
 			ps.setString(1, nhom);
 			ps.setString(2, id);
+			ps.setInt(3, 1);
 			ps.executeUpdate();
+			ps.setInt(3, 0);
 			for (String d : member) {
 				ps.setString(2, d);
 				ps.executeUpdate();
 			}
 			ps.close();
-			con.close();
 			res = "ok";
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -157,7 +162,6 @@ public class Group {
 				ps.executeUpdate();
 			}
 			ps.close();
-			con.close();
 			res = "ok";
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -192,16 +196,15 @@ public class Group {
 				ps.executeUpdate();
 
 				res = "ok";
-			}else
-			{
+			} else {
 				rs.close();
 				ps.close();
-				con.close();
+				// con.close();
 				return "false";
 			}
 			rs.close();
 			ps.close();
-			
+
 			ps = con.prepareStatement(addSql1);
 			String nhom = RandomStringUtils.randomAlphanumeric(32);
 			ps.setString(1, nhom);
@@ -209,7 +212,7 @@ public class Group {
 			ps.setString(3, id1 + "_" + id2);
 			ps.executeUpdate();
 			ps.close();
-			
+
 			ps = con.prepareStatement(addSql2);
 			ps.setString(1, nhom);
 			ps.setString(2, id1);
@@ -218,7 +221,7 @@ public class Group {
 			ps.setString(2, id2);
 			ps.executeUpdate();
 			ps.close();
-			con.close();
+			// con.close();
 
 		} catch (Exception e) {
 
@@ -249,7 +252,7 @@ public class Group {
 			gson = new Gson().toJson(ap);
 			rs.close();
 			ps.close();
-			con.close();
+			// con.close();
 			return gson;
 		} catch (Exception e) {
 			System.err.println(e);
@@ -264,22 +267,24 @@ public class Group {
 	 * @param group
 	 * @return
 	 */
-	public static String deleteMember(String id, String group) {
-		String sql = "delete from tvNhom where idNhom = ? and idTV = ?";
-
+	public static String deleteMember(String group,String id,String user) {
+		String res = "false";
+		String sql = "call deleteMember(?,?,?)";
 		try {
 			Connection con = Info.getCon();
-			PreparedStatement ps = con.prepareStatement(sql);
-			ps.setString(1, group);
-			ps.setString(2, id);
-			ps.executeUpdate();
-			ps.close();
-			con.close();
-			return "true";
-		} catch (SQLException e) {
+			CallableStatement cstm = con.prepareCall(sql);
+			cstm.setString(1, group);
+			cstm.setString(2, user);
+			cstm.setString(3, id);
+			System.out.println(cstm.toString());
+			cstm.executeUpdate();
+			cstm.close();
+			// con.close();
+			res = "ok";
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return "false";
+		return res;
 	}
 
 	public static String deleteFriend(String id1, String id2) {
@@ -294,11 +299,41 @@ public class Group {
 			ps.setString(4, id1);
 			ps.executeUpdate();
 			ps.close();
-			con.close();
+			// con.close();
 			return "true";
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return "false";
+	}
+
+	public static void outGroup(String group, String user) {
+		String sql = " delete from tvNhom where idNhom = ? and idTV = ?" ;
+		try {
+			Connection con = Info.getCon();
+			PreparedStatement ps = con.prepareStatement(sql);
+			ps.setString(1, group);
+			ps.setString(2, user);		
+			ps.executeUpdate();
+			ps.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+	}
+
+	public static void deleteGroup(String group , String user) {
+		String sql = "call deleteGroup(?,?)";
+		try {
+			Connection con = Info.getCon();
+			CallableStatement cstm = con.prepareCall(sql);
+			cstm.setString(1, group);
+			cstm.setString(2, user);
+			System.out.println(cstm.toString());
+			cstm.executeUpdate();
+			cstm.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

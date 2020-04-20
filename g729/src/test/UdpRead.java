@@ -92,11 +92,11 @@ public class UdpRead implements Runnable {
 			DatagramPacket dp;
 			while (run) {
 				if (!lp.isEmpty()) {
-					long t = System.currentTimeMillis();					
+					//long t = System.currentTimeMillis();					
 					byte[] res = en.process(lp.remove(0));
 					dp = new DatagramPacket(res, res.length, inet, port);
 					client.send(dp);
-					System.out.println( System.currentTimeMillis()-t);
+					//System.out.println( System.currentTimeMillis()-t);
 				}
 
 			}

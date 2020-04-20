@@ -10,7 +10,7 @@ import java.util.List;
 
 import dccan.remote.Communication;
 import dccan.server.sql.Comments;
-import dccan.server.sql.Group;
+import dccan.server.sql.Groups;
 import dccan.server.sql.User;
 import dccan.server.sql.file.SFile;
 
@@ -40,7 +40,7 @@ public class RemoteObj implements Communication {
 	public String getMember(String group) throws RemoteException {
 		if (user == null)
 			return "false";
-		String res = Group.getMember(group);
+		String res = Groups.getMember(group);
 		return res;
 	}
 
@@ -48,7 +48,7 @@ public class RemoteObj implements Communication {
 	public String getGroup() throws RemoteException {
 		if (user == null)
 			return "false";
-		String res = Group.GetGroup(user);
+		String res = Groups.GetGroup(user);
 		return res;
 	}
 
@@ -56,13 +56,13 @@ public class RemoteObj implements Communication {
 	public boolean addFriend(String id) throws RemoteException {
 		if (user == null)
 			return false;
-		String rs = Group.addFriend(user, id);
+		String rs = Groups.addFriend(user, id);
 		return rs.equals("ok");
 	}
 
 	@Override
 	public String getFriendList() throws RemoteException {
-		String rs = Group.getFrendList(user);
+		String rs = Groups.getFrendList(user);
 		return rs;
 	}
 
@@ -123,20 +123,38 @@ public class RemoteObj implements Communication {
 
 	@Override
 	public boolean deleteMember(String group, String mem) throws RemoteException {
-		String res = Group.deleteMember(mem, group);
+		String res = Groups.deleteMember(group, mem, user);
 		return res.equals("true");
 	}
 
 	@Override
 	public boolean createGroup(String name, List<String> member) throws RemoteException {
-		String rs = Group.addGroup(user, member, name);
+		String rs = Groups.addGroup(user, member, name);
 		return rs.equals("true");
 	}
 
 	@Override
-	public boolean addMember(String id, String group) throws RemoteException {
-		String res = Group.addMember(id, group);
+	public boolean addMember(String group, String id) throws RemoteException {
+		String res = Groups.addMember(id, group, user);
 		return res.equals("true");
+	}
+
+	@Override
+	public boolean upComment(String group, String nDung) throws RemoteException {
+		String res = Comments.up(group, user, nDung);
+		return res.equals("true");
+	}
+
+	@Override
+	public void outGroup(String group) throws RemoteException {
+		Groups.outGroup(group, user);
+
+	}
+
+	@Override
+	public void deleteGroup(String group) throws RemoteException {
+		// TODO Auto-generated method stub
+		Groups.deleteGroup(group, user);
 	}
 
 }

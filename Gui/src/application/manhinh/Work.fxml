@@ -46,7 +46,14 @@
                      </content></ScrollPane>
    				</center>
                <bottom>
-                  <HBox fx:id="cbar" prefHeight="26.0" prefWidth="681.0" BorderPane.alignment="CENTER" />
+                  <HBox fx:id="cbar" prefHeight="26.0" prefWidth="681.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <Button mnemonicParsing="false" text="Button" />
+                        <Button mnemonicParsing="false" text="Button" />
+                        <Button mnemonicParsing="false" text="Button" />
+                        <TextField fx:id="fill" prefHeight="25.0" prefWidth="321.0" />
+                        <Button mnemonicParsing="false" text="Button" />
+                     </children></HBox>
                </bottom>
    			</BorderPane>
    		</center>

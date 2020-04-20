@@ -27,5 +27,11 @@ public interface Communication extends Remote {
 
 	public boolean createGroup(String name, List<String> member) throws RemoteException;
 	
-	public boolean addMember(String id , String group) throws RemoteException;;
+	public boolean addMember(String group,String id) throws RemoteException;
+	
+	public boolean upComment(String group , String nDung) throws RemoteException;
+	
+	public void outGroup(String group) throws RemoteException;
+	
+	public void deleteGroup(String group) throws RemoteException ;
 }

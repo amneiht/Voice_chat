@@ -1,33 +1,31 @@
-import java.lang.reflect.Type;
+import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.List;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
 import dccan.server.rmi.RemoteObj;
-import dccan.suport.Friend;
+import dccan.suport.Comment;
+import dccan.suport.GetList;
+import dccan.suport.Group;
 
 public class test {
 	public static void main(String[] args) {
 		try {
 			RemoteObj rmi = new RemoteObj();
-			try {
-				boolean res = rmi.login("can", "1");
+			
+				boolean res = rmi.login("dccan", "1");
 				System.out.println(res);
-				// rmi.addFriend("test2");
-				Gson gson = new Gson();
-
-				String ps = rmi.getFriendList();
-				Type mem = new TypeToken<List<Friend>>() {
-				}.getType();
-				List<Friend> lm = gson.fromJson(ps, mem);
-				for (Friend d : lm) {
-					System.out.println(d.getNguoiDung());
-					System.out.println(d.getTen() + "\n");
+				String d=rmi.getGroup();
+				List<Group> dp = GetList.groups(d);
+				Group hs = dp.get(0);
+				String cmt = rmi.getCommentList(hs.getIdNhom(), new Timestamp(System.currentTimeMillis()).toString(), false);
+				List<Comment> cs = GetList.cmts(cmt);
+				for(Comment cd : cs)
+				{
+					System.out.println(cd.getNoiDung());
+					System.out.println(cd.getIdGui());
+					System.out.println(cd.getNgayGui());
 				}
-			} catch (Exception e) {
-				// TODO: handle exception
-			}
+			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

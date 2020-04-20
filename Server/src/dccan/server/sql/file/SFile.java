@@ -22,8 +22,9 @@ public class SFile {
 	public static String  insert(String id, InputStream in, String tenfile) {
 		String res = "false" ;
 		String sql = "insert into tepTin( idFile , ngayGui , data , tenFile ) values (?,?,?,?)";
-		Connection con = Info.getCon();
+		
 		try {
+			Connection con = Info.getCon();
 			PreparedStatement pstm = con.prepareStatement(sql);
 			Date dt = new Date(System.currentTimeMillis());
 			pstm.setString(1, id);
@@ -35,7 +36,7 @@ public class SFile {
 				d = pstm.executeUpdate();
 			}
 			pstm.close();
-			con.close();
+			//con.close();
 			if(d>0)
 				res="ok";
 		} catch (SQLException e) {
@@ -60,7 +61,7 @@ public class SFile {
 			}
 			rs.close();
 			pstm.close();
-			con.close();
+			//con.close();
 			return in;
 		} catch (Exception e) {
 			// TODO: handle exception
