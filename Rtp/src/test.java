@@ -1,9 +1,11 @@
 public class test {
-	public static void main(String[] args) throws InterruptedException {
-	long kds = System.currentTimeMillis();
-	System.out.println(kds);
-	Thread.sleep(1000);
-//	kds = System.currentTimeMillis();
-	System.out.println( System.currentTimeMillis()-kds);
+	public static void main(String[] args) {
+		String opm = "con ga an dam";
+		byte [] rp = opm.getBytes();
+		for(int i =0 ;i<rp.length;i++)
+		{
+			System.out.println(rp[i]+"   "+(int)opm.charAt(i));
+		}
+		
 	}
 }

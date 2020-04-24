@@ -9,8 +9,7 @@ import java.net.UnknownHostException;
 
 import net.help.Convert;
 import net.help.Info;
-import net.help.Time;
-import net.packet.Rtp;
+import net.packet.NotUseRtp;
 import net.packet.io.PWrite;
 
 public class RtpClient {
@@ -46,33 +45,35 @@ public class RtpClient {
 		sq = (int) (Math.random() * 9999);
 		ssrc = ssr;
 		client = new DatagramSocket();
-		
+
 	}
 
-	public void send(Rtp pack) {
+	public int getPort() {
+		return client.getPort();
+	}
+
+	public void send(NotUseRtp pack) {
 		byte[][] data = creatPacket(pack);
-		DatagramPacket send ;
+		DatagramPacket send;
 		InetAddress inet;
 		try {
 			inet = InetAddress.getByName(host);
-			for(byte[] p:data)
-			{
-				send = new DatagramPacket(p, p.length, inet,port);
+			for (byte[] p : data) {
+				send = new DatagramPacket(p, p.length, inet, port);
 				client.send(send);
-				
+
 			}
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
-			System.err.println("host :"+host+" khong xac dinh");
+			System.err.println("host :" + host + " khong xac dinh");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			System.err.println("loi gui du lieu");
 		}
-		
-		
+
 	}
 
-	private byte[][] creatPacket(Rtp pack) {
+	public byte[][] creatPacket(NotUseRtp pack) {
 		byte[] header = getHeader(pack);
 		if (pack.isPadding()) {
 			byte[] pad = getPadding(pack.getPad());
@@ -133,7 +134,7 @@ public class RtpClient {
 		return rs;
 	}
 
-	private byte[] getHeader(Rtp pack) {
+	private byte[] getHeader(NotUseRtp pack) {
 		byte[] ret = null;
 		if (pack.isExtend()) {
 			byte[] ext = Convert.objectToByte(pack.getEx());
@@ -146,7 +147,7 @@ public class RtpClient {
 				ret[0] = (byte) (ret[0] | 0b100000); // bat bit padding
 			ret[0] = (byte) (ret[0] | 0b10000); // bat bit extended
 			ret[1] = (byte) (pack.getPayloadtype() & 0x7f); // them playload type
-			PWrite.copyArray(Time.getTimeStamp(), ret, 4);// them nhan thoi gian
+			PWrite._32bitToArray(ret, System.currentTimeMillis(), 4);// them nhan thoi gian
 			PWrite._32bitToArray(ret, ssrc, 8);// them ma nguon dong bo
 			PWrite._16bitToArray(ret, size, 14);
 			PWrite.copyArray(ext, ret, 16);
@@ -156,7 +157,8 @@ public class RtpClient {
 			if (pack.isPadding())
 				ret[0] = (byte) (ret[0] | 0b100000); // bat bit padding
 			ret[1] = (byte) (pack.getPayloadtype() & 0x7f); // them playload type
-			PWrite.copyArray(Time.getTimeStamp(), ret, 4);// them nhan thoi gian
+			// them nhan thoi gian
+			PWrite._32bitToArray(ret, System.currentTimeMillis(), 4);
 			PWrite._32bitToArray(ret, ssrc, 8);// them ma nguon dong bo
 		}
 		return ret;

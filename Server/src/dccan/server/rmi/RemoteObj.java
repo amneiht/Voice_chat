@@ -16,7 +16,7 @@ import dccan.server.sql.file.SFile;
 
 public class RemoteObj implements Communication {
 	public String user = null;
-
+//static Roommap
 	@Override
 	public boolean login(String user, String pass) throws RemoteException {
 		String id = User.login(user, pass);
@@ -153,7 +153,6 @@ public class RemoteObj implements Communication {
 
 	@Override
 	public void deleteGroup(String group) throws RemoteException {
-		// TODO Auto-generated method stub
 		Groups.deleteGroup(group, user);
 	}
 

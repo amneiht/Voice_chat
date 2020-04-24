@@ -1,6 +1,6 @@
 package net.packet;
 
-public class Rtp {
+public class NotUseRtp {
 	public final int ver = 2;
 	protected byte[] send;
 	protected boolean extend = false;

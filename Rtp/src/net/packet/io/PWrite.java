@@ -11,9 +11,9 @@ public class PWrite {
 	}
 
 	public static void copyArray(byte[] src, byte[] des, int offset) {
-		int start = 0, length = src.length;
+		int length = src.length;
 		for (int i = 0; i < length; i++) {
-			des[offset + i] = src[start + i];
+			des[offset + i] = src[i];
 		}
 	}
 

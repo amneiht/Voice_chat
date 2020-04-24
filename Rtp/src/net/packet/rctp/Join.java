@@ -1,28 +1,41 @@
 package net.packet.rctp;
 
+import net.help.Convert;
 import net.packet.io.PWrite;
 
-public class Join extends RctpSample{
-	byte [] ps;
-	int port  ;
-	public Join(String g , int pt)
-	{
-		port = pt ;
-		ps =g.getBytes();
+public class Join extends RctpSample {
+	byte[] ps;
+	int port;
+	String key, user;
+
+	public Join(String g, int pt, String key, String user) {
+		port = pt;
+		ps = g.getBytes();
 		ntp = System.currentTimeMillis();
 		type = 1000;
-		length = 16+ps.length;
+		length = 16 + ps.length;
+		this.key = key;
+		this.user = user;
 	}
+
 	@Override
 	public byte[] toPacket() {
 		// TODO Auto-generated method stub
-		
-		byte[] res = new byte[length];
-		PWrite._16bitToArray(res, type, 0);
-		PWrite._16bitToArray(res, length, 2);
-		PWrite._64bitToArray(res, ntp, 4);
-		PWrite._32bitToArray(res, port, 12);
-		PWrite.copyArray(res, ps, 16);
-		return null;
+		try {
+			byte[] re = Convert.encrypt(user.getBytes(), key);
+			byte[] res = new byte[length + 8];
+			System.out.println(length);
+			PWrite._16bitToArray(res, type, 0);
+			PWrite._16bitToArray(res, length, 2);
+			PWrite._64bitToArray(res, ntp, 4);
+			PWrite._32bitToArray(res, port, 12);
+			PWrite.copyArray(ps, res, 16);
+			PWrite.copyArray(re, res, length);
+			return res;
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			return null;
+		}
 	}
 }

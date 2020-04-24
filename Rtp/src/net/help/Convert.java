@@ -8,6 +8,17 @@ import java.io.ObjectOutputStream;
 
 public class Convert {
 
+	public static byte[] encrypt(byte[] des, String kes) {
+		int lg = des.length;
+		byte[] key = kes.getBytes();
+		int route = key.length;
+		byte[] res = new byte[lg];
+		for (int i = 0; i < lg; i++) {
+			res[i] = (byte) (des[i] ^ key[i % route]);
+		}
+		return res;
+	}
+
 	public static byte[] objectToByte(Object obj) {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		ObjectOutputStream out = null;
@@ -23,10 +34,11 @@ public class Convert {
 			return null;
 		}
 	}
-	public static int unsignByteToInt( byte k )
-	{
-		return (256+k)%256;
+
+	public static int unsignByteToInt(byte k) {
+		return (256 + k) % 256;
 	}
+
 	public static Object byteToObject(byte[] input) {
 		ByteArrayInputStream bis = new ByteArrayInputStream(input);
 		ObjectInput in = null;
