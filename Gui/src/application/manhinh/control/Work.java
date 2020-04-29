@@ -1,11 +1,9 @@
 package application.manhinh.control;
 
+import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import application.autofill.Popup;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -15,13 +13,15 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import np.com.ngopal.control.AutoFillTextBox;
 
 public class Work implements Initializable {
-
+	public int test =1 ;
 	@FXML
 	private ScrollPane chatview;
 	@FXML
@@ -47,7 +47,7 @@ public class Work implements Initializable {
 	}
 
 	EventHandler<Event> enter, exit;
-
+	
 	public Work() {
 		enter = new EventHandler<Event>() {
 
@@ -73,16 +73,36 @@ public class Work implements Initializable {
 	}
 
 	public void initialize(URL location, ResourceBundle resources) {
-	       
-	        String[] s = new String[]{"apple","ball","cat","doll","elephant",
-	            "fight","georgeous","height","ice","jug",
-	             "aplogize","bank","call","done","ego",
-	             "finger","giant","hollow","internet","jumbo",
-	             "kilo","lion","for","length","primary","stage",
-	             "scene","zoo","jumble","auto","text",
-	            "root","box","items","hip-hop","himalaya","nepal",
-	            "kathmandu","kirtipur","everest","buddha","epic","hotel"};
-	        fill.setOnKeyReleased(new Popup(s,"@"));
+		test ++;
+		mainBox.setOnDragOver(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent event) {
+                Dragboard db = event.getDragboard();
+                if (db.hasFiles()) {
+                    event.acceptTransferModes(TransferMode.COPY);
+                } else {
+                    event.consume();
+                }
+            }
+        });
+		mainBox.setOnDragDropped(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent event) {
+                Dragboard db = event.getDragboard();
+                boolean success = false;
+                if (db.hasFiles()) {
+                    success = true;
+                    String filePath = null;
+                    for (File file:db.getFiles()) {
+                        filePath = file.getAbsolutePath();
+                        System.out.println(filePath);
+                    }
+                }
+                event.setDropCompleted(success);
+                event.consume();
+            }
+        });
+		
 	}
 
 }

@@ -1,23 +1,5 @@
 package dccan.server.control;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.lang.reflect.Type;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.sql.Timestamp;
-import java.util.List;
-import java.util.Map;
-
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import dccan.server.sql.Comments;
-import dccan.server.sql.Groups;
-import dccan.server.sql.User;
-import dccan.server.sql.file.SFile;
-
 public class Manager  {
 	/*
 	Socket sock;

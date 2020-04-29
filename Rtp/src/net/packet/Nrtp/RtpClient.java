@@ -12,18 +12,21 @@ public class RtpClient {
 	static int port = 9981;
 	DatagramSocket client;
 	InetAddress inet;
-	int sq = 1;
-	String key ;
+	int sq = 0;
+	String key;
+
 	// sq :0 ; ntp : 2 ; group 6 ,id :10 , data :14
 	public int getClientPort() {
 		return client.getLocalPort();
 	}
 
-	public RtpClient(String host, long group, long id , String key) {
+	public RtpClient(String host, long group, long id, String key, int ports) {
 		try {
 			inet = InetAddress.getByName(host);
 			client = new DatagramSocket();
-			this.key = key ;
+			this.key = key;
+			port = ports;
+			createHeader(group, id);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -32,11 +35,11 @@ public class RtpClient {
 	public void send(byte[] dt) {
 
 		try {
-			byte [] data = Convert.encrypt(dt, key);
+			byte[] data = Convert.encrypt(dt, key);
 			int p = data.length;
 			byte[] send = new byte[p + 14];// do dai header
 			PWrite._16bitToArray(send, sq, 0);
-			PWrite._32bitToArray(data, System.currentTimeMillis(), 2);
+			PWrite._32bitToArray(send, System.currentTimeMillis(), 2);
 			PWrite.copyArray(header, send, 6);
 			PWrite.copyArray(data, send, 14);
 			DatagramPacket dp = new DatagramPacket(send, p + 14, inet, port);

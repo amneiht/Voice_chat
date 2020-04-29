@@ -5,53 +5,67 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.RandomStringUtils;
 
-public class Room  {
+public class Room {
 	public static long timeout = 5 * 1000;// 5 s
 	private String key;
-	public List<String> user = new LinkedList<String>();
+	protected List<String> user = new LinkedList<String>();
+	protected Map<String, String> map = new HashMap<String, String>();
 
 	public Room(String d) throws SocketException {
 		sc = new DatagramSocket();
 		group = d;
-		key = RandomStringUtils.random(24);
+		key = RandomStringUtils.randomAscii(24);
 	}
 
-	public String createUserKey() {
-		String res = RandomStringUtils.random(8);
-		user.add(res);
+	public String createUserKey(String mem) {
+		String res = RandomStringUtils.randomAscii(8);
+		map.put(res, mem);
 		return res;
 	}
 
-	public boolean checkUserKey(byte[] in) {
+	public String checkUserKey(byte[] in) {
 		String test = new String(in);
-		synchronized (user) {
-			int lg = user.size();
-			for (int i = 0; i < lg; i++) {
-				if (user.get(i).equals(test)) {
-					user.remove(i);
-					return true;
-				}
-			}
+		String res = null;
+		synchronized (map) {
+			res = map.remove(test);
 		}
-		return false ;
+		if (res == null)
+			return res;
+		return checkListUser(res);
 	}
-	public boolean checkUserKey(String test) {
-		synchronized (user) {
-			int lg = user.size();
-			for (int i = 0; i < lg; i++) {
-				if (user.get(i).equals(test)) {
-					user.remove(i);
-					return true;
-				}
-			}
+
+	/**
+	 * tac dung : chi cho phep 1 user cua moi tai khoan ket noi vao
+	 * 
+	 * @param res
+	 * @return
+	 */
+	private String checkListUser(String res) {
+		System.out.println(mem.size());
+		for (Client cl : mem) {
+			if (cl.user.equals(res))
+				return null;
 		}
-		return false ;
+		return res;
 	}
+
+	public String checkUserKey(String test) {
+		String res = null;
+		synchronized (map) {
+			res = map.remove(test);
+		}
+		if (res == null)
+			return res;
+		return checkListUser(res);
+	}
+
 	public String getKey() {
 		return key;
 	}
@@ -61,6 +75,11 @@ public class Room  {
 	// long rtp; // ma tham so rtp
 	List<DatagramPacket> list = new LinkedList<DatagramPacket>(); // khoi tao de dang , phu hop thay doi
 	protected List<Client> mem = new LinkedList<Client>();// tru nhap de dang
+
+	public List<Client> getMem() {
+		return mem;
+	}
+
 	boolean end = false;
 
 	public void live(long p) {
@@ -83,7 +102,7 @@ public class Room  {
 
 	public void clear() {
 		long now = System.currentTimeMillis();
-		for (int i = mem.size() - 1; i > 0; i--) {
+		for (int i = mem.size() - 1; i > -1; i--) {
 			if (now - mem.get(i).live > timeout) {
 				mem.remove(i);
 			}
@@ -99,6 +118,7 @@ public class Room  {
 	public void addPacket(DatagramPacket dp) {
 		list.add(dp);
 	}
+
 	public void send(Flagment flg) {
 
 		try {

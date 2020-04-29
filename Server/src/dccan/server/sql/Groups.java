@@ -45,6 +45,28 @@ public class Groups {
 
 	private static final String getMem = "select ten,nguoiDung from thongtin , tvNhom where ten = idTV and idNhom = ?";
 
+	public static boolean checkMember(String group, String user) {
+		String sql = "select * from tvNhom where idNhom = ? and idTv=?";
+		Connection con = Info.getCon();
+		try {
+			boolean res = false;
+			PreparedStatement pps = con.prepareStatement(sql);
+			pps.setString(1, group);
+			pps.setString(2, user);
+			ResultSet rs = pps.executeQuery();
+			rs.beforeFirst();
+			res = rs.next();
+			rs.close();
+			pps.close();
+			return res;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+
+	}
+
 	/**
 	 * lay thong tin thanh vien
 	 * 
@@ -141,28 +163,22 @@ public class Groups {
 		return res;
 	}
 
-	public static String addGroup(String id, String[] member, String ten) {
-		String res = "false";
+	public static boolean  acceptMem(String id, String group, List<String> mem) {
+		boolean res = false;
 		try {
+			String addSql2 = "insert into tvNhom(idNhom,idTV,quyen,idAdd) values(?,?,?,?) ";
 			Connection con = Info.getCon();
-			PreparedStatement ps = con.prepareStatement(addSql1);
-			String nhom = RandomStringUtils.randomAlphanumeric(32);
-			ps.setString(1, nhom);
-			ps.setString(2, id);
-			ps.setString(3, ten);
-			ps.executeUpdate();
-			ps.close();
-
+			PreparedStatement ps = con.prepareStatement(addSql2);
 			ps = con.prepareStatement(addSql2);
-			ps.setString(1, nhom);
-			ps.setString(2, id);
-			ps.executeUpdate();
-			for (String d : member) {
+			ps.setString(1, group);
+			ps.setString(4, id);
+			ps.setInt(3, 0);
+			for (String d : mem) {
 				ps.setString(2, d);
 				ps.executeUpdate();
 			}
 			ps.close();
-			res = "ok";
+			res = true;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -267,7 +283,7 @@ public class Groups {
 	 * @param group
 	 * @return
 	 */
-	public static String deleteMember(String group,String id,String user) {
+	public static String deleteMember(String group, String id, String user) {
 		String res = "false";
 		String sql = "call deleteMember(?,?,?)";
 		try {
@@ -308,21 +324,21 @@ public class Groups {
 	}
 
 	public static void outGroup(String group, String user) {
-		String sql = " delete from tvNhom where idNhom = ? and idTV = ?" ;
+		String sql = " delete from tvNhom where idNhom = ? and idTV = ?";
 		try {
 			Connection con = Info.getCon();
 			PreparedStatement ps = con.prepareStatement(sql);
 			ps.setString(1, group);
-			ps.setString(2, user);		
+			ps.setString(2, user);
 			ps.executeUpdate();
 			ps.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 	}
 
-	public static void deleteGroup(String group , String user) {
+	public static void deleteGroup(String group, String user) {
 		String sql = "call deleteGroup(?,?)";
 		try {
 			Connection con = Info.getCon();

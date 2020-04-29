@@ -32,6 +32,7 @@ public class Info {
 		ds.setInitialSize(DB_MIN_CONNECTIONS);
 		ds.setMaxIdle(DB_MAX_CONNECTIONS); // maximum number of idle connections in the pool
 		ds.setMaxOpenPreparedStatements(100);
+	
 	}
 
 	// dung trong thuc te

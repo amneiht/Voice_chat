@@ -10,8 +10,7 @@ public class ResultToList<E> {
 	Class<E> ob;
 
 	public ResultToList(Class<E> obs) {
-		ob =obs;
-		
+		ob = obs;
 	}
 
 	public ArrayList<E> progess(ResultSet rs) {
@@ -20,7 +19,7 @@ public class ResultToList<E> {
 			Field[] fl = ob.getDeclaredFields();
 			rs.beforeFirst();
 			while (rs.next()) {
-				E in =  ob.newInstance();
+				E in = ob.newInstance();
 				for (Field obf : fl) {
 					obf.setAccessible(true);
 					obf.set(in, rs.getObject(obf.getName()));

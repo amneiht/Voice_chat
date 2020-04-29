@@ -5,9 +5,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class RoomMap {
+public class RoomMap implements Runnable {
 	public Map<Long, Room> lp = new HashMap<Long, Room>();
 	public Map<String, Long> lr = new HashMap<String, Long>();
+	boolean run = true;
 
 	public void send(long id, DatagramPacket ps) {
 		Room rm = lp.get(id);
@@ -62,7 +63,12 @@ public class RoomMap {
 		rm.bye(user);
 	}
 
-	public boolean checkUserKey(long gp, String user) {
+	public String checkUserKey(long gp, String user) {
+		Room rm = lp.get(gp);
+		return rm.checkUserKey(user);
+	}
+
+	public  String  checkUserKey(long gp, byte[] user) {
 		Room rm = lp.get(gp);
 		return rm.checkUserKey(user);
 	}
@@ -87,14 +93,14 @@ public class RoomMap {
 		return -1;
 	}
 
-	public String createUserKey(String gp) {
+	public String createUserKey(String gp,String user) {
 		Object ps = lr.get(gp);
 		if (ps == null)
 			return null;
 		long id = (long) ps;
 		try {
 			Room rs = lp.get(id);
-			return rs.createUserKey();
+			return rs.createUserKey(user);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -104,10 +110,13 @@ public class RoomMap {
 
 	public String getGroupKey(String gp) {
 		Object ps = lr.get(gp);
-		if (ps == null)
-			return null;
-
-		long res = (long) (Math.random() * 0xffffffffL);// 4 bit
+		if (ps != null) {
+			long id = (long) ps;
+			Room rs = lp.get(id);
+			return rs.getKey();
+		}
+	//	long res = (long) (Math.random() * 0xffffffffL);// 4 bit
+		long res = 3498249040L;
 		try {
 			lr.put(gp, res);
 			Room rs = new Room(gp);
@@ -116,6 +125,32 @@ public class RoomMap {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
+		}
+
+	}
+
+	@Override
+	public void run() {
+
+		while (run) {
+			try {
+				Thread.sleep(20000);
+				synchronized (lr) {
+					Set<String> sp = lr.keySet();
+					for (String name : sp) {
+						long id = lr.get(name);
+						Room rm = lp.get(id);
+						rm.clear();
+						if (rm.end) {
+							lp.remove(id);
+							lr.remove(name);
+							System.out.println("remove room on room map");
+						}
+					}
+				}
+
+			} catch (Exception e) {
+			}
 		}
 
 	}

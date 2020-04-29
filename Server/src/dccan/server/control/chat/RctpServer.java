@@ -8,33 +8,42 @@ import java.net.SocketException;
 import java.util.LinkedList;
 import java.util.List;
 
-import dccan.server.suport.rtp.ReadPacket;
+import net.help.Convert;
 import net.packet.io.PRead;
 import net.packet.io.PWrite;
 
-public class RctpServer {
-	int port = 8889;
+public class RctpServer implements Runnable {
+	int port = 8890;
 	RoomMap rm;
 	int maxlg = 10 * 1024;// 10 kb
-	DatagramSocket ds;
-	DatagramSocket dg;
-	List<Flagment> ls = new LinkedList<Flagment>();
+	private DatagramSocket ds;
+	private List<Flagment> ls = new LinkedList<Flagment>();
 	private boolean run = true;
 	DatagramSocket clients = new DatagramSocket();
 
-	public RctpServer(RoomMap mp) throws SocketException {
+	public RctpServer() throws SocketException {
 		ds = new DatagramSocket(port);
-		dg = new DatagramSocket();
-		rm = mp;
+		rm = StaticMap.getRm();
+	}
+
+	public static void main(String[] args) {
+		try {
+			new Thread(new RctpServer()).start();
+		} catch (SocketException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public void run() {
-		Thread t = new Thread(new Handle());
-		t.start();
+
+		System.out.println("Rctp server run");
+		new Thread(new Handle()).start();
+
 		byte[] buf = new byte[maxlg];
+		DatagramPacket dp = new DatagramPacket(buf, maxlg);
 		while (run) {
 			try {
-				DatagramPacket dp = new DatagramPacket(buf, maxlg);
 				ds.receive(dp);
 				ls.add(new Flagment(dp));
 			} catch (IOException e) {
@@ -44,48 +53,52 @@ public class RctpServer {
 	}
 
 	private class Handle implements Runnable {
-
-		@Override
 		public void run() {
+			System.out.println("Rctp handle server run : ");
 			while (run) {
 				try {
-					if (!ls.isEmpty()) {
-						Flagment fg = ls.remove(0);
+					Flagment fg = null;
+					synchronized (ls) {
+						if (!ls.isEmpty())
+							fg = ls.remove(0);
+					}
+					if (fg != null) {			
 						byte[] res = fg.data;
-
-						int type = ReadPacket.getType(res);
+						int type = (int) PRead.getLong(res, 0, 2);
 						switch (type) {
-						case 1000: // goi tin create of join
-							int length = (int) ReadPacket.getLong(res, 2, 2);
-							int pos = (int) ReadPacket.getLong(res, 12, 4);
+						case 1000: // goi tin create of join					
+							int length = (int) PRead.getLong(res, 2, 2);
+							int pos = (int) PRead.getLong(res, 12, 4);
 							int z = length - 16;
-							String group = ReadPacket.getString(res, 16, z);
-							String user = PRead.getString(res, length, 8);
+							String group = PRead.getString(res, 16, z);
 							long gid = rm.getRoomId(group);
 							if (gid == -1)
 								break;
-							if (!rm.checkUserKey(gid, user))
+							byte[] en = Convert.encrypt(PRead.getByte(res, length, 8), rm.getGroupKey(group));
+							String ck =rm.checkUserKey(gid, en) ;
+							System.out.println("user kete noi"+ck);
+							if(ck==null)
 								break; // kiem tra key false la cho bay luon
 							long id = (long) Math.random() * 0xffffffff;
 							InetAddress inet = fg.inet;
-							Client s = new Client(pos, inet, id);
-
+							Client s = new Client(pos, inet, id,ck);
 							rm.addClient(gid, s);
 							sendid(id, fg);
 							break;
 						case 1001:
-							long gid1 = ReadPacket.getLong(res, 12, 4);
-							long live = ReadPacket.getLong(res, 16, 4);
+							long gid1 = PRead.getLong(res, 12, 4);
+							long live = PRead.getLong(res, 16, 4);
 							rm.live(gid1, live);
 							break;
 						case 1111:
-							long byegroup = ReadPacket.getLong(res, 12, 4);
-							long byeid = ReadPacket.getLong(res, 16, 4);
+							long byegroup = PRead.getLong(res, 12, 4);
+							long byeid = PRead.getLong(res, 16, 4);
 							rm.bye(byegroup, byeid);
 							break;
 
 						}
 					}
+
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -93,6 +106,7 @@ public class RctpServer {
 		}
 
 		private void sendid(long id, Flagment fg) {
+			System.out.println("send to client");
 			byte res[] = new byte[10];
 			PWrite._16bitToArray(res, 2000, 0);
 			PWrite._32bitToArray(res, System.currentTimeMillis(), 2);

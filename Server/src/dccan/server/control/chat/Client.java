@@ -7,11 +7,16 @@ public class Client {
 	int port; // cong
 	long id;
 	long live;
-
-	public Client(int p, InetAddress ina, long pid) {
+	String user ;
+	public Client(int p, InetAddress ina, long pid , String user) {
 		port = p;
 		this.ina = ina;
 		id = pid;
 		live = System.currentTimeMillis();
+		this.user = user ;
+	}
+	public String getUser()
+	{
+		return user ;
 	}
 }

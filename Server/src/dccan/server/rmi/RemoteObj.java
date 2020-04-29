@@ -6,17 +6,27 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.rmi.RemoteException;
+import java.util.LinkedList;
 import java.util.List;
 
+import com.google.gson.Gson;
+
 import dccan.remote.Communication;
+import dccan.server.control.chat.Client;
+import dccan.server.control.chat.Room;
+import dccan.server.control.chat.RoomMap;
+import dccan.server.control.chat.StaticMap;
 import dccan.server.sql.Comments;
 import dccan.server.sql.Groups;
+import dccan.server.sql.Requests;
 import dccan.server.sql.User;
 import dccan.server.sql.file.SFile;
 
 public class RemoteObj implements Communication {
+
 	public String user = null;
-//static Roommap
+
+	// static Roommap
 	@Override
 	public boolean login(String user, String pass) throws RemoteException {
 		String id = User.login(user, pass);
@@ -40,6 +50,8 @@ public class RemoteObj implements Communication {
 	public String getMember(String group) throws RemoteException {
 		if (user == null)
 			return "false";
+		if (!Groups.checkMember(group, user))
+			return null;
 		String res = Groups.getMember(group);
 		return res;
 	}
@@ -68,6 +80,8 @@ public class RemoteObj implements Communication {
 
 	@Override
 	public String getCommentList(String group, String date, boolean status) throws RemoteException {
+		if (!Groups.checkMember(group, user))
+			return "false";
 		String res = null;
 		if (status) {
 			res = Comments.getNewChat(group, date);
@@ -79,6 +93,8 @@ public class RemoteObj implements Communication {
 
 	@Override
 	public byte[] dowload(String idFile) throws RemoteException {
+		if (user == null)
+			return null;
 		try {
 			DataInputStream is = new DataInputStream(SFile.downloadFile(idFile));
 			ByteArrayOutputStream buffer = new ByteArrayOutputStream();
@@ -102,7 +118,10 @@ public class RemoteObj implements Communication {
 
 	@Override
 	public boolean upload(String name, byte[] data, String group) throws RemoteException {
+		if (user == null)
+			return false;
 		try {
+			System.out.println(data.length);
 			String id = SFile.createFileId(name);
 			String res = Comments.upFcoment(group, user, name, id);
 			if (res.equals("false")) {
@@ -123,37 +142,103 @@ public class RemoteObj implements Communication {
 
 	@Override
 	public boolean deleteMember(String group, String mem) throws RemoteException {
+		if (user == null)
+			return false;
 		String res = Groups.deleteMember(group, mem, user);
 		return res.equals("true");
 	}
 
 	@Override
 	public boolean createGroup(String name, List<String> member) throws RemoteException {
+		if (user == null)
+			return false;
 		String rs = Groups.addGroup(user, member, name);
 		return rs.equals("true");
 	}
 
 	@Override
 	public boolean addMember(String group, String id) throws RemoteException {
+		if (user == null)
+			return false;
 		String res = Groups.addMember(id, group, user);
 		return res.equals("true");
 	}
 
 	@Override
 	public boolean upComment(String group, String nDung) throws RemoteException {
+		if (user == null)
+			return false;
 		String res = Comments.up(group, user, nDung);
 		return res.equals("true");
 	}
 
 	@Override
 	public void outGroup(String group) throws RemoteException {
+		if (user == null)
+			return;
 		Groups.outGroup(group, user);
 
 	}
 
 	@Override
 	public void deleteGroup(String group) throws RemoteException {
+		if (user == null)
+			return;
 		Groups.deleteGroup(group, user);
 	}
 
+	@Override
+	public String getUserkey(String group) throws RemoteException {
+		if (user == null)
+			return null;
+		if (!Groups.checkMember(group, user))
+			return null;
+		List<String> lp = new LinkedList<String>();
+		RoomMap rm = StaticMap.getRm();
+		lp.add(rm.getGroupKey(group));
+		lp.add(rm.createUserKey(group, user));
+		String up = new Gson().toJson(lp);
+		return up;
+	}
+
+	@Override
+	public String chatMember(String group) throws RemoteException {
+		if (user == null)
+			return null;
+		if (!Groups.checkMember(group, user))
+			return null;
+		List<String> lp = new LinkedList<String>();
+		RoomMap rm = StaticMap.getRm();
+		long id = rm.getRoomId(group);
+		if (id == -1)
+			return null;
+		Room room = rm.lp.get(id);
+		List<Client> ls = room.getMem();
+		for (Client cp : ls) {
+			lp.add(cp.getUser());
+		}
+		String up = new Gson().toJson(lp);
+		return up;
+	}
+
+	@Override
+	public boolean requestGroup(String group) throws RemoteException {
+		return Requests.addRequest(group, user);
+	}
+
+	@Override
+	public String showRequest(String group) throws RemoteException {
+		return Requests.showRq(group, user);
+		
+	}
+
+	@Override
+	public boolean acceptRequest(String group, List<String> member) throws RemoteException {
+		return Requests.acceptRq(group, user, member);
+	}
+
+	@Override
+	public boolean deleteRequest(String group, List<String> member) throws RemoteException {
+		return Requests.deleteRq(group, user, member);
+	}
 }

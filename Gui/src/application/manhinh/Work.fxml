@@ -9,13 +9,6 @@
 <AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.manhinh.control.Work">
    <children>
    	<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="544.0" prefWidth="820.0">
-   		<left>
-   			<ScrollPane prefHeight="515.0" prefWidth="139.0" BorderPane.alignment="CENTER">
-   				<content>
-   					<VBox fx:id="group" prefHeight="501.0" prefWidth="124.0" />
-   				</content>
-   			</ScrollPane>
-   		</left>
    		<top>
    			<MenuBar BorderPane.alignment="CENTER">
    				<menus>
@@ -57,6 +50,13 @@
                </bottom>
    			</BorderPane>
    		</center>
+         <left>
+            <BorderPane prefHeight="515.0" prefWidth="117.0" BorderPane.alignment="CENTER">
+               <top>
+                  <TextField BorderPane.alignment="CENTER" />
+               </top>
+            </BorderPane>
+         </left>
    	</BorderPane>
    </children>
 </AnchorPane>

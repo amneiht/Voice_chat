@@ -7,6 +7,7 @@ import com.sun.glass.ui.Robot;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 
+@SuppressWarnings("restriction")
 public class Robo {
 	Robot robot;
 

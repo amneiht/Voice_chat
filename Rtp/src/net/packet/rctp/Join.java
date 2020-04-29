@@ -24,7 +24,6 @@ public class Join extends RctpSample {
 		try {
 			byte[] re = Convert.encrypt(user.getBytes(), key);
 			byte[] res = new byte[length + 8];
-			System.out.println(length);
 			PWrite._16bitToArray(res, type, 0);
 			PWrite._16bitToArray(res, length, 2);
 			PWrite._64bitToArray(res, ntp, 4);

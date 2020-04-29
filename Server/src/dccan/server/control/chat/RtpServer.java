@@ -10,7 +10,7 @@ import java.util.List;
 
 import net.packet.io.PRead;
 
-public class RtpServer {
+public class RtpServer implements Runnable {
 
 	int port = 8889;
 	RoomMap rm;
@@ -20,19 +20,34 @@ public class RtpServer {
 	private boolean run = true;
 	DatagramSocket sc = new DatagramSocket();
 
-	public RtpServer(RoomMap r) throws SocketException {
+	public RtpServer() throws SocketException {
 		ds = new DatagramSocket(port);
-		rm = r;
+		rm = StaticMap.getRm();
 
 	}
 
+	public static void main(String[] args) {
+		try {
+			RtpServer rp = new RtpServer();
+			new Thread(rp).start();
+			InetAddress inet = InetAddress.getByName("localhost");
+			rp.rm.getGroupKey("tula");
+			long gg = rp.rm.getRoomId("tula");
+			System.out.println(gg);
+			rp.rm.addClient(gg, new Client(11211, inet, 98988, "dccan"));
+			rp.rm.addClient(gg, new Client(11212, inet, 98989, "dccan"));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 	public void run() {
-		Thread t = new Thread(new Handle());
-		t.start();
+		new Thread(new Handle()).start();
 		byte[] buf = new byte[maxlg];
+		DatagramPacket dp = new DatagramPacket(buf, maxlg);
 		while (true) {
 			try {
-				DatagramPacket dp = new DatagramPacket(buf, maxlg);
 				ds.receive(dp);
 				ls.add(new Flagment(dp));
 			} catch (IOException e) {
@@ -45,9 +60,10 @@ public class RtpServer {
 
 		try {
 			byte[] send = flg.data;
-			InetAddress ip = flg.inet;
+			long tid = PRead.getLong(send, 10, 4);
 			for (Client c : mem) {
-				if (!c.ina.equals(ip)) {
+				if (c.id != tid) {
+					System.out.println("send to" + c.port);
 					DatagramPacket sd = new DatagramPacket(send, send.length, c.ina, c.port);
 					sc.send(sd);
 				} else {
@@ -64,13 +80,20 @@ public class RtpServer {
 
 		public void run() {
 			while (run) {
-				if (!ls.isEmpty()) {
-					Flagment fg = ls.remove(0);
+				Flagment fg = null;
+				synchronized (ls) {
+					if (!ls.isEmpty())
+						fg = ls.remove(0);
+				}
+				if (fg != null) {
 					byte data[] = fg.data;
 					long gp = PRead.getLong(data, 6, 4);
+
 					Room m = rm.lp.get(gp);
 					if (m != null) {
 						send(fg, m.mem);
+					} else {
+						System.out.println("no room" + gp);
 					}
 				}
 			}
