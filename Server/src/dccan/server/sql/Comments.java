@@ -29,8 +29,9 @@ public class Comments {
 	 */
 	public static String upFcoment(String idnhan, String idGui, String noiDung, String idFile) {
 		String res = "false";
+		Connection con = Info.getCon();
 		try {
-			Connection con = Info.getCon();
+
 			Long tm = System.currentTimeMillis();
 			PreparedStatement ps = con.prepareStatement(upFilesql);
 			String time = new Timestamp(tm).toString();
@@ -41,12 +42,13 @@ public class Comments {
 			ps.setString(5, idFile);
 			ps.executeUpdate();
 			ps.close();
-			//con.close();
+			// con.close();
 			res = "ok";
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
 		}
+		Info.give(con);
 		return res;
 	}
 
@@ -63,8 +65,9 @@ public class Comments {
 	 */
 	public static String up(String idnhan, String idGui, String noiDung) {
 		String res = "false";
+		Connection con = Info.getCon();
 		try {
-			Connection con = Info.getCon();
+
 			Long tm = System.currentTimeMillis();
 			PreparedStatement ps = con.prepareStatement(upsql);
 			String time = new Timestamp(tm).toString();
@@ -74,12 +77,14 @@ public class Comments {
 			ps.setString(4, time);
 			ps.executeUpdate();
 			ps.close();
-			//con.close();
+			// con.close();
 			res = "ok";
+
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
 		}
+		Info.give(con);
 		return res;
 	}
 
@@ -95,25 +100,27 @@ public class Comments {
 	 * @return tra ve chuoi json
 	 */
 	public static String getOldChat(String id, String time) {
+		Connection con = Info.getCon();
+		String gson = null;
 		try {
-			Connection con = Info.getCon();
+
 			PreparedStatement ps = con.prepareStatement(getSql);
 			ps.setString(1, id);
 			ps.setString(2, time);
-			System.out.println(ps.toString());
+			// system.out.pr.println(ps.toString());
 			ResultSet rs = ps.executeQuery();
 			ArrayList<Comment> ap = new ResultToList<Comment>(Comment.class).progess(rs);
-			String gson = new Gson().toJson(ap);
+			gson = new Gson().toJson(ap);
 			rs.close();
 			ps.close();
-			//con.close();
-			return gson;
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
 		}
-		return "false";
+		Info.give(con);
+		return gson;
 	}
+
 	private final static String getNSql = "select * from tinNhan where idNhan = ? and ngayGui > ? limit 30";
 
 	/**
@@ -126,8 +133,10 @@ public class Comments {
 	 * @return tra ve chuoi json
 	 */
 	public static String getNewChat(String id, String time) {
+		Connection con = Info.getCon();
+
 		try {
-			Connection con = Info.getCon();
+
 			PreparedStatement ps = con.prepareStatement(getNSql);
 			ps.setString(1, id);
 			ps.setString(2, time);
@@ -136,12 +145,15 @@ public class Comments {
 			String gson = new Gson().toJson(ap);
 			rs.close();
 			ps.close();
-			//con.close();
+			Info.give(con);
+			// con.close();
+			Info.give(con);
 			return gson;
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
 		}
+		Info.give(con);
 		return "false";
 	}
 }

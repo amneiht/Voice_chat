@@ -27,8 +27,9 @@ public class Groups {
 	 */
 	public static String GetGroup(String id) {
 		String res = "false";
+		Connection con = Info.getCon();
 		try {
-			Connection con = Info.getCon();
+
 			PreparedStatement ps = con.prepareStatement(getGroup);
 			ps.setString(1, id);
 			ResultSet rs = ps.executeQuery();
@@ -40,6 +41,7 @@ public class Groups {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		Info.give(con);
 		return res;
 	}
 
@@ -47,9 +49,10 @@ public class Groups {
 
 	public static boolean checkMember(String group, String user) {
 		String sql = "select * from tvNhom where idNhom = ? and idTv=?";
+		boolean res = false;
 		Connection con = Info.getCon();
 		try {
-			boolean res = false;
+
 			PreparedStatement pps = con.prepareStatement(sql);
 			pps.setString(1, group);
 			pps.setString(2, user);
@@ -58,13 +61,14 @@ public class Groups {
 			res = rs.next();
 			rs.close();
 			pps.close();
-			return res;
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return false;
-		}
 
+		}
+		Info.give(con);
+		return res;
 	}
 
 	/**
@@ -75,8 +79,9 @@ public class Groups {
 	 */
 	public static String getMember(String id) {
 		String res = "false";
+		Connection con = Info.getCon();
 		try {
-			Connection con = Info.getCon();
+
 			PreparedStatement ps = con.prepareStatement(getMem);
 			ps.setString(1, id);
 			ResultSet rs = ps.executeQuery();
@@ -88,6 +93,7 @@ public class Groups {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		Info.give(con);
 		return res;
 	}
 
@@ -106,8 +112,9 @@ public class Groups {
 	public static String addMember(String id, String group, String user) {
 		String res = "false";
 		String sql = "call addMember(?,?,?)";
+		Connection con = Info.getCon();
 		try {
-			Connection con = Info.getCon();
+
 			CallableStatement cstm = con.prepareCall(sql);
 			cstm.setString(1, group);
 			cstm.setString(2, user);
@@ -119,6 +126,7 @@ public class Groups {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		Info.give(con);
 		return res;
 	}
 
@@ -134,8 +142,9 @@ public class Groups {
 	 */
 	public static String addGroup(String id, List<String> member, String ten) {
 		String res = "false";
+		Connection con = Info.getCon();
 		try {
-			Connection con = Info.getCon();
+
 			PreparedStatement ps = con.prepareStatement(addSql1);
 			String nhom = RandomStringUtils.randomAlphanumeric(32);
 			ps.setString(1, nhom);
@@ -160,14 +169,16 @@ public class Groups {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		Info.give(con);
 		return res;
 	}
 
-	public static boolean  acceptMem(String id, String group, List<String> mem) {
+	public static boolean acceptMem(String id, String group, List<String> mem) {
 		boolean res = false;
+		Connection con = Info.getCon();
 		try {
 			String addSql2 = "insert into tvNhom(idNhom,idTV,quyen,idAdd) values(?,?,?,?) ";
-			Connection con = Info.getCon();
+
 			PreparedStatement ps = con.prepareStatement(addSql2);
 			ps = con.prepareStatement(addSql2);
 			ps.setString(1, group);
@@ -182,6 +193,7 @@ public class Groups {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		Info.give(con);
 		return res;
 	}
 
@@ -196,8 +208,9 @@ public class Groups {
 	 */
 	public static String addFriend(String id1, String id2) {
 		String res = "false";
+		Connection con = Info.getCon();
 		try {
-			Connection con = Info.getCon();
+
 			PreparedStatement ps = con.prepareStatement(checkF);
 			ps.setString(1, id1);
 			ps.setString(2, id2);
@@ -243,6 +256,7 @@ public class Groups {
 
 			System.err.println(e);
 		}
+		Info.give(con);
 		return res;
 	}
 
@@ -256,24 +270,25 @@ public class Groups {
 	 * @return
 	 */
 	public static String getFrendList(String id) {
-
+		Connection con = Info.getCon();
+		String gson = null;
 		try {
-			Connection con = Info.getCon();
+
 			PreparedStatement ps = con.prepareStatement(getFlist);
 			ps.setString(1, id);
 			ps.setString(2, id);
 			ResultSet rs = ps.executeQuery();
-			String gson = null;
+
 			ArrayList<Friend> ap = new ResultToList<Friend>(Friend.class).progess(rs);
 			gson = new Gson().toJson(ap);
 			rs.close();
 			ps.close();
-			// con.close();
-			return gson;
 		} catch (Exception e) {
 			System.err.println(e);
-			return "false";
+
 		}
+		Info.give(con);
+		return gson;
 	}
 
 	/**
@@ -286,8 +301,9 @@ public class Groups {
 	public static String deleteMember(String group, String id, String user) {
 		String res = "false";
 		String sql = "call deleteMember(?,?,?)";
+		Connection con = Info.getCon();
 		try {
-			Connection con = Info.getCon();
+
 			CallableStatement cstm = con.prepareCall(sql);
 			cstm.setString(1, group);
 			cstm.setString(2, user);
@@ -300,14 +316,16 @@ public class Groups {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		Info.give(con);
 		return res;
 	}
 
 	public static String deleteFriend(String id1, String id2) {
 		String sql = "delete from banBe where (id1 = ? and id2 = ?) or (id1 = ? and id2 = ?)";
-
+		Connection con = Info.getCon();
+		String res = "false";
 		try {
-			Connection con = Info.getCon();
+
 			PreparedStatement ps = con.prepareStatement(sql);
 			ps.setString(1, id1);
 			ps.setString(2, id2);
@@ -315,18 +333,20 @@ public class Groups {
 			ps.setString(4, id1);
 			ps.executeUpdate();
 			ps.close();
-			// con.close();
-			return "true";
+			res = "true";
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return "false";
+		Info.give(con);
+		return res;
 	}
 
 	public static void outGroup(String group, String user) {
 		String sql = " delete from tvNhom where idNhom = ? and idTV = ?";
+		Connection con = Info.getCon();
 		try {
-			Connection con = Info.getCon();
+
 			PreparedStatement ps = con.prepareStatement(sql);
 			ps.setString(1, group);
 			ps.setString(2, user);
@@ -335,13 +355,14 @@ public class Groups {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
+		Info.give(con);
 	}
 
 	public static void deleteGroup(String group, String user) {
 		String sql = "call deleteGroup(?,?)";
+		Connection con = Info.getCon();
 		try {
-			Connection con = Info.getCon();
+
 			CallableStatement cstm = con.prepareCall(sql);
 			cstm.setString(1, group);
 			cstm.setString(2, user);
@@ -351,5 +372,6 @@ public class Groups {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		Info.give(con);
 	}
 }

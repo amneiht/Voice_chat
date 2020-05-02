@@ -17,26 +17,30 @@ public class User {
 	 * @return ten hien thi cua nguoi dung , null neu khong co
 	 */
 	public static String login(String user, String pass) {
+		Connection con = Info.getCon();
+		String id = null;
 		try {
-			Connection con = Info.getCon();
+
 			String sql = "select nguoiDung from thongtin where ten = ? and matKhau = ?";
 			PreparedStatement ps = con.prepareStatement(sql);
 			ps.setString(1, user);
 			ps.setString(2, Info.getMD5(pass));
 			ResultSet rs = ps.executeQuery();
 			rs.beforeFirst();// dich con tro
-			String id = null;
+
 			if (rs.next()) {
 				id = rs.getString(1);
 			}
 			ps.close();
-			//con.close();
-			return id;
+			// con.close();
+
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
-			return null;
+
 		}
+		Info.give(con);
+		return id;
 	}
 
 	/**
@@ -53,17 +57,19 @@ public class User {
 	 * @return true neu thanh cong , false con lai
 	 */
 	public static boolean register(String user, String pass, String email, String hoten) {
+		Connection con = Info.getCon();
 		try {
-			Connection con = Info.getCon();
+
 			String sql = "select matKhau from thongtin where ten = ? ";
 			PreparedStatement ps = con.prepareStatement(sql);
 			ps.setString(1, user);
 			ResultSet rs = ps.executeQuery();
 			rs.beforeFirst();// dich con tro
 			if (rs.next()) {
-				System.out.println("user :"+user+" da co tk");
+				System.out.println("user :" + user + " da co tk");
 				ps.close();
-				//con.close();
+				// con.close();
+				Info.give(con);
 				return false; // da co tai khoan
 			}
 			ps.close();
@@ -75,11 +81,13 @@ public class User {
 			ps.setString(4, hoten);
 			ps.executeUpdate();
 			ps.close();
-			//con.close();
+			// con.close();
+			Info.give(con);
 			return true;
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
+			Info.give(con);
 			return false;
 		}
 	}

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane fx:id="rq" prefHeight="502.0" prefWidth="439.0"
+	xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8"
+	fx:controller="application.manhinh.control.ReQuest"
+	>
+	<children>
+		<BorderPane prefHeight="502.0" prefWidth="439.0">
+			<bottom>
+				<Button fx:id="btn" mnemonicParsing="false"
+					onAction="#runAct" text="Button" BorderPane.alignment="CENTER" />
+			</bottom>
+			<center>
+				<ScrollPane prefHeight="200.0" prefWidth="200.0"
+					BorderPane.alignment="CENTER">
+					<content>
+						<TableView fx:id="tab" prefHeight="465.0"
+							prefWidth="437.0" />
+					</content>
+				</ScrollPane>
+			</center>
+		</BorderPane>
+	</children>
+</AnchorPane>

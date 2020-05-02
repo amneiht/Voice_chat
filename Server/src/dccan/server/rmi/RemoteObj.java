@@ -6,6 +6,7 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.rmi.RemoteException;
+import java.sql.Timestamp;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -24,7 +25,7 @@ import dccan.server.sql.file.SFile;
 
 public class RemoteObj implements Communication {
 
-	public String user = null;
+	public String user = "can";
 
 	// static Roommap
 	@Override
@@ -80,6 +81,8 @@ public class RemoteObj implements Communication {
 
 	@Override
 	public String getCommentList(String group, String date, boolean status) throws RemoteException {
+		if (date.equals("now"))
+			date = new Timestamp(System.currentTimeMillis()).toString();
 		if (!Groups.checkMember(group, user))
 			return "false";
 		String res = null;
@@ -166,6 +169,7 @@ public class RemoteObj implements Communication {
 
 	@Override
 	public boolean upComment(String group, String nDung) throws RemoteException {
+		//System.out.println("Noidung "+nDung);
 		if (user == null)
 			return false;
 		String res = Comments.up(group, user, nDung);
@@ -229,7 +233,7 @@ public class RemoteObj implements Communication {
 	@Override
 	public String showRequest(String group) throws RemoteException {
 		return Requests.showRq(group, user);
-		
+
 	}
 
 	@Override

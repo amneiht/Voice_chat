@@ -1,5 +1,7 @@
 package application.autofill;
 
+import java.util.List;
+
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -11,16 +13,13 @@ import javafx.scene.control.TextField;
 public class Popup implements EventHandler<Event> {
 	private String dta = "";
 
-	public void Text(Event e) {
-	}
-
 	ContextMenu contextMenu;
 	String[] member;
 	String gtext;
 	int length = 5;
 
 	private void createMenu(String text) {
-		//gtext = text;
+		// gtext = text;
 		contextMenu.getItems().clear();
 		int d = 0;
 		for (int i = 0; i < member.length; i++) {
@@ -83,7 +82,7 @@ public class Popup implements EventHandler<Event> {
 		MenuItem im = (MenuItem) ect.getSource();
 		String d = im.getText();
 		int p = gtext.length();
-		String ps = d.substring(p)+" ";
+		String ps = d.substring(p) + " ";
 		rb.paste(ps);
 	}
 
@@ -109,7 +108,8 @@ public class Popup implements EventHandler<Event> {
 		}
 
 	}
-	public Popup(String[] p,String note) {
+
+	public Popup(String[] p, String note) {
 		contextMenu = new ContextMenu();
 		member = new String[p.length];
 		mItem = new MenuItem[member.length];
@@ -122,12 +122,33 @@ public class Popup implements EventHandler<Event> {
 			}
 		};
 		for (int i = 0; i < member.length; i++) {
-			member[i]=note+p[i];
+			member[i] = note + p[i];
 			mItem[i] = new MenuItem(member[i]);
 			mItem[i].setOnAction(addtext);
 		}
 
 	}
+
+	public Popup(List<String> p, String note) {
+		contextMenu = new ContextMenu();
+		member = new String[p.size()];
+		mItem = new MenuItem[member.length];
+		addtext = new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				paste(event);
+
+			}
+		};
+		for (int i = 0; i < member.length; i++) {
+			member[i] = note + p.get(i);
+			mItem[i] = new MenuItem(member[i]);
+			mItem[i].setOnAction(addtext);
+		}
+
+	}
+
 	@Override
 	public void handle(Event e) {
 		//
@@ -139,8 +160,9 @@ public class Popup implements EventHandler<Event> {
 		dta = lg;
 		gtext = getText(lg, h);
 		contextMenu.hide();
-		if(gtext.length()<1) return ;
-		createMenu(gtext);	
-		contextMenu.show(v,Side.BOTTOM,0.5,0.5 );
+		if (gtext.length() < 1)
+			return;
+		createMenu(gtext);
+		contextMenu.show(v, Side.BOTTOM, 0.5, 0.5);
 	}
 }

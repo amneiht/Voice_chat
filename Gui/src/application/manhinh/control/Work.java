@@ -7,8 +7,11 @@ import java.util.ResourceBundle;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -19,6 +22,7 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 
 public class Work implements Initializable {
 	public int test =1 ;
@@ -104,5 +108,21 @@ public class Work implements Initializable {
         });
 		
 	}
-
+	
+	void showRq(String gp) {
+		try {
+			// StaticStage.pri = primaryStage;
+			FXMLLoader fxmlLoader = new FXMLLoader();
+			fxmlLoader.setControllerFactory(e -> {
+				return new ReQuest(gp);
+			});
+			Parent root = fxmlLoader.load(getClass().getResource("/application/manhinh/ReQuest.fxml").openStream());
+			Scene sen = new Scene(root);
+			Stage ip = new Stage();
+			ip.setScene(sen);
+			ip.show();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }

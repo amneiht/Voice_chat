@@ -4,14 +4,9 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.SQLException;
-
-import org.apache.commons.dbcp2.BasicDataSource;
 
 public class Info {
-
-	// com.mysql.jdbc.MysqlDataSource es ;
-	private static BasicDataSource ds = new BasicDataSource();
+	static DbPool dp = new DbPool();
 	public static final String HOST_NAME = "localhost";
 	public static final String DB_NAME = "chat";
 	public static final String DB_PORT = "3306";
@@ -20,35 +15,35 @@ public class Info {
 	public static final String DB_DRIVER = "com.mysql.jdbc.Driver";
 	public static final int DB_MIN_CONNECTIONS = 5;
 	public static final int DB_MAX_CONNECTIONS = 10;
-	// jdbc:mysql://hostname:port/dbname
 	public static final String CONNECTION_URL = "jdbc:mysql://" + HOST_NAME + ":" + DB_PORT + "/" + DB_NAME
-			+ "?useSSL=false";
+			+ "?useSSL=false&characterEncoding=UTF-8";
 	static {
-		ds.setDriverClassName(DB_DRIVER);
-		ds.setUrl(CONNECTION_URL);
-		ds.setUsername(USER_NAME);
-		ds.setPassword(PASSWORD);
-		ds.setMinIdle(DB_MIN_CONNECTIONS); // minimum number of idle connections in the pool
-		ds.setInitialSize(DB_MIN_CONNECTIONS);
-		ds.setMaxIdle(DB_MAX_CONNECTIONS); // maximum number of idle connections in the pool
-		ds.setMaxOpenPreparedStatements(100);
-	
+		System.out.println("Khoi tao database pool ");
+		System.out.println();
+		dp.setMaxConnection(DB_MAX_CONNECTIONS);
+		dp.setMinConnection(DB_MIN_CONNECTIONS);
+		dp.setUser(USER_NAME);
+		dp.setPass(PASSWORD);
+		dp.setUrl(CONNECTION_URL);
+		dp.init();
 	}
 
 	// dung trong thuc te
-	public static Connection getCon1() throws SQLException {
-		return ds.getConnection();
+	public static Connection getCon(){
+		return dp.getConnection();
 	}
-
+	public static void give(Connection con)
+	{
+		dp.give(con);
+	}
 	// test hoat dong
-	public static Connection getCon() {
+	public static Connection getCon1() {
 		try {
-			// Class.forName("com.mysql.jdbc.Driver");
+
 			String url = "jdbc:mysql://" + HOST_NAME + ":" + DB_PORT + "/" + DB_NAME + "?useSSL=false";
 			Connection con = DriverManager.getConnection(url, USER_NAME, PASSWORD);
 			return con;
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 			return null;
 		}

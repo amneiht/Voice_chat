@@ -4,16 +4,17 @@ import java.io.File;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
-import javax.rmi.ssl.SslRMIClientSocketFactory;
-
-public class GetRmi {
+public class Client {
 	private static Communication rmi = null;
 	static Registry registry;
 
 	public static void init(String host) {
 		try {
-			setSettings();
-			registry = LocateRegistry.getRegistry(host, 8888, new SslRMIClientSocketFactory());
+			// setSettings();
+			// registry = LocateRegistry.getRegistry(host, 8888, new
+			// SslRMIClientSocketFactory());
+
+			registry = LocateRegistry.getRegistry(host, 8888);
 			rmi = (Communication) registry.lookup("Hello");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -25,7 +26,7 @@ public class GetRmi {
 		return rmi;
 	}
 
-	private static void setSettings() {
+	protected static void setSettings() {
 		String path = new File("").getAbsolutePath();
 		String pass = "dangcongcan"; // ko duoc tu tien thay doi
 		System.setProperty("javax.net.ssl.debug", "all");

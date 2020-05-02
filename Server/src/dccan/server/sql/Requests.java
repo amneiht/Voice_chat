@@ -13,31 +13,36 @@ import dccan.server.sql.config.Info;
 
 public class Requests {
 	static Gson gs = new Gson();
-	public static boolean acceptRq(String group, String user, List<String> mem)
-	{
+
+	public static boolean acceptRq(String group, String user, List<String> mem) {
 		if (!checkpri(group, user))
 			return false;
 		deleteRq(group, user, mem);
 		return Groups.acceptMem(user, group, mem);
 	}
+
 	public static String showRq(String group, String user) {
 		if (!checkpri(group, user))
 			return null;
 		String sql = "select idTv from yeuCau where idNhom = ?";
 		Connection con = Info.getCon();
+		String res = null;
 		try {
+
 			PreparedStatement pps = con.prepareStatement(sql);
 			pps.setString(1, group);
 			ResultSet ps = pps.executeQuery();
 			List<String> lp = stringListInPoint(ps, 1);
 			ps.close();
 			pps.close();
-			return gs.toJson(lp);
+			res = gs.toJson(lp);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return null;
+
 		}
+		Info.give(con);
+		return res;
 	}
 
 	public static boolean deleteRq(String group, String user, List<String> mem) {
@@ -47,6 +52,7 @@ public class Requests {
 		String sql = "delete from yeuCau where idNhom = ? and idTv = ?";
 		Connection con = Info.getCon();
 		try {
+			
 			PreparedStatement pps = con.prepareStatement(sql);
 			pps.setString(1, group);
 			for (String m : mem) {
@@ -59,6 +65,7 @@ public class Requests {
 			e.printStackTrace();
 
 		}
+		Info.give(con);
 		return res;
 	}
 
@@ -67,6 +74,7 @@ public class Requests {
 		String sql = "insert into yeuCau values (?,?)";
 		Connection con = Info.getCon();
 		try {
+
 			PreparedStatement pps = con.prepareStatement(sql);
 			pps.setString(1, group);
 			pps.setString(2, user);
@@ -77,6 +85,7 @@ public class Requests {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		Info.give(con);
 		return res;
 	}
 
@@ -85,6 +94,7 @@ public class Requests {
 		String sql = "select quyen from tvNhom where idNhom = ? and idTv = ?";
 		Connection con = Info.getCon();
 		try {
+
 			PreparedStatement pps = con.prepareStatement(sql);
 			pps.setString(1, group);
 			pps.setString(2, user);
@@ -100,6 +110,7 @@ public class Requests {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		Info.give(con);
 		return res;
 	}
 
