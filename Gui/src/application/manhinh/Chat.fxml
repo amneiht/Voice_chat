@@ -39,9 +39,9 @@
 			<center>
 				<BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
 					<center>
-						<ScrollPane prefHeight="472.0" prefWidth="719.0" BorderPane.alignment="CENTER">
+						<ScrollPane fx:id="schat" BorderPane.alignment="CENTER" fitToWidth="true" fitToHeight="true">
                      <content>
-                        <VBox fx:id="khungChat" prefHeight="506.0" prefWidth="708.0" />
+                        <VBox fx:id="khungChat" prefHeight="472.0" prefWidth="708.0" />
                      </content></ScrollPane>
 					</center>
 					<bottom>
@@ -49,7 +49,7 @@
 							<children>
 								<Button fx:id="call" mnemonicParsing="false" text="Call" />
 								<Button fx:id="File" mnemonicParsing="false" text="File" />
-								<TextField fx:id="text" prefHeight="25.0" prefWidth="551.0" />
+								<TextField fx:id="text" onKeyPressed="#checkEnter" prefHeight="25.0" prefWidth="551.0" />
 								<Button fx:id="send" mnemonicParsing="false" onAction="#sendComment" prefHeight="25.0" prefWidth="79.0" text="Send" />
 							</children>
 						</FlowPane>

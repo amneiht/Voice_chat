@@ -1,5 +1,7 @@
 package net.packet.Nrtp;
 
+import java.io.Closeable;
+import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -7,15 +9,15 @@ import java.net.InetAddress;
 import net.help.Convert;
 import net.packet.io.PWrite;
 
-public class RtpClient {
+public class RtpClient implements Closeable{
 	byte[] header = new byte[8];
 	static int port = 9981;
 	DatagramSocket client;
 	InetAddress inet;
-	int sq = 0;
+	int sq = 1234;
 	String key;
 
-	// sq :0 ; ntp : 2 ; group 6 ,id :10 , data :14
+	// type :0 ; ntp : 2 ; group 6 ,id :10 , data :14
 	public int getClientPort() {
 		return client.getLocalPort();
 	}
@@ -23,6 +25,18 @@ public class RtpClient {
 	public RtpClient(String host, long group, long id, String key, int ports) {
 		try {
 			inet = InetAddress.getByName(host);
+			client = new DatagramSocket();
+			this.key = key;
+			port = ports;
+			createHeader(group, id);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public RtpClient(InetAddress it, long group, long id, String key, int ports) {
+		try {
+			inet = it;
 			client = new DatagramSocket();
 			this.key = key;
 			port = ports;
@@ -48,11 +62,15 @@ public class RtpClient {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		sq++;
 	}
 
 	public void createHeader(long group, long id) {
 		PWrite._32bitToArray(header, group, 0);
 		PWrite._32bitToArray(header, id, 4);
+	}
+
+	@Override
+	public void close() throws IOException {
+		client.close();	
 	}
 }

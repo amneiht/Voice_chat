@@ -9,7 +9,7 @@ import java.util.ResourceBundle;
 import application.radiocell.Chose;
 import application.radiocell.CreateTable;
 import application.radiocell.User;
-import dccan.remote.Communication;
+import dccan.remote.Remote;
 import dccan.remote.Client;
 import dccan.suport.GetList;
 import javafx.collections.ObservableList;
@@ -54,7 +54,7 @@ public class ReQuest implements Initializable {
 				// System.out.println(up.getName());
 			}
 		}
-		Communication rmi = Client.getRmi();
+		Remote rmi = Client.getRmi();
 		try {
 			rmi.acceptRequest(group, add);
 			rmi.deleteRequest(group, del);
@@ -79,7 +79,7 @@ public class ReQuest implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 		tab.setEditable(true);
 		CreateTable.make(tab);
-		Communication rmi = Client.getRmi();
+		Remote rmi = Client.getRmi();
 		List<String> il;
 		il = new LinkedList<String>();
 

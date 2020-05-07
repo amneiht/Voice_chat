@@ -1,20 +1,19 @@
-import java.rmi.RemoteException;
 import java.util.LinkedList;
+import java.util.List;
 
 import dccan.server.rmi.RemoteObj;
 
 public class Test {
-public static void main(String[] args) {
-	RemoteObj rmi = new RemoteObj() ;
-	try {
-		//rmi.register("can", "1", "admin", "nomail");
-		rmi.createGroup("thien ha vo dong", new LinkedList<String>()) ;
-		rmi.createGroup("thien ha vo dong", new LinkedList<String>()) ;
-		rmi.createGroup("thien ha vo dong", new LinkedList<String>()) ;
-		System.out.println("ok");
-	} catch (RemoteException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
+	public static void main(String[] args) {
+		RemoteObj rmi = new RemoteObj();
+		try {
+			String token =rmi.login("can2", "1");
+			List<String> cn = new LinkedList<String>();
+			cn.add("can");
+			rmi.createGroup(token,"GTFO", cn);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
-}
 }

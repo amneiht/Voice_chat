@@ -1,5 +1,6 @@
 package amneiht.media.buffer;
 
+import java.io.Closeable;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -8,7 +9,7 @@ import javax.sound.sampled.LineUnavailableException;
 import amneiht.media.NetAudioFormat;
 import amneiht.media.PlayMedia;
 
-public class NoControl extends Voice {
+public class NoControl extends Voice implements Closeable {
 	public static int siz = 20;
 	boolean run = true;
 	boolean status = false;
@@ -79,17 +80,12 @@ public class NoControl extends Voice {
 			
 		} else {
 			if (System.currentTimeMillis() - live > lose)
-				end();
+				close();
 		}
 
 	}
 
-	public long getId() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	public void end() {
+	public void close() {
 		// TODO Auto-generated method stub
 		run = false;
 		status = false;
@@ -97,9 +93,11 @@ public class NoControl extends Voice {
 	}
 
 	@Override
-	public boolean isRun() {
+	public boolean isrun() {
 		// TODO Auto-generated method stub
-		return run;
+		return run ;
 	}
+
+	
 
 }

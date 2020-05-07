@@ -24,6 +24,7 @@ public class RctpServer implements Runnable {
 	public RctpServer() throws SocketException {
 		ds = new DatagramSocket(port);
 		rm = StaticMap.getRm();
+		System.out.println("create Rctp server on port 8890\n");
 	}
 
 	public static void main(String[] args) {
@@ -62,28 +63,36 @@ public class RctpServer implements Runnable {
 						if (!ls.isEmpty())
 							fg = ls.remove(0);
 					}
-					if (fg != null) {			
+					if (fg != null) {
 						byte[] res = fg.data;
 						int type = (int) PRead.getLong(res, 0, 2);
 						switch (type) {
-						case 1000: // goi tin create of join					
+						case 1000: // goi tin create of join
 							int length = (int) PRead.getLong(res, 2, 2);
 							int pos = (int) PRead.getLong(res, 12, 4);
 							int z = length - 16;
 							String group = PRead.getString(res, 16, z);
 							long gid = rm.getRoomId(group);
-							if (gid == -1)
+							System.out.println("ma group " + gid);
+							if (gid == -1) {
+								sendid(fg);
 								break;
+							}
 							byte[] en = Convert.encrypt(PRead.getByte(res, length, 8), rm.getGroupKey(group));
-							String ck =rm.checkUserKey(gid, en) ;
-							System.out.println("user kete noi"+ck);
-							if(ck==null)
+							
+							String ck = rm.checkUserKey(gid, en);
+							System.out.println("user ket noi" + ck);
+							System.out.println();
+							if (ck == null) {
+								sendid(fg);
 								break; // kiem tra key false la cho bay luon
-							long id = (long) Math.random() * 0xffffffff;
+							}
+							long id = (long) (Math.random() * 0xffffffffL);
+							//System.out.println("id "+id);
 							InetAddress inet = fg.inet;
-							Client s = new Client(pos, inet, id,ck);
+							Client s = new Client(pos, inet, id, ck);
 							rm.addClient(gid, s);
-							sendid(id, fg);
+							sendid(id, gid, fg, rm.getGroupKey(group));
 							break;
 						case 1001:
 							long gid1 = PRead.getLong(res, 12, 4);
@@ -105,12 +114,10 @@ public class RctpServer implements Runnable {
 			}
 		}
 
-		private void sendid(long id, Flagment fg) {
-			System.out.println("send to client");
-			byte res[] = new byte[10];
-			PWrite._16bitToArray(res, 2000, 0);
-			PWrite._32bitToArray(res, System.currentTimeMillis(), 2);
-			PWrite._32bitToArray(res, id, 6);
+		private void sendid(Flagment fg) {
+			// System.out.println("send to client");
+			byte res[] = new byte[14];
+			PWrite._16bitToArray(res, 2001, 0);
 			DatagramPacket dp = new DatagramPacket(res, res.length, fg.inet, fg.port);
 			try {
 				clients.send(dp);
@@ -118,5 +125,22 @@ public class RctpServer implements Runnable {
 				e.printStackTrace();
 			}
 		}
+
+		private void sendid(long id, long gp, Flagment fg, String key) {
+			// System.out.println("send to client");
+			byte res[] = new byte[14];
+			PWrite._32bitToArray(res, System.currentTimeMillis(), 2);
+			PWrite._32bitToArray(res, id, 6);
+			PWrite._32bitToArray(res, gp, 10);
+			byte[] dta = Convert.encrypt(res, key);
+			PWrite._16bitToArray(dta, 2000, 0);
+			DatagramPacket dp = new DatagramPacket(dta, dta.length, fg.inet, fg.port);
+			try {
+				clients.send(dp);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
+
 }

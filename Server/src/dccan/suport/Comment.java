@@ -4,8 +4,7 @@ import java.sql.Timestamp;
 
 public class Comment {
 	private String idNhan, idGui, noiDung, idFile;
-	//private String idNhan =null, idGui=null, noiDung=null, idFile=null, ngayGui=null;
-	private Timestamp ngayGui ;
+	private long ngayGui ;
 	public String getIdNhan() {
 		return idNhan;
 	}
@@ -23,6 +22,6 @@ public class Comment {
 	}
 
 	public String getNgayGui() {
-		return ngayGui.toString();
+		return new Timestamp(ngayGui).toString();
 	}
 }

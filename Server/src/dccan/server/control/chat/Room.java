@@ -1,9 +1,7 @@
 package dccan.server.control.chat;
 
-import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-import java.net.InetAddress;
 import java.net.SocketException;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -24,7 +22,7 @@ public class Room {
 		key = RandomStringUtils.randomAscii(24);
 	}
 
-	public String createUserKey(String mem) {
+	public synchronized String createUserKey(String mem) {
 		String res = RandomStringUtils.randomAscii(8);
 		map.put(res, mem);
 		return res;
@@ -36,6 +34,8 @@ public class Room {
 		synchronized (map) {
 			res = map.remove(test);
 		}
+		System.out.println(test);
+		System.out.println(res);
 		if (res == null)
 			return res;
 		return checkListUser(res);
@@ -48,7 +48,8 @@ public class Room {
 	 * @return
 	 */
 	private String checkListUser(String res) {
-		System.out.println(mem.size());
+		
+		
 		for (Client cl : mem) {
 			if (cl.user.equals(res))
 				return null;
@@ -117,24 +118,5 @@ public class Room {
 
 	public void addPacket(DatagramPacket dp) {
 		list.add(dp);
-	}
-
-	public void send(Flagment flg) {
-
-		try {
-			byte[] send = flg.data;
-			InetAddress ip = flg.inet;
-			for (Client c : mem) {
-				if (!c.ina.equals(ip)) {
-					DatagramPacket sd = new DatagramPacket(send, send.length, c.ina, c.port);
-					sc.send(sd);
-				} else {
-					c.live = System.currentTimeMillis();
-				}
-			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 }

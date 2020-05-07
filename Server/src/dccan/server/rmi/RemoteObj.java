@@ -6,7 +6,6 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.rmi.RemoteException;
-import java.sql.Timestamp;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -17,6 +16,7 @@ import dccan.server.control.chat.Client;
 import dccan.server.control.chat.Room;
 import dccan.server.control.chat.RoomMap;
 import dccan.server.control.chat.StaticMap;
+import dccan.server.control.user.ListUser2;
 import dccan.server.sql.Comments;
 import dccan.server.sql.Groups;
 import dccan.server.sql.Requests;
@@ -25,30 +25,29 @@ import dccan.server.sql.file.SFile;
 
 public class RemoteObj implements Communication {
 
-	public String user = "can";
-
 	// static Roommap
 	@Override
-	public boolean login(String user, String pass) throws RemoteException {
+	public String login(String user, String pass) throws RemoteException {
 		String id = User.login(user, pass);
+		System.out.println(id);
 		if (id != null) {
-			this.user = user;
-			return true;
+			return ListUser2.addNew(user);
 		}
-		return false;
+		return null;
 	}
 
 	@Override
-	public boolean register(String user, String pass, String hoten, String email) throws RemoteException {
+	public String register(String user, String pass, String hoten, String email) throws RemoteException {
 		boolean td = User.register(user, pass, email, hoten);
 		if (td) {
-			this.user = user;
+			return ListUser2.addNew(user);
 		}
-		return td;
+		return null;
 	}
 
 	@Override
-	public String getMember(String group) throws RemoteException {
+	public String getMember(String token, String group) throws RemoteException {
+		String user = ListUser2.getUserByToken(token);
 		if (user == null)
 			return "false";
 		if (!Groups.checkMember(group, user))
@@ -58,15 +57,17 @@ public class RemoteObj implements Communication {
 	}
 
 	@Override
-	public String getGroup() throws RemoteException {
+	public String getGroup(String token) throws RemoteException {
+		String user = ListUser2.getUserByToken(token);
 		if (user == null)
-			return "false";
+			return null;
 		String res = Groups.GetGroup(user);
 		return res;
 	}
 
 	@Override
-	public boolean addFriend(String id) throws RemoteException {
+	public boolean addFriend(String token, String id) throws RemoteException {
+		String user = ListUser2.getUserByToken(token);
 		if (user == null)
 			return false;
 		String rs = Groups.addFriend(user, id);
@@ -74,17 +75,22 @@ public class RemoteObj implements Communication {
 	}
 
 	@Override
-	public String getFriendList() throws RemoteException {
+	public String getFriendList(String token) throws RemoteException {
+		String user = ListUser2.getUserByToken(token);
 		String rs = Groups.getFrendList(user);
 		return rs;
 	}
 
 	@Override
-	public String getCommentList(String group, String date, boolean status) throws RemoteException {
-		if (date.equals("now"))
-			date = new Timestamp(System.currentTimeMillis()).toString();
+	public String getCommentList(String token, String group, long date, boolean status) throws RemoteException {
+		String user = ListUser2.getUserByToken(token);
+		if (date == -1)
+			date = System.currentTimeMillis();
 		if (!Groups.checkMember(group, user))
-			return "false";
+		{
+			
+			return null;
+		}
 		String res = null;
 		if (status) {
 			res = Comments.getNewChat(group, date);
@@ -95,7 +101,8 @@ public class RemoteObj implements Communication {
 	}
 
 	@Override
-	public byte[] dowload(String idFile) throws RemoteException {
+	public byte[] dowload(String token, String idFile) throws RemoteException {
+		String user = ListUser2.getUserByToken(token);
 		if (user == null)
 			return null;
 		try {
@@ -120,7 +127,8 @@ public class RemoteObj implements Communication {
 	}
 
 	@Override
-	public boolean upload(String name, byte[] data, String group) throws RemoteException {
+	public boolean upload(String token, String name, byte[] data, String group) throws RemoteException {
+		String user = ListUser2.getUserByToken(token);
 		if (user == null)
 			return false;
 		try {
@@ -144,7 +152,8 @@ public class RemoteObj implements Communication {
 	}
 
 	@Override
-	public boolean deleteMember(String group, String mem) throws RemoteException {
+	public boolean deleteMember(String token, String group, String mem) throws RemoteException {
+		String user = ListUser2.getUserByToken(token);
 		if (user == null)
 			return false;
 		String res = Groups.deleteMember(group, mem, user);
@@ -152,7 +161,8 @@ public class RemoteObj implements Communication {
 	}
 
 	@Override
-	public boolean createGroup(String name, List<String> member) throws RemoteException {
+	public boolean createGroup(String token, String name, List<String> member) throws RemoteException {
+		String user = ListUser2.getUserByToken(token);
 		if (user == null)
 			return false;
 		String rs = Groups.addGroup(user, member, name);
@@ -160,7 +170,8 @@ public class RemoteObj implements Communication {
 	}
 
 	@Override
-	public boolean addMember(String group, String id) throws RemoteException {
+	public boolean addMember(String token, String group, String id) throws RemoteException {
+		String user = ListUser2.getUserByToken(token);
 		if (user == null)
 			return false;
 		String res = Groups.addMember(id, group, user);
@@ -168,8 +179,8 @@ public class RemoteObj implements Communication {
 	}
 
 	@Override
-	public boolean upComment(String group, String nDung) throws RemoteException {
-		//System.out.println("Noidung "+nDung);
+	public boolean upComment(String token, String group, String nDung) throws RemoteException {
+		String user = ListUser2.getUserByToken(token);
 		if (user == null)
 			return false;
 		String res = Comments.up(group, user, nDung);
@@ -177,7 +188,8 @@ public class RemoteObj implements Communication {
 	}
 
 	@Override
-	public void outGroup(String group) throws RemoteException {
+	public void outGroup(String token, String group) throws RemoteException {
+		String user = ListUser2.getUserByToken(token);
 		if (user == null)
 			return;
 		Groups.outGroup(group, user);
@@ -185,14 +197,16 @@ public class RemoteObj implements Communication {
 	}
 
 	@Override
-	public void deleteGroup(String group) throws RemoteException {
+	public void deleteGroup(String token, String group) throws RemoteException {
+		String user = ListUser2.getUserByToken(token);
 		if (user == null)
 			return;
 		Groups.deleteGroup(group, user);
 	}
 
 	@Override
-	public String getUserkey(String group) throws RemoteException {
+	public String getUserkey(String token, String group) throws RemoteException {
+		String user = ListUser2.getUserByToken(token);
 		if (user == null)
 			return null;
 		if (!Groups.checkMember(group, user))
@@ -206,7 +220,8 @@ public class RemoteObj implements Communication {
 	}
 
 	@Override
-	public String chatMember(String group) throws RemoteException {
+	public String chatMember(String token, String group) throws RemoteException {
+		String user = ListUser2.getUserByToken(token);
 		if (user == null)
 			return null;
 		if (!Groups.checkMember(group, user))
@@ -226,23 +241,27 @@ public class RemoteObj implements Communication {
 	}
 
 	@Override
-	public boolean requestGroup(String group) throws RemoteException {
+	public boolean requestGroup(String token, String group) throws RemoteException {
+		String user = ListUser2.getUserByToken(token);
 		return Requests.addRequest(group, user);
 	}
 
 	@Override
-	public String showRequest(String group) throws RemoteException {
+	public String showRequest(String token, String group) throws RemoteException {
+		String user = ListUser2.getUserByToken(token);
 		return Requests.showRq(group, user);
 
 	}
 
 	@Override
-	public boolean acceptRequest(String group, List<String> member) throws RemoteException {
+	public boolean acceptRequest(String token, String group, List<String> member) throws RemoteException {
+		String user = ListUser2.getUserByToken(token);
 		return Requests.acceptRq(group, user, member);
 	}
 
 	@Override
-	public boolean deleteRequest(String group, List<String> member) throws RemoteException {
+	public boolean deleteRequest(String token, String group, List<String> member) throws RemoteException {
+		String user = ListUser2.getUserByToken(token);
 		return Requests.deleteRq(group, user, member);
 	}
 }

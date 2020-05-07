@@ -3,7 +3,6 @@ package dccan.server.control.chat;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-import java.net.InetAddress;
 import java.net.SocketException;
 import java.util.LinkedList;
 import java.util.List;
@@ -23,23 +22,7 @@ public class RtpServer implements Runnable {
 	public RtpServer() throws SocketException {
 		ds = new DatagramSocket(port);
 		rm = StaticMap.getRm();
-
-	}
-
-	public static void main(String[] args) {
-		try {
-			RtpServer rp = new RtpServer();
-			new Thread(rp).start();
-			InetAddress inet = InetAddress.getByName("localhost");
-			rp.rm.getGroupKey("tula");
-			long gg = rp.rm.getRoomId("tula");
-			System.out.println(gg);
-			rp.rm.addClient(gg, new Client(11211, inet, 98988, "dccan"));
-			rp.rm.addClient(gg, new Client(11212, inet, 98989, "dccan"));
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		System.out.println("create rtp server on port:8889\n");
 	}
 
 	public void run() {
@@ -93,7 +76,7 @@ public class RtpServer implements Runnable {
 					if (m != null) {
 						send(fg, m.mem);
 					} else {
-						System.out.println("no room" + gp);
+						//System.out.println("no room" + gp);
 					}
 				}
 			}

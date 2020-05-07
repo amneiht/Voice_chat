@@ -68,7 +68,7 @@ public class RoomMap implements Runnable {
 		return rm.checkUserKey(user);
 	}
 
-	public  String  checkUserKey(long gp, byte[] user) {
+	public String checkUserKey(long gp, byte[] user) {
 		Room rm = lp.get(gp);
 		return rm.checkUserKey(user);
 	}
@@ -93,7 +93,8 @@ public class RoomMap implements Runnable {
 		return -1;
 	}
 
-	public String createUserKey(String gp,String user) {
+	public String createUserKey(String gp, String user) {
+		System.out.println("user key +"+user);
 		Object ps = lr.get(gp);
 		if (ps == null)
 			return null;
@@ -109,32 +110,33 @@ public class RoomMap implements Runnable {
 	}
 
 	public String getGroupKey(String gp) {
-		Object ps = lr.get(gp);
-		if (ps != null) {
-			long id = (long) ps;
-			Room rs = lp.get(id);
-			return rs.getKey();
-		}
-	//	long res = (long) (Math.random() * 0xffffffffL);// 4 bit
-		long res = 3498249040L;
-		try {
-			lr.put(gp, res);
-			Room rs = new Room(gp);
-			lp.put(res, rs);
-			return rs.getKey();
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
+		synchronized (lr) {
 
+			Object ps = lr.get(gp);
+			if (ps != null) {
+				long id = (long) ps;
+				Room rs = lp.get(id);
+				return rs.getKey();
+			}
+			long res = (long) (Math.random() * 0xffffffffL);// 4 bit
+			try {
+				lr.put(gp, res);
+				Room rs = new Room(gp);
+				lp.put(res, rs);
+				return rs.getKey();
+			} catch (Exception e) {
+				e.printStackTrace();
+				return null;
+			}
+		}
 	}
 
 	@Override
 	public void run() {
-
+		System.out.println("remove run");
 		while (run) {
 			try {
-				Thread.sleep(20000);
+				Thread.sleep(10000);
 				synchronized (lr) {
 					Set<String> sp = lr.keySet();
 					for (String name : sp) {

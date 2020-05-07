@@ -67,14 +67,12 @@ public class Comments {
 		String res = "false";
 		Connection con = Info.getCon();
 		try {
-
-			Long tm = System.currentTimeMillis();
 			PreparedStatement ps = con.prepareStatement(upsql);
-			String time = new Timestamp(tm).toString();
+			long time = getTime();
 			ps.setString(1, idnhan);
 			ps.setString(2, idGui);
 			ps.setString(3, noiDung);
-			ps.setString(4, time);
+			ps.setLong(4, time);
 			ps.executeUpdate();
 			ps.close();
 			// con.close();
@@ -88,7 +86,11 @@ public class Comments {
 		return res;
 	}
 
-	private final static String getSql = "select * from tinNhan where idNhan = ? and ngayGui < ? limit 30";
+	private static long getTime() {
+		return System.currentTimeMillis();
+	}
+
+	private final static String getSql = "select * from tinNhan where idNhan = ? and ngayGui < ?  order by ngayGui DESC limit 30";
 
 	/**
 	 * lay ve cac thong tin trong bang tin nhan
@@ -99,15 +101,14 @@ public class Comments {
 	 *            thoi diem muon lay
 	 * @return tra ve chuoi json
 	 */
-	public static String getOldChat(String id, String time) {
+	public static String getOldChat(String id, long time) {
 		Connection con = Info.getCon();
 		String gson = null;
 		try {
 
 			PreparedStatement ps = con.prepareStatement(getSql);
 			ps.setString(1, id);
-			ps.setString(2, time);
-			// system.out.pr.println(ps.toString());
+			ps.setLong(2, time);
 			ResultSet rs = ps.executeQuery();
 			ArrayList<Comment> ap = new ResultToList<Comment>(Comment.class).progess(rs);
 			gson = new Gson().toJson(ap);
@@ -121,7 +122,7 @@ public class Comments {
 		return gson;
 	}
 
-	private final static String getNSql = "select * from tinNhan where idNhan = ? and ngayGui > ? limit 30";
+	private final static String getNSql = "select * from tinNhan where idNhan = ? and ngayGui > ? order by ngayGui ASC limit 30";
 
 	/**
 	 * lay ve cac thong tin trong bang tin nhan theo tg moi hon
@@ -132,14 +133,14 @@ public class Comments {
 	 *            thoi diem muon lay
 	 * @return tra ve chuoi json
 	 */
-	public static String getNewChat(String id, String time) {
+	public static String getNewChat(String id, long time) {
 		Connection con = Info.getCon();
 
 		try {
 
 			PreparedStatement ps = con.prepareStatement(getNSql);
 			ps.setString(1, id);
-			ps.setString(2, time);
+			ps.setLong(2, time);
 			ResultSet rs = ps.executeQuery();
 			ArrayList<Comment> ap = new ResultToList<Comment>(Comment.class).progess(rs);
 			String gson = new Gson().toJson(ap);

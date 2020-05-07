@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: db
--- Generation Time: Apr 28, 2020 at 03:47 PM
+-- Generation Time: May 03, 2020 at 02:34 PM
 -- Server version: 5.7.29
 -- PHP Version: 7.4.3
 
@@ -11,12 +11,6 @@ SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
 
 --
 -- Database: `chat`
@@ -121,10 +115,10 @@ CREATE TABLE `thongtin` (
 
 CREATE TABLE `tinNhan` (
   `idNhan` varchar(35) COLLATE utf8_unicode_ci NOT NULL,
-  `idGui` varchar(35) COLLATE utf8_unicode_ci NOT NULL,
-  `noiDung` varchar(500) COLLATE utf8_unicode_ci NOT NULL,
+  `noiDung` varchar(500) CHARACTER SET utf16 COLLATE utf16_unicode_ci NOT NULL,
   `idFile` varchar(300) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `ngayGui` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `ngayGui` bigint(20) NOT NULL,
+  `idGui` varchar(35) COLLATE utf8_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -178,7 +172,7 @@ ALTER TABLE `thongtin`
 -- Indexes for table `tinNhan`
 --
 ALTER TABLE `tinNhan`
-  ADD KEY `idGui` (`idGui`);
+  ADD KEY `idNhan` (`idNhan`);
 
 --
 -- Indexes for table `tvNhom`
@@ -209,8 +203,7 @@ ALTER TABLE `banBe`
 -- Constraints for table `tinNhan`
 --
 ALTER TABLE `tinNhan`
-  ADD CONSTRAINT `tinNhan_ibfk_1` FOREIGN KEY (`idGui`) REFERENCES `thongtin` (`ten`),
-  ADD CONSTRAINT `tinNhan_ibfk_2` FOREIGN KEY (`idGui`) REFERENCES `thongtin` (`ten`);
+  ADD CONSTRAINT `tinNhan_ibfk_1` FOREIGN KEY (`idNhan`) REFERENCES `nhom` (`idNhom`);
 
 --
 -- Constraints for table `tvNhom`
@@ -226,7 +219,3 @@ ALTER TABLE `yeuCau`
   ADD CONSTRAINT `yeuCau_ibfk_1` FOREIGN KEY (`idNhom`) REFERENCES `nhom` (`idNhom`),
   ADD CONSTRAINT `yeuCau_ibfk_2` FOREIGN KEY (`idTv`) REFERENCES `thongtin` (`ten`);
 COMMIT;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

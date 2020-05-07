@@ -11,8 +11,8 @@ import net.help.Convert;
 import net.help.Info;
 import net.packet.NotUseRtp;
 import net.packet.io.PWrite;
-
-public class RtpClient {
+@Deprecated
+public class NRtpClient {
 	private int port, sq;
 	private DatagramSocket client = null;
 
@@ -39,7 +39,7 @@ public class RtpClient {
 	 *            dinh danh cua nguoi su dung
 	 * @throws SocketException
 	 */
-	public RtpClient(int p, String hs, long ssr) throws SocketException {
+	public NRtpClient(int p, String hs, long ssr) throws SocketException {
 		port = p;
 		host = hs;
 		sq = (int) (Math.random() * 9999);

@@ -1,16 +1,13 @@
 import java.rmi.RemoteException;
 
-import dccan.remote.Communication;
 import dccan.remote.Client;
+import dccan.remote.Remote;
 
 public class Test {
 	public static void main(String[] args) {
-		Client.init("localhost");
-		Communication rmi = Client.getRmi();
+		Remote rm = Client.getRmi();
 		try {
-			System.out.println("Run");
-			rmi.login("ma", "1");
-			rmi.requestGroup("VKv3wAKsJszEar201ohkjfCqSEQZUFBJ");
+			rm.login("can", "1");
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

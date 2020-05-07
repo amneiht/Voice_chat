@@ -2,7 +2,7 @@ package application.manhinh.control;
 
 import java.rmi.RemoteException;
 
-import dccan.remote.Communication;
+import dccan.remote.Remote;
 import dccan.remote.Client;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -63,7 +63,7 @@ public class Regis {
 			note.setText("M\u1EADt kh\u1EA9u kh\u00F4ng kh\u1EDBp");
 			return;
 		}
-		Communication rmi = Client.getRmi();
+		Remote rmi = Client.getRmi();
 		try {
 			boolean t=rmi.register(ur, mk, nd, em);
 			if(!t) note.setText("loi dang nhap");

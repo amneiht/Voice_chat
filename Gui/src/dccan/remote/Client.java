@@ -5,9 +5,13 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
 public class Client {
-	private static Communication rmi = null;
+	private static Remote rmi = null;
+	public static Communication connect;
 	static Registry registry;
-
+	static 
+	{
+		Client.init("localhost");
+	}
 	public static void init(String host) {
 		try {
 			// setSettings();
@@ -15,14 +19,15 @@ public class Client {
 			// SslRMIClientSocketFactory());
 
 			registry = LocateRegistry.getRegistry(host, 8888);
-			rmi = (Communication) registry.lookup("Hello");
+			connect = (Communication) registry.lookup("Hello");
+			rmi = new Remote(connect);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
-	public static Communication getRmi() {
+	public static Remote getRmi() {
 		return rmi;
 	}
 

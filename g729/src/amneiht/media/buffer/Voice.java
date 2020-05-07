@@ -1,7 +1,8 @@
 package amneiht.media.buffer;
 
-public abstract class Voice implements Runnable{
-	public abstract boolean isRun();
+import java.io.Closeable;
+
+public abstract class Voice implements Runnable ,Closeable{
 	/**
 	 * them 1 ban ghi am thanh vao play list
 	 * @param con
@@ -16,9 +17,5 @@ public abstract class Voice implements Runnable{
 	 * lay doan id do
 	 * @return
 	 */
-	public  abstract long getId() ;
-	/**
-	 * ket thuc chuong luong
-	 */
-	public  abstract void end();
+	public  abstract boolean isrun();
 }

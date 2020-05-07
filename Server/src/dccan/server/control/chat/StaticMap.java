@@ -5,7 +5,7 @@ public class StaticMap {
 	static {
 		System.out.println("create new roommap aka room control");
 		rm = new RoomMap();
-		//new Thread(rm).start();
+		new Thread(rm).start();
 	}
 
 	public static RoomMap getRm() {

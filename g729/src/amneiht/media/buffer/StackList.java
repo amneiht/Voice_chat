@@ -1,15 +1,23 @@
 package amneiht.media.buffer;
 
+import java.io.Closeable;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class StackList implements Runnable {
+public class StackList implements Runnable, Closeable {
 	Map<Long, Voice> mp = new HashMap<Long, Voice>();
 	Boolean run = true;
 
-	public void end() {
+	public void close() throws IOException {
 		run = false;
+		Set<Long> key = mp.keySet();
+		for (long id : key) {
+
+			mp.get(id).close();
+
+		}
 	}
 
 	public void add(Long id, Pack p) {
@@ -18,7 +26,7 @@ public class StackList implements Runnable {
 			d.addList(p);
 		} else {
 			try {
-				
+
 				NoControl nc = new NoControl();
 				nc.addList(p);
 				new Thread(nc).start();
@@ -38,7 +46,7 @@ public class StackList implements Runnable {
 				Thread.sleep(2 * 60 * 1000);// ngu 2 phut roi xoa cac luong khong ton tai
 				Set<Long> key = mp.keySet();
 				for (long id : key) {
-					if (!mp.get(id).isRun()) {
+					if (!mp.get(id).isrun()) {
 						mp.remove(id);
 					}
 				}
@@ -47,4 +55,5 @@ public class StackList implements Runnable {
 		}
 
 	}
+
 }

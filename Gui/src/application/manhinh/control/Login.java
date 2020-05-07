@@ -5,7 +5,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import dccan.remote.Client;
-import dccan.remote.Communication;
+import dccan.remote.Remote;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -38,7 +38,7 @@ public class Login implements Initializable {
 		System.out.println(mk.getText());
 		String user = ten.getText().trim();
 		String pass = mk.getText();
-		Communication rmi = Client.getRmi();
+		Remote rmi = Client.getRmi();
 		try {
 			boolean d = rmi.login(user, pass);
 			if (d) {

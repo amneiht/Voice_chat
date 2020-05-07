@@ -1,12 +1,15 @@
 package amneiht.media;
 
+import java.io.Closeable;
+import java.io.IOException;
+
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.DataLine;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.TargetDataLine;
 
-public class Recorder {
+public class Recorder implements Closeable {
 	int time = 100;// 1/100 s = 10ms
 	int count;
 	TargetDataLine microphone;
@@ -43,7 +46,15 @@ public class Recorder {
 		return data;
 	}
 
-	public void stop() {
+	public byte[] getSound(int d) {
+		byte[] data = new byte[d];
+		microphone.read(data, 0, count);
+		return data;
+	}
+
+	@Override
+	public void close() throws IOException {
 		microphone.close();
+
 	}
 }
