@@ -3,7 +3,7 @@ package dccan.remote;
 import java.rmi.RemoteException;
 import java.util.List;
 
-public class Remote {
+public class Remote implements Rmt {
 	private String token = null;
 	Communication rmi;
 
@@ -11,15 +11,15 @@ public class Remote {
 		this.rmi = rmi;
 	}
 
-	public boolean login(String user, String pass) throws RemoteException {
+	public String login(String user, String pass) throws RemoteException {
 		token = rmi.login(user, pass);
-		
-		return token != null;
+		return token;
+
 	}
 
-	public boolean register(String user, String pass, String hoten, String email) throws RemoteException {
+	public String register(String user, String pass, String hoten, String email) throws RemoteException {
 		token = rmi.register(user, pass, hoten, email);
-		return token != null;
+		return token;
 	}
 
 	public String getMember(String group) throws RemoteException {
@@ -50,10 +50,6 @@ public class Remote {
 		return rmi.upload(token, name, data, group);
 	}
 
-	public boolean deleteMember(String group, String mem) throws RemoteException {
-		return rmi.deleteMember(token, group, mem);
-	}
-
 	public boolean createGroup(String name, List<String> member) throws RemoteException {
 		return rmi.createGroup(token, name, member);
 	}
@@ -80,13 +76,6 @@ public class Remote {
 		return rmi.getUserkey(token, group);
 	}
 
-	/**
-	 * get mem ber on chat group
-	 * 
-	 * @param group
-	 * @return
-	 * @throws RemoteException
-	 */
 	public String chatMember(String group) throws RemoteException {
 		return rmi.chatMember(token, group);
 	}
@@ -105,6 +94,47 @@ public class Remote {
 
 	public boolean deleteRequest(String group, List<String> member) throws RemoteException {
 		return rmi.deleteRequest(token, group, member);
+	}
+
+	@Override
+	public boolean changeName(String NewName) throws RemoteException {
+
+		return rmi.changeName(token, NewName);
+	}
+
+	@Override
+	public boolean setImage(String img, byte[] data) throws RemoteException {
+		return rmi.setImage(token, img, data);
+	}
+
+	@Override
+	public boolean checkLive() throws RemoteException {
+		return rmi.checkLive(token);
+	}
+
+	@Override
+	public String getInfo() throws RemoteException {
+		return rmi.getInfo(token);
+	}
+
+	@Override
+	public boolean changeMail(String mail) throws RemoteException {
+		return rmi.changeMail(token, mail);
+	}
+
+	@Override
+	public String getUserOnLimit(String name) throws RemoteException {
+		return rmi.getUserOnLimit(token,name);
+	}
+
+	@Override
+	public boolean deleteMember(String group, List<String> mem) throws RemoteException {
+		return rmi.deleteMember(token, group, mem);
+	}
+
+	@Override
+	public boolean deleteFriend(List<String> mem) throws RemoteException {
+		return rmi.deleteFriend(token, mem);
 	}
 
 }

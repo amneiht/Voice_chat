@@ -1,5 +1,8 @@
 package application.manhinh.control;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.LinkedList;
@@ -11,7 +14,9 @@ import javax.swing.JTextField;
 import application.autofill.Popup;
 import dccan.remote.Client;
 import dccan.remote.Remote;
+import dccan.suport.CheckImage;
 import dccan.suport.Comment;
+import dccan.suport.FileVsByte;
 import dccan.suport.Friend;
 import dccan.suport.GetList;
 import dccan.suport.Group;
@@ -22,21 +27,32 @@ import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class Chat implements Initializable {
@@ -49,7 +65,10 @@ public class Chat implements Initializable {
 
 	@FXML
 	private MenuItem fmanager;
-
+	@FXML
+	private MenuItem vn;
+	@FXML
+	private MenuItem en;
 	@FXML
 	private ScrollPane schat;
 
@@ -122,13 +141,127 @@ public class Chat implements Initializable {
 		};
 	}
 
+	FileChooser fileChooser = new FileChooser();
+
+	@FXML
+	private void openFile() {
+		List<File> files = fileChooser.showOpenMultipleDialog(ap.getScene().getWindow());
+		for (File p : files) {
+			try {
+				if (p.isFile()) {
+					if (p.length() < FileVsByte.max) {
+						// System.out.println("lll");
+						byte[] data = FileVsByte.toByte(p);
+						rmi.upload(p.getName(), data, id);
+					}
+				}
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+		}
+
+	}
+
+	@FXML
+	private void openFriendList() {
+		// System.out.println("ss");
+		FXMLLoader fxmlLoader = new FXMLLoader();
+		// fxmlLoader.setResources(ResourceBundle.getBundle("app.lang.vn"));
+		Parent root;
+		try {
+			root = fxmlLoader.load(getClass().getResource("/application/manhinh/friend/ShowFriend.fxml").openStream());
+			Scene sen = new Scene(root);
+			Stage pr = new Stage();
+			pr.setScene(sen);
+			pr.show();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	@FXML
+	private void openAddFriend() {
+		// System.out.println("ss");
+		FXMLLoader fxmlLoader = new FXMLLoader();
+		// fxmlLoader.setResources(ResourceBundle.getBundle("app.lang.vn"));
+		Parent root;
+		try {
+			root = fxmlLoader.load(getClass().getResource("/application/manhinh/friend/AddFriend.fxml").openStream());
+			Scene sen = new Scene(root);
+			Stage pr = new Stage();
+			pr.setScene(sen);
+			pr.show();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		// TODO
 		@SuppressWarnings("unused")
 		JTextField textp = new JTextField();
 
 		try {
+			khungChat.setOnDragOver(new EventHandler<DragEvent>() {
+				@Override
+				public void handle(DragEvent event) {
+					Dragboard db = event.getDragboard();
+					if (db.hasFiles()) {
+						event.acceptTransferModes(TransferMode.COPY);
+					} else {
+						event.consume();
+					}
+				}
+			});
+			khungChat.setOnDragDropped(new EventHandler<DragEvent>() {
+				@Override
+				public void handle(DragEvent event) {
+					Dragboard db = event.getDragboard();
+					boolean success = false;
+					if (db.hasFiles()) {
+						success = true;
+						for (File p : db.getFiles()) {
+							try {
+								if (p.isFile()) {
+									if (p.length() < FileVsByte.max) {
+										// System.out.println("lll");
+										byte[] data = FileVsByte.toByte(p);
+										rmi.upload(p.getName(), data, id);
+									}
+								}
+
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+						}
+					}
+					event.setDropCompleted(success);
+					event.consume();
+				}
+			});
 			schat.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+			getGroupList();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		Timeline get = new Timeline(new KeyFrame(Duration.millis(500), new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent event) {
+				newComment();
+			}
+		}));
+		get.setCycleCount(Timeline.INDEFINITE);
+		get.play();
+		System.out.println("show chat");
+	}
+
+	private void getGroupList() {
+		try {
 			String group = rmi.getGroup();
 			if (group != null) {
 				List<Group> lg = GetList.groups(group);
@@ -146,16 +279,6 @@ public class Chat implements Initializable {
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
-		// TODO
-		// khungChat.maxHeightProperty().bind(khungChat.heightProperty());
-		Timeline get = new Timeline(new KeyFrame(Duration.millis(500), new EventHandler<ActionEvent>() {
-			public void handle(ActionEvent event) {
-				newComment();
-			}
-		}));
-		get.setCycleCount(Timeline.INDEFINITE);
-		get.play();
-		System.out.println("show chat");
 	}
 
 	@FXML
@@ -179,7 +302,7 @@ public class Chat implements Initializable {
 
 	private void newComment() {
 		try {
-			// TODO
+
 			if (id != null) {
 
 				String cmt = rmi.getCommentList(id, ndate, lnew);
@@ -210,7 +333,63 @@ public class Chat implements Initializable {
 		}
 
 	}
+
+	DirectoryChooser dirChooser = new DirectoryChooser();
+
+	private void download(String name, String id) {
+
+		File chosenDir = dirChooser.showDialog(ap.getScene().getWindow());
+		if (chosenDir != null)
+			if (chosenDir.isDirectory()) {
+				byte[] data;
+				try {
+					data = rmi.dowload(id);
+					FileVsByte.toFile(data, chosenDir.getAbsolutePath() + "/" + name);
+				} catch (RemoteException e) {
+					e.printStackTrace();
+				}
+
+			}
+	}
+
+	@FXML
+	void showInfo() {
+		FXMLLoader fxmlLoader = new FXMLLoader();
+		// fxmlLoader.setResources(ResourceBundle.getBundle("app.lang.vn"));
+		Parent root;
+		try {
+			root = fxmlLoader.load(getClass().getResource("/application/manhinh/user/Info.fxml").openStream());
+			Scene sen = new Scene(root);
+			Stage pr = new Stage();
+			pr.setScene(sen);
+			;
+			pr.show();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	@FXML
+	void newInfo() {
+		FXMLLoader fxmlLoader = new FXMLLoader();
+		// fxmlLoader.setResources(ResourceBundle.getBundle("app.lang.vn"));
+		Parent root;
+		try {
+			root = fxmlLoader.load(getClass().getResource("/application/manhinh/user/NewInfo.fxml").openStream());
+			Scene sen = new Scene(root);
+			Stage pr = new Stage();
+			pr.setScene(sen);
+			;
+			pr.show();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+
 	private void addComment(Comment cp, boolean vt, ObservableList<Node> ls) {
+		int size = 100;
 		Label user = new Label("@" + cp.getIdGui());
 		user.getStyleClass().add("user");
 		if (vt)
@@ -227,20 +406,53 @@ public class Chat implements Initializable {
 				ls.add(1, tf);
 
 		} else {
-			Label file = new Label(cp.getNoiDung());
-			file.getStyleClass().add("cmt");
-			file.setOnMouseEntered(enter);
-			file.setOnMouseExited(exit);
-			if (vt)
-				ls.add(file);
-			else
-				ls.add(1, file);
+			String name = cp.getNoiDung();
+			boolean check = CheckImage.cmp(name);
+			if (check) {
+				try {
+					byte[] data = rmi.dowload(cp.getIdFile());
+					ByteArrayInputStream bis = new ByteArrayInputStream(data);
+					Image im = new Image(bis);
+					double h = im.getHeight();
+					double v = im.getWidth();
+					double z = Math.max(h, v);
+					h = h / z * size;
+					v = v / z * size;
+					ImageView iv = new ImageView(im);
+					iv.setFitWidth(v);
+					iv.setFitHeight(h);
+					iv.setOnMouseClicked(e -> {
+						download(cp.getNoiDung(), cp.getIdFile());
+					});
+					iv.setOnMouseEntered(e -> {
+						iv.setCursor(Cursor.HAND);
+					});
+					if (vt)
+						ls.add(iv);
+					else
+						ls.add(1, iv);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 
+			} else {
+				Label file = new Label(cp.getNoiDung());
+				file.getStyleClass().add("cmt");
+				file.setOnMouseEntered(enter);
+				file.setOnMouseExited(exit);
+				file.setOnMouseClicked(e -> {
+					download(cp.getNoiDung(), cp.getIdFile());
+				});
+				if (vt)
+					ls.add(file);
+				else
+					ls.add(1, file);
+			}
 		}
 	}
 
 	private void setGroup(String gp) {
-		//TODO
+
 		id = gp;
 		try {
 			List<Friend> lf = GetList.member(rmi.getMember(gp));

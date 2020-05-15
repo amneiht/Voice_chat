@@ -8,7 +8,7 @@ import java.util.ResourceBundle;
 
 import application.radiocell.Chose;
 import application.radiocell.CreateTable;
-import application.radiocell.User;
+import application.radiocell.UserRq;
 import dccan.remote.Remote;
 import dccan.remote.Client;
 import dccan.suport.GetList;
@@ -31,7 +31,7 @@ public class ReQuest implements Initializable {
 	}
 
 	@FXML
-	private TableView<User> tab;
+	private TableView<UserRq> tab;
 
 	@FXML
 	private Button btn;
@@ -42,10 +42,10 @@ public class ReQuest implements Initializable {
 	@FXML
 	void runAct(ActionEvent event) {
 
-		ObservableList<User> data = tab.getItems();
+		ObservableList<UserRq> data = tab.getItems();
 		List<String> add = new LinkedList<String>();
 		List<String> del = new LinkedList<String>();
-		for (User up : data) {
+		for (UserRq up : data) {
 			if (up.getAction() == Chose.YES) {
 				add.add(up.getName());
 				// System.out.println(up.getName());
@@ -67,10 +67,10 @@ public class ReQuest implements Initializable {
 
 	}
 
-	public static List<User> initList(List<String> up) {
-		List<User> ip = new LinkedList<User>();
+	public static List<UserRq> initList(List<String> up) {
+		List<UserRq> ip = new LinkedList<UserRq>();
 		for (String us : up) {
-			ip.add(new User(us));
+			ip.add(new UserRq(us));
 		}
 		return ip;
 	}
@@ -78,7 +78,7 @@ public class ReQuest implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		tab.setEditable(true);
-		CreateTable.make(tab);
+		CreateTable.makeReQuestTable(tab);
 		Remote rmi = Client.getRmi();
 		List<String> il;
 		il = new LinkedList<String>();

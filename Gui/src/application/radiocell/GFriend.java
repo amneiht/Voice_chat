@@ -1,13 +1,8 @@
 package application.radiocell;
 
-public class User {
-
+public class GFriend {
 	private String name;
-	private Chose action = Chose.MAYBE;
-
-	public User(String a)	{
-		name = a;
-	}
+	private AddF action = AddF.NO;
 
 	public String getName() {
 		return name;
@@ -17,11 +12,15 @@ public class User {
 		this.name = name;
 	}
 
-	public Chose getAction() {
+	public AddF getAction() {
 		return action;
 	}
 
-	public void setAction(Chose action) {
+	public void setAction(AddF action) {
 		this.action = action;
+	}
+
+	public GFriend(String a)	{
+		name = a;
 	}
 }

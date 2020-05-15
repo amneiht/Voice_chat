@@ -29,7 +29,7 @@ public class RemoteObj implements Communication {
 	@Override
 	public String login(String user, String pass) throws RemoteException {
 		String id = User.login(user, pass);
-		System.out.println(id);
+		// System.out.println(id);
 		if (id != null) {
 			return ListUser2.addNew(user);
 		}
@@ -70,13 +70,15 @@ public class RemoteObj implements Communication {
 		String user = ListUser2.getUserByToken(token);
 		if (user == null)
 			return false;
-		String rs = Groups.addFriend(user, id);
-		return rs.equals("ok");
+		return Groups.addFriend(user, id);
+
 	}
 
 	@Override
 	public String getFriendList(String token) throws RemoteException {
 		String user = ListUser2.getUserByToken(token);
+		if (user == null)
+			return null;
 		String rs = Groups.getFrendList(user);
 		return rs;
 	}
@@ -84,11 +86,12 @@ public class RemoteObj implements Communication {
 	@Override
 	public String getCommentList(String token, String group, long date, boolean status) throws RemoteException {
 		String user = ListUser2.getUserByToken(token);
+		if (user == null)
+			return null;
 		if (date == -1)
 			date = System.currentTimeMillis();
-		if (!Groups.checkMember(group, user))
-		{
-			
+		if (!Groups.checkMember(group, user)) {
+
 			return null;
 		}
 		String res = null;
@@ -132,7 +135,7 @@ public class RemoteObj implements Communication {
 		if (user == null)
 			return false;
 		try {
-			System.out.println(data.length);
+			// System.out.println(data.length);
 			String id = SFile.createFileId(name);
 			String res = Comments.upFcoment(group, user, name, id);
 			if (res.equals("false")) {
@@ -148,16 +151,16 @@ public class RemoteObj implements Communication {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return false;
+		return true;
 	}
 
 	@Override
-	public boolean deleteMember(String token, String group, String mem) throws RemoteException {
+	public boolean deleteMember(String token, String group, List<String> mem) throws RemoteException {
 		String user = ListUser2.getUserByToken(token);
 		if (user == null)
 			return false;
-		String res = Groups.deleteMember(group, mem, user);
-		return res.equals("true");
+		return Groups.deleteMember(group, mem, user);
+
 	}
 
 	@Override
@@ -262,6 +265,78 @@ public class RemoteObj implements Communication {
 	@Override
 	public boolean deleteRequest(String token, String group, List<String> member) throws RemoteException {
 		String user = ListUser2.getUserByToken(token);
+		if (user == null)
+			return false;
 		return Requests.deleteRq(group, user, member);
+	}
+
+	@Override
+	public boolean changeName(String token, String NewName) throws RemoteException {
+		String user = ListUser2.getUserByToken(token);
+		if (user == null)
+			return false;
+
+		return User.changName(user, NewName);
+	}
+
+	@Override
+	public boolean setImage(String token, String img, byte[] data) throws RemoteException {
+		String user = ListUser2.getUserByToken(token);
+		if (user == null)
+			return false;
+		try {
+			// System.out.println(data.length);
+			String id = SFile.createFileId(img);
+			InputStream in = new ByteArrayInputStream(data);
+			String res = SFile.insert(id, in, img);
+			if (res.equals("false")) {
+
+				return false;
+			}
+			return User.setImg(user, id);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	@Override
+	public boolean checkLive(String token) throws RemoteException {
+		String user = ListUser2.getUserByToken(token);
+		return user != null;
+	}
+
+	@Override
+	public String getInfo(String token) throws RemoteException {
+		String user = ListUser2.getUserByToken(token);
+		if (user == null)
+			return null;
+		return User.getInfo(user);
+	}
+
+	@Override
+	public boolean changeMail(String token, String mail) throws RemoteException {
+		String user = ListUser2.getUserByToken(token);
+		if (user == null)
+			return false;
+
+		return User.changMail(user, mail);
+	}
+
+	@Override
+	public String getUserOnLimit(String token, String name) throws RemoteException {
+		String user = ListUser2.getUserByToken(token);
+		if (user == null)
+			return null;
+		return User.getLimitName(name);
+
+	}
+
+	@Override
+	public boolean deleteFriend(String token, List<String> mem) throws RemoteException {
+		String user = ListUser2.getUserByToken(token);
+		if (user == null)
+			return false;
+		return Groups.deleteFriend(user, mem);
 	}
 }

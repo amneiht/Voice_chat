@@ -3,8 +3,13 @@ package dccan.server.sql;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
+
+import com.google.gson.Gson;
 
 import dccan.server.sql.config.Info;
+import dccan.suport.Friend;
 
 public class User {
 	/**
@@ -27,7 +32,6 @@ public class User {
 			ps.setString(2, Info.getMD5(pass));
 			ResultSet rs = ps.executeQuery();
 			rs.beforeFirst();// dich con tro
-
 			if (rs.next()) {
 				id = rs.getString(1);
 			}
@@ -35,7 +39,6 @@ public class User {
 			// con.close();
 
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 
 		}
@@ -85,10 +88,113 @@ public class User {
 			Info.give(con);
 			return true;
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 			Info.give(con);
 			return false;
 		}
+	}
+
+	public static boolean changName(String user, String newName) {
+		boolean res = false;
+		Connection con = Info.getCon();
+		String sql = "update thongtin set nguoiDung = ? where ten = ? ";
+
+		try {
+			PreparedStatement ps = con.prepareStatement(sql);
+			ps.setString(1, newName);
+			ps.setString(2, user);
+			ps.executeUpdate();
+			ps.close();
+			res = true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		Info.give(con);
+		return res;
+	}
+
+	public static boolean setImg(String user, String id) {
+		boolean res = false;
+		Connection con = Info.getCon();
+		String sql = "update thongtin set idAnh = ? where ten = ? ";
+
+		try {
+			PreparedStatement ps = con.prepareStatement(sql);
+			ps.setString(1, id);
+			ps.setString(2, user);
+			ps.executeUpdate();
+			ps.close();
+			res = true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		Info.give(con);
+		return res;
+	}
+
+	public static String getInfo(String user) {
+		Connection con = Info.getCon();
+		String sql = "select nguoiDung , ten , idAnh ,email from thongtin where ten = ?";
+		String res = null;
+		try {
+			PreparedStatement ps = con.prepareStatement(sql);
+			ps.setString(1, user);
+			ResultSet rs = ps.executeQuery();
+			List<Friend> lp = new ResultToList<Friend>(Friend.class).progess(rs);
+			res = new Gson().toJson(lp);
+			rs.close();
+			ps.close();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		Info.give(con);
+		return res;
+	}
+
+	public static boolean changMail(String user, String mail) {
+		boolean res = false;
+		Connection con = Info.getCon();
+		String sql = "update thongtin set email = ? where ten = ? ";
+
+		try {
+			PreparedStatement ps = con.prepareStatement(sql);
+			ps.setString(1, mail);
+			ps.setString(2, user);
+			ps.executeUpdate();
+			ps.close();
+			res = true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		Info.give(con);
+		return res;
+	}
+
+	public static String getLimitName(String name) {
+		String res = null;
+		Connection con = Info.getCon();
+		String sql = "select  ten from thongtin where ten like ? limit 10";
+
+		try {
+			PreparedStatement ps = con.prepareStatement(sql);
+			name = name + "%";
+			ps.setString(1, name);
+			System.out.println(ps.toString());
+			ResultSet rs = ps.executeQuery();
+			List<String> lp = new ResultToList<String>(String.class).getListFromResult(rs, "ten");
+			res = new Gson().toJson(lp);
+			rs.close();
+			ps.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		Info.give(con);
+		return res;
 	}
 }

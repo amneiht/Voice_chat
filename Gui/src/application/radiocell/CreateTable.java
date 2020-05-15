@@ -20,35 +20,65 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 
 public class CreateTable {
-	public static void make(TableView<User> tb) {
+	public static void makeReQuestTable(TableView<UserRq> tb) {
 		// TableView<User> tb = new TableView<User>();
-		TableColumn<User, String> name = new TableColumn<User, String>("Ten user");
-		name.setCellValueFactory(new PropertyValueFactory<User, String>("name"));
+		TableColumn<UserRq, String> name = new TableColumn<UserRq, String>("Ten user");
+		name.setCellValueFactory(new PropertyValueFactory<UserRq, String>("name"));
 		name.setMinWidth(200);
-		TableColumn<User, Chose> act = new TableColumn<User, Chose>("Chap nhan");
-		act.setCellValueFactory(new PropertyValueFactory<User, Chose>("action"));
-		act.setCellFactory((param) -> new RadioButtonCell<User, Chose>(EnumSet.allOf(Chose.class)));
-		act.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<User,Chose>>() {
-			
+		TableColumn<UserRq, Chose> act = new TableColumn<UserRq, Chose>("Chap nhan");
+		act.setCellValueFactory(new PropertyValueFactory<UserRq, Chose>("action"));
+		act.setCellFactory((param) -> new RadioButtonCell<UserRq, Chose>(EnumSet.allOf(Chose.class)));
+		act.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<UserRq, Chose>>() {
+
 			@Override
-			public void handle(CellEditEvent<User, Chose> t) {
+			public void handle(CellEditEvent<UserRq, Chose> t) {
 				int l = t.getTablePosition().getRow();
-				User us =(User) t.getTableView().getItems().get(l);
+				UserRq us = (UserRq) t.getTableView().getItems().get(l);
 				us.setAction(t.getNewValue());
 			}
 		});
-		
-		
+
 		tb.getColumns().add(name);
 		tb.getColumns().add(act);
 		// tb.setIte
 	}
 
-	public static void setUser(TableView<User> tb, List<User> lp) {
+	public static void makeChoiseFrendTable(TableView<GFriend> tb) {
+		TableColumn<GFriend, String> name = new TableColumn<GFriend, String>("Ten user");
+		name.setCellValueFactory(new PropertyValueFactory<GFriend, String>("name"));
+		name.setMinWidth(200);
+		TableColumn<GFriend, AddF> act = new TableColumn<GFriend, AddF>("Xoa");
+		act.setMinWidth(200);
+		act.setCellValueFactory(new PropertyValueFactory<GFriend, AddF>("action"));
+		act.setCellFactory((param) -> new RadioButtonCell<GFriend, AddF>(EnumSet.allOf(AddF.class)));
+		act.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<GFriend, AddF>>() {
+
+			@Override
+			public void handle(CellEditEvent<GFriend, AddF> t) {
+				int l = t.getTablePosition().getRow();
+				GFriend us = (GFriend) t.getTableView().getItems().get(l);
+				us.setAction(t.getNewValue());
+			}
+		});
+		tb.getColumns().add(name);
+		tb.getColumns().add(act);
+		tb.setEditable(true);
+	}
+
+
+	public static void setUser(TableView<UserRq> tb, List<UserRq> lp) {
 		try {
-		ObservableList<User> data = FXCollections.observableArrayList(lp);
-		tb.setItems(data);
-		}catch (Exception e) {
+			ObservableList<UserRq>  data = FXCollections.observableArrayList(lp);
+			tb.setItems(data);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	public static void setGFriend(TableView<GFriend> tb, List<GFriend> lp) {
+		try {
+			ObservableList<GFriend>  data = FXCollections.observableArrayList(lp);
+			tb.setItems(data);
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

@@ -45,7 +45,7 @@ public class Groups {
 		return res;
 	}
 
-	private static final String getMem = "select ten,nguoiDung from thongtin , tvNhom where ten = idTV and idNhom = ?";
+	private static final String getMem = "select ten,nguoiDung ,idAnh ,email from thongtin , tvNhom where ten = idTV and idNhom = ?";
 
 	public static boolean checkMember(String group, String user) {
 		String sql = "select * from tvNhom where idNhom = ? and idTv=?";
@@ -206,8 +206,8 @@ public class Groups {
 	 * @param id1
 	 * @param id2
 	 */
-	public static String addFriend(String id1, String id2) {
-		String res = "false";
+	public static boolean addFriend(String id1, String id2) {
+		boolean res = false;
 		Connection con = Info.getCon();
 		try {
 
@@ -217,19 +217,18 @@ public class Groups {
 			ps.setString(4, id1);
 			ps.setString(3, id2);
 			ResultSet rs = ps.executeQuery();
+			rs.beforeFirst();
 			if (!rs.next()) {
 				ps.close();
 				ps = con.prepareStatement(addF);
 				ps.setString(1, id1);
 				ps.setString(2, id2);
 				ps.executeUpdate();
-
-				res = "ok";
+				res = true;
 			} else {
 				rs.close();
 				ps.close();
-				// con.close();
-				return "false";
+				res = false;
 			}
 			rs.close();
 			ps.close();
@@ -260,7 +259,7 @@ public class Groups {
 		return res;
 	}
 
-	private static final String getFlist = "SELECT ten,nguoiDung FROM banBe , thongtin where id1 = ? and id2 = ten UNION SELECT ten,nguoiDung FROM banBe , thongtin where id2 = ? and id1 = ten ";
+	private static final String getFlist = "SELECT ten,nguoiDung ,idAnh , email FROM banBe , thongtin where id1 = ? and id2 = ten UNION SELECT ten,nguoiDung ,idAnh , email  FROM banBe , thongtin where id2 = ? and id1 = ten ";
 
 	/**
 	 * lay danh sanh ban be
@@ -298,8 +297,8 @@ public class Groups {
 	 * @param group
 	 * @return
 	 */
-	public static String deleteMember(String group, String id, String user) {
-		String res = "false";
+	public static boolean deleteMember(String group, List<String> mem, String user) {
+		boolean res = false;
 		String sql = "call deleteMember(?,?,?)";
 		Connection con = Info.getCon();
 		try {
@@ -307,12 +306,13 @@ public class Groups {
 			CallableStatement cstm = con.prepareCall(sql);
 			cstm.setString(1, group);
 			cstm.setString(2, user);
-			cstm.setString(3, id);
-			System.out.println(cstm.toString());
-			cstm.executeUpdate();
+			for (String id : mem) {
+				cstm.setString(3, id);
+				cstm.executeUpdate();
+			}
 			cstm.close();
 			// con.close();
-			res = "ok";
+			res = true;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -320,20 +320,22 @@ public class Groups {
 		return res;
 	}
 
-	public static String deleteFriend(String id1, String id2) {
+	public static boolean deleteFriend(String id1, List<String> mem) {
 		String sql = "delete from banBe where (id1 = ? and id2 = ?) or (id1 = ? and id2 = ?)";
 		Connection con = Info.getCon();
-		String res = "false";
+		boolean res = false;
 		try {
-
 			PreparedStatement ps = con.prepareStatement(sql);
 			ps.setString(1, id1);
-			ps.setString(2, id2);
-			ps.setString(3, id2);
 			ps.setString(4, id1);
-			ps.executeUpdate();
+			for (String id2 : mem) {
+
+				ps.setString(2, id2);
+				ps.setString(3, id2);
+				ps.executeUpdate();
+			}
 			ps.close();
-			res = "true";
+			res = true;
 
 		} catch (SQLException e) {
 			e.printStackTrace();

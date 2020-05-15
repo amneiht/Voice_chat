@@ -3,7 +3,6 @@ package dccan.server.sql;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 
 import com.google.gson.Gson;
@@ -34,11 +33,10 @@ public class Comments {
 
 			Long tm = System.currentTimeMillis();
 			PreparedStatement ps = con.prepareStatement(upFilesql);
-			String time = new Timestamp(tm).toString();
 			ps.setString(1, idnhan);
 			ps.setString(2, idGui);
 			ps.setString(3, noiDung);
-			ps.setString(4, time);
+			ps.setLong(4, tm);
 			ps.setString(5, idFile);
 			ps.executeUpdate();
 			ps.close();

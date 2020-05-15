@@ -38,7 +38,7 @@ public class DbPool implements Runnable {
 				ls.add(makeCon());
 			}
 			list = min - 1;
-			new Thread(this).start();
+			//new Thread(this).start();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

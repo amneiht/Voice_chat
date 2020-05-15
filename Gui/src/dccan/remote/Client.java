@@ -8,10 +8,10 @@ public class Client {
 	private static Remote rmi = null;
 	public static Communication connect;
 	static Registry registry;
-	static 
-	{
+	static {
 		Client.init("localhost");
 	}
+
 	public static void init(String host) {
 		try {
 			// setSettings();

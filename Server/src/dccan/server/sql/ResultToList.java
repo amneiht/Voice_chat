@@ -2,7 +2,9 @@ package dccan.server.sql;
 
 import java.lang.reflect.Field;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import dccan.suport.Comment;
 
@@ -11,6 +13,24 @@ public class ResultToList<E> {
 
 	public ResultToList(Class<E> obs) {
 		ob = obs;
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<E> getListFromResult(ResultSet rs, String name) {
+		ArrayList<E> res = new ArrayList<E>();
+		String lop = ob.getName();
+		try {
+			rs.beforeFirst();
+			while (rs.next()) {
+				Object ed = rs.getObject(name);
+				if (ed.getClass().getName().equals(lop))
+					res.add((E) ed);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return res;
 	}
 
 	public ArrayList<E> progess(ResultSet rs) {

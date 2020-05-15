@@ -40,8 +40,8 @@ public class Login implements Initializable {
 		String pass = mk.getText();
 		Remote rmi = Client.getRmi();
 		try {
-			boolean d = rmi.login(user, pass);
-			if (d) {
+		String d = rmi.login(user, pass);
+			if (d!=null) {
 				((Stage) ap.getScene().getWindow()).close();
 				FXMLLoader fxmlLoader = new FXMLLoader();
 				Parent root = fxmlLoader.load(getClass().getResource("/application/manhinh/Work.fxml").openStream());

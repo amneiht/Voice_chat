@@ -65,10 +65,10 @@ public class Regis {
 		}
 		Remote rmi = Client.getRmi();
 		try {
-			boolean t=rmi.register(ur, mk, nd, em);
-			if(!t) note.setText("loi dang nhap");
-			else
-			{
+			String rs = rmi.register(ur, mk, nd, em);
+			if (rs == null)
+				note.setText("loi dang nhap");
+			else {
 				Stage st = (Stage) ap.getScene().getWindow();
 				st.close();
 			}
