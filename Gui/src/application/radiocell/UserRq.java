@@ -3,7 +3,7 @@ package application.radiocell;
 public class UserRq {
 
 	private String name;
-	private Chose action = Chose.MAYBE;
+	private Chose action = Chose.LATE;
 
 	public UserRq(String a)	{
 		name = a;

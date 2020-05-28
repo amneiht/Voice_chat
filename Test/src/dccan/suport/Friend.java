@@ -1,7 +1,13 @@
 package dccan.suport;
 
-public class Friend {
-	private String nguoiDung = null, ten = null;
+import java.io.Serializable;
+
+public class Friend implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private String nguoiDung = "sss", ten = "pika";
 
 	public String getNguoiDung() {
 		return nguoiDung;

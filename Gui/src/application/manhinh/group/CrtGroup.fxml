@@ -5,20 +5,32 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="466.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
-   <top>
-      <AnchorPane prefHeight="32.0" prefWidth="524.0" BorderPane.alignment="CENTER">
-         <children>
-            <Label layoutX="14.0" layoutY="11.0" text="Tên nhóm" />
-            <TextField layoutX="113.0" layoutY="4.0" prefHeight="25.0" prefWidth="309.0" />
-         </children>
-      </AnchorPane>
-   </top>
-   <center>
-      <ScrollPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
-   </center>
-   <bottom>
-      <Button mnemonicParsing="false" text="Send" BorderPane.alignment="CENTER" />
-   </bottom>
+<BorderPane fx:id="ap" maxHeight="-Infinity"
+	maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+	prefHeight="400.0" prefWidth="466.0" xmlns="http://javafx.com/javafx/8"
+	xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="application.manhinh.group.CrtGroup">
+	<top>
+		<AnchorPane prefHeight="32.0" prefWidth="524.0"
+			BorderPane.alignment="CENTER">
+			<children>
+				<Label layoutX="14.0" layoutY="11.0" text="Tên nhóm" />
+				<TextField fx:id="group" layoutX="113.0" layoutY="4.0"
+					prefHeight="25.0" prefWidth="309.0" />
+			</children>
+		</AnchorPane>
+	</top>
+	<center>
+		<ScrollPane hbarPolicy="NEVER" prefHeight="200.0"
+			prefWidth="200.0" BorderPane.alignment="CENTER">
+			<content>
+				<TableView fx:id="tab" prefHeight="332.0"
+					prefWidth="457.0" />
+			</content>
+		</ScrollPane>
+	</center>
+	<bottom>
+		<Button mnemonicParsing="false" onAction="#makeGp" text="Tạo"
+			BorderPane.alignment="CENTER" />
+	</bottom>
 </BorderPane>

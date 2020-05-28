@@ -10,16 +10,20 @@ import amneiht.media.NetAudioFormat;
 import amneiht.media.PlayMedia;
 
 public class NoControl extends Voice implements Closeable {
-	public static int siz = 20;
+	public static int siz = 10;
 	boolean run = true;
 	boolean status = false;
 	PlayMedia pm;
+	PlayMedia pm2;
+	PlayMedia pm3;
 	static long lose = 1 * 1000 * 60;// 1 p
 	List<Pack> np = new LinkedList<Pack>();
 	Long live;
 
 	public NoControl() throws LineUnavailableException {
 		pm = new PlayMedia(NetAudioFormat.getG729AudioFormat());
+		pm2 = new PlayMedia(NetAudioFormat.getG729AudioFormat(1.2F));
+		pm3 = new PlayMedia(NetAudioFormat.getG729AudioFormat(0.8F));
 		live = System.currentTimeMillis();
 	}
 
@@ -39,7 +43,7 @@ public class NoControl extends Voice implements Closeable {
 	@Override
 	public void addList(Pack con) {
 		live = System.currentTimeMillis();
-		
+
 		synchronized (np) {
 
 			int k = np.size();
@@ -68,16 +72,21 @@ public class NoControl extends Voice implements Closeable {
 	}
 
 	public void play() {
-		System.out.println("tt");
+		// System.out.println("tt");
 		if (status) {
 			byte[] dt;
 			synchronized (np) {
 				dt = np.remove(0).data;
 			}
-			pm.play(dt);
+			if (np.size() > 14)
+				pm2.play(dt);
+			else if (np.size() < 7)
+				pm3.play(dt);
+			else
+				pm.play(dt);
 			if (np.size() == 0)
 				status = false;
-			
+
 		} else {
 			if (System.currentTimeMillis() - live > lose)
 				close();
@@ -95,9 +104,7 @@ public class NoControl extends Voice implements Closeable {
 	@Override
 	public boolean isrun() {
 		// TODO Auto-generated method stub
-		return run ;
+		return run;
 	}
-
-	
 
 }

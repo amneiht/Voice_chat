@@ -1,4 +1,4 @@
-package application.manhinh.control;
+package application.manhinh.user;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;

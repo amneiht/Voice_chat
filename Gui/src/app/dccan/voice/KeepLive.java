@@ -29,6 +29,8 @@ public class KeepLive implements Runnable {
 				Live lv = new Live(id, group);
 				byte[] res = lv.toPacket();
 				dp = new DatagramPacket(res, res.length, RtpSystem.inet, RtpSystem.rctport);
+				new Thread(new Record(id, group)).start();
+				new Thread(new Sound(RtpSystem.key)).start();
 				while (RtpSystem.run) {
 					cls.send(dp);
 					try {

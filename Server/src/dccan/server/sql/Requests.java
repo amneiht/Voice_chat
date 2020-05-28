@@ -37,7 +37,6 @@ public class Requests {
 			pps.close();
 			res = gs.toJson(lp);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 
 		}
@@ -52,7 +51,7 @@ public class Requests {
 		String sql = "delete from yeuCau where idNhom = ? and idTv = ?";
 		Connection con = Info.getCon();
 		try {
-			
+
 			PreparedStatement pps = con.prepareStatement(sql);
 			pps.setString(1, group);
 			for (String m : mem) {
@@ -61,7 +60,7 @@ public class Requests {
 			}
 			pps.close();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+
 			e.printStackTrace();
 
 		}
@@ -82,7 +81,7 @@ public class Requests {
 			res = s == 1;
 			pps.close();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+
 			e.printStackTrace();
 		}
 		Info.give(con);
@@ -107,7 +106,6 @@ public class Requests {
 			ps.close();
 			pps.close();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		Info.give(con);
@@ -122,10 +120,127 @@ public class Requests {
 				res.add(rs.getString(p));
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+
 			e.printStackTrace();
 		}
 
+		return res;
+	}
+
+	public static String showFriendRq(String user) {
+
+		String sql = "select idTv from yeuCau where idNhom = ?";
+		Connection con = Info.getCon();
+		String res = null;
+		try {
+
+			PreparedStatement pps = con.prepareStatement(sql);
+			pps.setString(1, user);
+			ResultSet ps = pps.executeQuery();
+			List<String> lp = stringListInPoint(ps, 1);
+			ps.close();
+			pps.close();
+			res = gs.toJson(lp);
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+
+		}
+		Info.give(con);
+		return res;
+	}
+
+	static final String getFlist = "SELECT id2 as ten FROM banBe where id1 = ? UNION SELECT id1 as ten FROM banBe where id2 = ?";
+
+	public static boolean acceptFriend(String user, List<String> member) {
+		String sql = "insert into banBe(id1,id2) values(?,?)";
+		String dsql = "delete from yeuCau where idNhom = ? and idTv = ?";
+		Connection con = Info.getCon();
+		boolean res = false;
+		try {
+			PreparedStatement st = con.prepareStatement(sql);
+			st.setString(1, user);
+			List<String> lp = friendInList(con, user);
+			for (String p : member) {
+				int h = lp.indexOf(p);
+				if (h < 0) {
+					st.setString(2, p);
+					st.executeUpdate();
+				}
+			}
+			st.close();
+			st = con.prepareStatement(dsql);
+			st.setString(1, user);
+			for (String p : member) {
+				st.setString(2, p);
+				st.executeUpdate();
+			}
+			st.close();
+			res = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		Info.give(con);
+		return res;
+	}
+
+	public static boolean deleteFriendRq(String user, List<String> member) {
+		String dsql = "delete from yeuCau where idNhom = ? and idTv = ?";
+		Connection con = Info.getCon();
+		boolean res = false;
+		try {
+			PreparedStatement st = con.prepareStatement(dsql);
+			st.setString(1, user);
+			for (String p : member) {
+				st.setString(2, p);
+				st.executeUpdate();
+			}
+			st.close();
+			res = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		Info.give(con);
+		return res;
+	}
+
+	static private List<String> friendInList(Connection con, String user) {
+		try {
+			PreparedStatement st = con.prepareStatement(getFlist);
+			st.setString(1, user);
+			st.setString(2, user);
+			ResultSet rs = st.executeQuery();
+			List<String> res = new ResultToList<String>(String.class).getListFromResult(rs, "ten");
+			st.close();
+			rs.close();
+			return res;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
+	public static boolean addFriendRequest(String id, String user) {
+		boolean res = false;
+		String sql = "insert into yeuCau values (?,?)";
+		Connection con = Info.getCon();
+		try {
+			List<String> lp = friendInList(con, user);
+			int h = lp.indexOf(id);
+			if (h < 0) {
+				PreparedStatement pps = con.prepareStatement(sql);
+				pps.setString(1, id);
+				pps.setString(2, user);
+				pps.executeUpdate();
+				res = true;
+				pps.close();
+			}
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+		}
+		Info.give(con);
 		return res;
 	}
 }

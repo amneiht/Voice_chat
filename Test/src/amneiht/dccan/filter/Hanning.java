@@ -1,17 +1,15 @@
 package amneiht.dccan.filter;
 
-public class Hanning {
+import java.io.Serializable;
+
+public class Hanning implements  Serializable{
 	int size;
 	int lfft;
 	double[] funtion;
 
 	public static void main(String[] args) {
-		Hanning op = new Hanning(80);
-		System.out.println(op.lfft);
-		for(double sp:op.funtion)
-		{
-			System.out.println(sp);
-		}
+		Complex x = new Complex(10, 10);
+		System.out.println(x.scale(2));
 	}
 
 	public Hanning(int size) {
@@ -21,16 +19,16 @@ public class Hanning {
 		funtion = new double[size];
 		for (int i = 0; i < size; i++) {
 			double ps = 0.5 - 0.5 * Math.cos(2 * Math.PI * (i+size) / (2*size));
+			if(i<(size/2)) ps =0 ;
 			funtion[i] = ps;
+			//if((i>size/2) 
+		
 		}
-//		funtion[1]=1;
-//		funtion[2]=1;
-//		funtion[3]=1;
+	
 	}
 
 	public short[] process(short[] rm) {
 		//if(true) return rm ;
-		long tm = System.currentTimeMillis();
 		Complex[] cp = new Complex[lfft];
 		for (int i = 0; i < size; i++) {
 			double ps = rm[i]/ 32768.0;
@@ -51,7 +49,7 @@ public class Hanning {
 		for (int i = 0; i < size; i++) {
 			res[i] = (short) (cv[i].re()*32768.0);
 		}
-		System.out.println(System.currentTimeMillis() - tm);
+		//System.out.println(System.currentTimeMillis() - tm);
 		return res;
 	}
 }

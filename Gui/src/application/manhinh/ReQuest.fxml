@@ -8,7 +8,6 @@
 
 <AnchorPane fx:id="rq" prefHeight="502.0" prefWidth="439.0"
 	xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8"
-	fx:controller="application.manhinh.control.ReQuest"
 	>
 	<children>
 		<BorderPane prefHeight="502.0" prefWidth="439.0">

@@ -12,6 +12,15 @@ import java.util.ResourceBundle;
 import javax.swing.JTextField;
 
 import application.autofill.Popup;
+import application.manhinh.friend.AddF;
+import application.manhinh.friend.DltMember;
+import application.manhinh.friend.RqFriend;
+import application.manhinh.friend.RqGroup;
+import application.manhinh.friend.RqId;
+import application.manhinh.friend.SetAd;
+import application.manhinh.friend.ShowFiend;
+import application.manhinh.user.Info;
+import application.manhinh.voice.Talk;
 import dccan.remote.Client;
 import dccan.remote.Remote;
 import dccan.suport.CheckImage;
@@ -35,7 +44,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.MenuItem;
+import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -44,6 +53,7 @@ import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
@@ -64,14 +74,9 @@ public class Chat implements Initializable {
 	private String id = null;
 
 	@FXML
-	private MenuItem fmanager;
-	@FXML
-	private MenuItem vn;
-	@FXML
-	private MenuItem en;
-	@FXML
 	private ScrollPane schat;
-
+	@FXML
+	private AnchorPane gm;
 	@FXML
 	private Button delete;
 
@@ -85,37 +90,20 @@ public class Chat implements Initializable {
 	private Button call;
 
 	@FXML
-	private MenuItem crtGroup;
-
-	@FXML
 	private TextField vilgax;
 
 	@FXML
-	private MenuItem fadd;
-
-	@FXML
-	private VBox listGroup;
-
+	private ListView<Node> listGroup;
 	@FXML
 	private VBox khungChat;
 
 	@FXML
-	private VBox member;
+	private ListView<Label> member;
 
 	@FXML
 	private TextField text;
 
-	@FXML
-	private MenuItem Jon_group;
-
-	@FXML
-	private Button File;
-
-	@FXML
-	private Button send;
-
-	@FXML
-	private Button rq;
+	String infoG = "";
 
 	public Chat() {
 		// new Thread(this).start();
@@ -139,6 +127,99 @@ public class Chat implements Initializable {
 				lb.setTextFill(Color.BLACK);
 			}
 		};
+	}
+	@FXML 
+	private void openFriendRq()
+	{
+		FXMLLoader fxmlLoader = new FXMLLoader();
+		// fxmlLoader.setResources(ResourceBundle.getBundle("app.lang.vn"));
+		Parent root;
+		try {
+			fxmlLoader.setController(new RqFriend());
+			root = fxmlLoader.load(getClass().getResource("/application/manhinh/friend/ShowFriend.fxml").openStream());
+			Scene sen = new Scene(root);
+			Stage pr = new Stage();
+			pr.setScene(sen);
+			pr.setTitle("Chon ban");
+			pr.show();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@FXML
+	private void openDelAdmin() {
+		FXMLLoader fxmlLoader = new FXMLLoader();
+		// fxmlLoader.setResources(ResourceBundle.getBundle("app.lang.vn"));
+		Parent root;
+		try {
+			fxmlLoader.setController(new SetAd(id, true));
+			root = fxmlLoader.load(getClass().getResource("/application/manhinh/friend/ShowFriend.fxml").openStream());
+			Scene sen = new Scene(root);
+			Stage pr = new Stage();
+			pr.setScene(sen);
+			pr.setTitle("Delete admin");
+			pr.show();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@FXML
+	private void openSetAdmin() {
+		FXMLLoader fxmlLoader = new FXMLLoader();
+		// fxmlLoader.setResources(ResourceBundle.getBundle("app.lang.vn"));
+		Parent root;
+		try {
+			fxmlLoader.setController(new SetAd(id, false));
+			root = fxmlLoader.load(getClass().getResource("/application/manhinh/friend/ShowFriend.fxml").openStream());
+			Scene sen = new Scene(root);
+			Stage pr = new Stage();
+			pr.setScene(sen);
+			pr.setTitle("Set admin");
+			pr.show();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	@FXML
+	private void openVoiceCall() {
+		FXMLLoader fxmlLoader = new FXMLLoader();
+		// fxmlLoader.setResources(ResourceBundle.getBundle("app.lang.vn"));
+		Parent root;
+		try {
+			fxmlLoader.setController(new Talk(id));
+			root = fxmlLoader.load(getClass().getResource("/application/manhinh/voice/Talk.fxml").openStream());
+			Scene sen = new Scene(root);
+			Stage pr = new Stage();
+			pr.setScene(sen);
+			pr.setTitle("Delete member");
+			pr.show();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	@FXML
+	private void openDeleteMember() {
+		FXMLLoader fxmlLoader = new FXMLLoader();
+		// fxmlLoader.setResources(ResourceBundle.getBundle("app.lang.vn"));
+		Parent root;
+		try {
+			fxmlLoader.setController(new DltMember(id));
+			root = fxmlLoader.load(getClass().getResource("/application/manhinh/friend/ShowFriend.fxml").openStream());
+			Scene sen = new Scene(root);
+			Stage pr = new Stage();
+			pr.setScene(sen);
+			pr.setTitle("Delete member");
+			pr.show();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	FileChooser fileChooser = new FileChooser();
@@ -165,16 +246,94 @@ public class Chat implements Initializable {
 	}
 
 	@FXML
+	private void openDelGroup() {
+		if (id != null) {
+			FXMLLoader fxmlLoader = new FXMLLoader();
+			// fxmlLoader.setResources(ResourceBundle.getBundle("app.lang.vn"));
+			Parent root;
+			try {
+				fxmlLoader.setController(new RqId(id));
+				root = fxmlLoader.load(getClass().getResource("/application/manhinh/friend/Find.fxml").openStream());
+				Scene sen = new Scene(root);
+				Stage pr = new Stage();
+				pr.setTitle("nhap \"yes\" de xoa");
+				pr.setScene(sen);
+				pr.show();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	@FXML
+	private void getIdGroup() {
+		if (id != null) {
+			FXMLLoader fxmlLoader = new FXMLLoader();
+			// fxmlLoader.setResources(ResourceBundle.getBundle("app.lang.vn"));
+			Parent root;
+			try {
+				fxmlLoader.setController(new RqId(id));
+				root = fxmlLoader.load(getClass().getResource("/application/manhinh/friend/Find.fxml").openStream());
+				Scene sen = new Scene(root);
+				Stage pr = new Stage();
+				pr.setScene(sen);
+				pr.show();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	@FXML
+	private void showRequestList() {
+		if (id != null) {
+			FXMLLoader fxmlLoader = new FXMLLoader();
+			// fxmlLoader.setResources(ResourceBundle.getBundle("app.lang.vn"));
+			Parent root;
+			try {
+				fxmlLoader.setController(new ReQuest(id));
+				root = fxmlLoader.load(getClass().getResource("/application/manhinh/ReQuest.fxml").openStream());
+				Scene sen = new Scene(root);
+				Stage pr = new Stage();
+				pr.setTitle("Tham gia nhom");
+				pr.setScene(sen);
+				pr.show();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	@FXML
+	private void openJoinGroup() {
+		FXMLLoader fxmlLoader = new FXMLLoader();
+		// fxmlLoader.setResources(ResourceBundle.getBundle("app.lang.vn"));
+		Parent root;
+		try {
+			fxmlLoader.setController(new RqGroup());
+			root = fxmlLoader.load(getClass().getResource("/application/manhinh/friend/Find.fxml").openStream());
+			Scene sen = new Scene(root);
+			Stage pr = new Stage();
+			pr.setScene(sen);
+			pr.show();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@FXML
 	private void openFriendList() {
 		// System.out.println("ss");
 		FXMLLoader fxmlLoader = new FXMLLoader();
 		// fxmlLoader.setResources(ResourceBundle.getBundle("app.lang.vn"));
 		Parent root;
 		try {
+			fxmlLoader.setController(new ShowFiend());
 			root = fxmlLoader.load(getClass().getResource("/application/manhinh/friend/ShowFriend.fxml").openStream());
 			Scene sen = new Scene(root);
 			Stage pr = new Stage();
 			pr.setScene(sen);
+			pr.setTitle("Xoa ban");
 			pr.show();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -189,7 +348,8 @@ public class Chat implements Initializable {
 		// fxmlLoader.setResources(ResourceBundle.getBundle("app.lang.vn"));
 		Parent root;
 		try {
-			root = fxmlLoader.load(getClass().getResource("/application/manhinh/friend/AddFriend.fxml").openStream());
+			fxmlLoader.setController(new AddF());
+			root = fxmlLoader.load(getClass().getResource("/application/manhinh/friend/Find.fxml").openStream());
 			Scene sen = new Scene(root);
 			Stage pr = new Stage();
 			pr.setScene(sen);
@@ -207,6 +367,9 @@ public class Chat implements Initializable {
 		JTextField textp = new JTextField();
 
 		try {
+			// gm.setVisible(false);
+			gm.setMinSize(0, 0);
+			// gm.setMaxSize(0, 0);
 			khungChat.setOnDragOver(new EventHandler<DragEvent>() {
 				@Override
 				public void handle(DragEvent event) {
@@ -245,7 +408,9 @@ public class Chat implements Initializable {
 				}
 			});
 			schat.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-			getGroupList();
+			schat.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+
+			// member.setSpacing(10);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -257,6 +422,13 @@ public class Chat implements Initializable {
 		}));
 		get.setCycleCount(Timeline.INDEFINITE);
 		get.play();
+		Timeline grp = new Timeline(new KeyFrame(Duration.millis(1500), new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent event) {
+				getGroupList();
+			}
+		}));
+		grp.setCycleCount(Timeline.INDEFINITE);
+		grp.play();
 		System.out.println("show chat");
 	}
 
@@ -264,19 +436,80 @@ public class Chat implements Initializable {
 		try {
 			String group = rmi.getGroup();
 			if (group != null) {
-				List<Group> lg = GetList.groups(group);
-				for (Group p : lg) {
-					Button bt = new Button(p.getTenNhom());
-					bt.setOnAction(e -> {
-						setGroup(p.getIdNhom());
-					});
-					listGroup.getChildren().add(bt);
+				if (group != infoG) {
+					infoG = group;
+					listGroup.getItems().clear();
+					List<Group> lg = GetList.groups(group);
+					List<String> test = new LinkedList<String>();
+					for (Group p : lg) {
+						test.add(p.getIdNhom());
+						Label bt = new Label(p.getTenNhom());
+						bt.setOnMouseClicked(e -> {
+							setGroup(p.getIdNhom());
+						});
+						listGroup.getItems().add(bt);
+					}
+					if (id == null) {
+						if (lg.size() > 0)
+							setGroup(lg.get(0).getIdNhom());
+					} else {
+						int h = test.indexOf(id);
+						if (h < 0)
+							setGroup(lg.get(0).getIdNhom());
+					}
 				}
-				if (lg.size() > 0)
-					setGroup(lg.get(0).getIdNhom());
 			}
 
 		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@FXML
+	private void getOldComment() {
+		try {
+			System.out.println("ss");
+			if (id != null) {
+
+				ObservableList<Node> ls = khungChat.getChildren();
+				double p = schat.getVvalue();
+				System.out.println(p);
+				if (p != 0)
+					return;
+				String cmt = rmi.getCommentList(id, odate, lold);
+				if (cmt != null) {
+					List<Comment> lp = GetList.cmts(cmt);
+					for (Comment cp : lp) {
+						addComment(cp, lold, ls);
+					}
+
+					if (lp.size() > 0) {
+						odate = lp.get(0).lgetNgayGui();
+
+					}
+				}
+
+			}
+		} catch (RemoteException e) {
+
+			e.printStackTrace();
+		}
+	}
+
+	@FXML
+	private void onCreateGroup() {
+		FXMLLoader fxmlLoader = new FXMLLoader();
+		// fxmlLoader.setResources(ResourceBundle.getBundle("app.lang.vn"));
+		Parent root;
+		try {
+			// fxmlLoader.setController(new Info());
+			root = fxmlLoader.load(getClass().getResource("/application/manhinh/group/CrtGroup.fxml").openStream());
+			Scene sen = new Scene(root);
+			Stage pr = new Stage();
+			pr.setTitle("Tao nhom");
+			pr.setScene(sen);
+			pr.show();
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -358,11 +591,13 @@ public class Chat implements Initializable {
 		// fxmlLoader.setResources(ResourceBundle.getBundle("app.lang.vn"));
 		Parent root;
 		try {
+			String lp = rmi.getInfo();
+			List<Friend> ls = GetList.friend(lp);
+			fxmlLoader.setController(new Info(ls.get(0)));
 			root = fxmlLoader.load(getClass().getResource("/application/manhinh/user/Info.fxml").openStream());
 			Scene sen = new Scene(root);
 			Stage pr = new Stage();
 			pr.setScene(sen);
-			;
 			pr.show();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -376,11 +611,11 @@ public class Chat implements Initializable {
 		// fxmlLoader.setResources(ResourceBundle.getBundle("app.lang.vn"));
 		Parent root;
 		try {
+			// fxmlLoader.setController(new Ninfo());
 			root = fxmlLoader.load(getClass().getResource("/application/manhinh/user/NewInfo.fxml").openStream());
 			Scene sen = new Scene(root);
 			Stage pr = new Stage();
 			pr.setScene(sen);
-			;
 			pr.show();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -457,9 +692,25 @@ public class Chat implements Initializable {
 		try {
 			List<Friend> lf = GetList.member(rmi.getMember(gp));
 			List<String> lp = new LinkedList<String>();
+			if (lf == null)
+				return;
 			for (int i = 0; i < lf.size(); i++) {
 				String d = lf.get(i).getNguoiDung();
 				lp.add(d);
+			}
+			// member.getChildren().clear();
+			member.getItems().clear();
+
+			ObservableList<Label> mb = member.getItems();
+			for (Friend ff : lf) {
+				Label lbm = new Label(ff.getNguoiDung());
+				lbm.setOnMouseClicked((e) -> {
+					if (e.getButton() == MouseButton.SECONDARY) {
+						// System.out.println();
+						FLpopup.show(lbm, ff);
+					}
+				});
+				mb.add(lbm);
 			}
 			Popup pop = new Popup(lp, "@");
 			text.setOnKeyReleased(pop);

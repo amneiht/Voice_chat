@@ -32,7 +32,7 @@ public class MyApplication extends Application {
 	public static void main(String[] args) {
 		// Client.init("localhost");
 		try {
-			Client.getRmi().login("can2", "1");
+			Client.getRmi().login("can", "1");
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

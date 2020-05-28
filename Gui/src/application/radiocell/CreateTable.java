@@ -37,9 +37,10 @@ public class CreateTable {
 				us.setAction(t.getNewValue());
 			}
 		});
-
+		act.setMinWidth(200);
 		tb.getColumns().add(name);
 		tb.getColumns().add(act);
+		tb.setEditable(true);
 		// tb.setIte
 	}
 
@@ -47,7 +48,7 @@ public class CreateTable {
 		TableColumn<GFriend, String> name = new TableColumn<GFriend, String>("Ten user");
 		name.setCellValueFactory(new PropertyValueFactory<GFriend, String>("name"));
 		name.setMinWidth(200);
-		TableColumn<GFriend, AddF> act = new TableColumn<GFriend, AddF>("Xoa");
+		TableColumn<GFriend, AddF> act = new TableColumn<GFriend, AddF>("Chon");
 		act.setMinWidth(200);
 		act.setCellValueFactory(new PropertyValueFactory<GFriend, AddF>("action"));
 		act.setCellFactory((param) -> new RadioButtonCell<GFriend, AddF>(EnumSet.allOf(AddF.class)));
@@ -65,18 +66,18 @@ public class CreateTable {
 		tb.setEditable(true);
 	}
 
-
 	public static void setUser(TableView<UserRq> tb, List<UserRq> lp) {
 		try {
-			ObservableList<UserRq>  data = FXCollections.observableArrayList(lp);
+			ObservableList<UserRq> data = FXCollections.observableArrayList(lp);
 			tb.setItems(data);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
+
 	public static void setGFriend(TableView<GFriend> tb, List<GFriend> lp) {
 		try {
-			ObservableList<GFriend>  data = FXCollections.observableArrayList(lp);
+			ObservableList<GFriend> data = FXCollections.observableArrayList(lp);
 			tb.setItems(data);
 		} catch (Exception e) {
 			e.printStackTrace();

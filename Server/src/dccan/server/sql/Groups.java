@@ -140,8 +140,8 @@ public class Groups {
 	 * @param ten
 	 *            nhom
 	 */
-	public static String addGroup(String id, List<String> member, String ten) {
-		String res = "false";
+	public static boolean addGroup(String id, List<String> member, String ten) {
+		boolean res = false ;
 		Connection con = Info.getCon();
 		try {
 
@@ -165,7 +165,7 @@ public class Groups {
 				ps.executeUpdate();
 			}
 			ps.close();
-			res = "ok";
+			res = true ;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -230,27 +230,6 @@ public class Groups {
 				ps.close();
 				res = false;
 			}
-			rs.close();
-			ps.close();
-
-			ps = con.prepareStatement(addSql1);
-			String nhom = RandomStringUtils.randomAlphanumeric(32);
-			ps.setString(1, nhom);
-			ps.setString(2, id1);
-			ps.setString(3, id1 + "_" + id2);
-			ps.executeUpdate();
-			ps.close();
-
-			ps = con.prepareStatement(addSql2);
-			ps.setString(1, nhom);
-			ps.setString(2, id1);
-			ps.executeUpdate();
-			ps.setString(1, nhom);
-			ps.setString(2, id2);
-			ps.executeUpdate();
-			ps.close();
-			// con.close();
-
 		} catch (Exception e) {
 
 			System.err.println(e);
@@ -376,4 +355,78 @@ public class Groups {
 		}
 		Info.give(con);
 	}
+
+	public static boolean isAdmin(String user, String group) {
+		String sql = "select quyen from tvNhom where idNhom =? and idTv = ? ";
+		Connection con = Info.getCon();
+		boolean res = false;
+		try {
+			PreparedStatement ps = con.prepareStatement(sql);
+			ps.setString(1, group);
+			ps.setString(2, user);
+			ResultSet rs = ps.executeQuery();
+			rs.first();
+			int d = rs.getInt("quyen");
+			if (d > 0)
+				res = true;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		Info.give(con);
+		return res;
+	}
+
+	public static void setPri(String user, String group, List<String> mem, int pri) {
+		String sql = "select quyen from tvNhom where idNhom =? and idTv = ? ";
+		Connection con = Info.getCon();
+		try {
+			PreparedStatement ps = con.prepareStatement(sql);
+			ps.setString(1, group);
+			ps.setString(2, user);
+			ResultSet rs = ps.executeQuery();
+			rs.first();
+			int d = rs.getInt("quyen");
+			rs.close();
+			ps.close();
+			if (d != 0) {
+				sql = "update tvNhom set quyen = ? where idTv =?";
+				ps = con.prepareStatement(sql);
+				ps.setInt(1, pri);
+				for (String ms : mem) {
+					ps.setString(2, ms);
+					ps.executeUpdate();
+
+				}
+				ps.close();
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		Info.give(con);
+
+	}
+
+	public static String getPriMember(String group, int pri) {
+		String sql = "select nguoiDung , ten from tvNhom , thongtin where idTv = ten and idNhom =? and quyen = ? ";
+		Connection con = Info.getCon();
+		String res = null;
+		try {
+			PreparedStatement ps = con.prepareStatement(sql);
+			ps.setString(1, group);
+			ps.setInt(2, pri);
+			ResultSet rs = ps.executeQuery();
+			List<Friend> lp = new ResultToList<Friend>(Friend.class).progess(rs);
+			res = new Gson().toJson(lp);
+			rs.close();
+			ps.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		Info.give(con);
+		return res;
+	}
+
 }

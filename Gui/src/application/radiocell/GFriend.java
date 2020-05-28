@@ -1,8 +1,11 @@
 package application.radiocell;
 
+import dccan.suport.Friend;
+
 public class GFriend {
 	private String name;
 	private AddF action = AddF.NO;
+	private String id;
 
 	public String getName() {
 		return name;
@@ -10,6 +13,15 @@ public class GFriend {
 
 	public void setName(String name) {
 		this.name = name;
+
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public AddF getAction() {
@@ -20,7 +32,9 @@ public class GFriend {
 		this.action = action;
 	}
 
-	public GFriend(String a)	{
-		name = a;
+	
+	public GFriend(Friend a) {
+		name = a.getNguoiDung();
+		id = a.getTen();
 	}
 }

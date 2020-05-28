@@ -28,8 +28,8 @@ public class ReQuest implements Initializable {
 
 	public ReQuest(String gp) {
 		group = gp;
+		
 	}
-
 	@FXML
 	private TableView<UserRq> tab;
 

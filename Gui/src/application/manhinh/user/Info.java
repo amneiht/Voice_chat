@@ -1,15 +1,13 @@
-package application.manhinh.control;
+package application.manhinh.user;
 
 import java.io.ByteArrayInputStream;
 import java.net.URL;
 import java.rmi.RemoteException;
-import java.util.List;
 import java.util.ResourceBundle;
 
 import dccan.remote.Client;
 import dccan.remote.Remote;
 import dccan.suport.Friend;
-import dccan.suport.GetList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -19,6 +17,7 @@ import javafx.scene.paint.Color;
 
 public class Info implements Initializable{
 
+	Friend inf =null;
     @FXML
     private Label User;
 
@@ -29,23 +28,27 @@ public class Info implements Initializable{
     private Label name;
 
     Remote rmi ;
+    public Info(Friend i)
+    {
+    	inf = i ;
+    }
     int size =100;
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		// TODO Auto-generated method stub
 		rmi=Client.getRmi();
 		try {
-			String fp = rmi.getInfo();
-			if(fp!=null)
+			//String fp = rmi.getInfo();
+			if(inf!=null)
 			{
-				List<Friend> ls= GetList.friend(fp);
-				User.setText(ls.get(0).getTen());
-				name .setText(ls.get(0).getNguoiDung());
+				
+				User.setText(inf.getTen());
+				name .setText(inf.getNguoiDung());
 				User.setTextFill(Color.RED);
 				name.setTextFill(Color.RED);
-				if(ls.get(0).getIdAnh()!=null)
+				if(inf.getIdAnh()!=null)
 				{
-					byte[] data = rmi.dowload(ls.get(0).getIdAnh());
+					byte[] data = rmi.dowload(inf.getIdAnh());
 					ByteArrayInputStream bis = new ByteArrayInputStream(data);
 					Image ims = new Image(bis);
 					double h = ims.getHeight();

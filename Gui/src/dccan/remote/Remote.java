@@ -5,6 +5,7 @@ import java.util.List;
 
 public class Remote implements Rmt {
 	private String token = null;
+	public String id = null;
 	Communication rmi;
 
 	public Remote(Communication rmi) {
@@ -13,12 +14,14 @@ public class Remote implements Rmt {
 
 	public String login(String user, String pass) throws RemoteException {
 		token = rmi.login(user, pass);
+		id = user;
 		return token;
 
 	}
 
 	public String register(String user, String pass, String hoten, String email) throws RemoteException {
 		token = rmi.register(user, pass, hoten, email);
+		id = user;
 		return token;
 	}
 
@@ -124,7 +127,7 @@ public class Remote implements Rmt {
 
 	@Override
 	public String getUserOnLimit(String name) throws RemoteException {
-		return rmi.getUserOnLimit(token,name);
+		return rmi.getUserOnLimit(token, name);
 	}
 
 	@Override
@@ -135,6 +138,48 @@ public class Remote implements Rmt {
 	@Override
 	public boolean deleteFriend(List<String> mem) throws RemoteException {
 		return rmi.deleteFriend(token, mem);
+	}
+
+	@Override
+	public boolean isAdmin(String group) throws RemoteException {
+		return rmi.isAdmin(token, group);
+	}
+
+	@Override
+	public void setAdmin(String group, List<String> mem) throws RemoteException {
+		rmi.setAdmin(token, group, mem);
+
+	}
+
+	@Override
+	public void delAdmin(String group, List<String> mem) throws RemoteException {
+		rmi.delAdmin(token, group, mem);
+
+	}
+
+	@Override
+	public String getAdminOnGroup(String group) throws RemoteException {
+		return rmi.getAdminOnGroup(token, group);
+	}
+
+	@Override
+	public String getNonAdminOnGroup(String group) throws RemoteException {
+		return rmi.getNonAdminOnGroup(token, group);
+	}
+
+	@Override
+	public String showFriendRq() throws RemoteException {
+		return rmi.showFriendRq(token);
+	}
+
+	@Override
+	public boolean acceptFriendRequest(List<String> member) throws RemoteException {
+		return rmi.acceptFriendRequest(token, member);
+	}
+
+	@Override
+	public boolean deleteFriendRequest(List<String> member) throws RemoteException {
+		return rmi.deleteFriendRequest(token, member);
 	}
 
 }

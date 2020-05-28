@@ -6,14 +6,21 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane fx:id="ap" prefHeight="437.0" prefWidth="310.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.manhinh.control.Ninfo">
+<AnchorPane fx:id="ap" prefHeight="437.0" prefWidth="310.0"
+	xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="application.manhinh.user.Ninfo"
+	>
 	<children>
-		<Button layoutX="14.0" layoutY="47.0" mnemonicParsing="false" onAction="#openImg" text="Chọn ảnh" />
+		<Button layoutX="14.0" layoutY="47.0" mnemonicParsing="false"
+			onAction="#openImg" text="Chọn ảnh" />
 		<Label layoutX="2.0" layoutY="191.0" text="Tên" />
 		<Label layoutX="4.0" layoutY="265.0" text="email" />
 		<TextField fx:id="email" layoutX="114.0" layoutY="260.0" />
 		<TextField fx:id="name" layoutX="114.0" layoutY="186.0" />
-		<Button layoutX="223.0" layoutY="398.0" mnemonicParsing="false" onAction="#sendInfo" text="Gửi" />
-		<ImageView fx:id="iv" fitHeight="143.0" fitWidth="148.0" layoutX="114.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" />
+		<Button layoutX="223.0" layoutY="398.0" mnemonicParsing="false"
+			onAction="#sendInfo" text="Gửi" />
+		<ImageView fx:id="iv" fitHeight="143.0" fitWidth="148.0"
+			layoutX="114.0" layoutY="14.0" pickOnBounds="true"
+			preserveRatio="true" />
 	</children>
 </AnchorPane>

@@ -40,7 +40,7 @@ public class ShowFiend implements Initializable {
 			List<Friend> Flist = GetList.friend(s);
 			List<GFriend> lg = new LinkedList<GFriend>();
 			for (Friend ss : Flist) {
-				lg.add(new GFriend(ss.getTen()));
+				lg.add(new GFriend(ss));
 			}
 			
 			CreateTable.setGFriend(view, lg);
@@ -57,7 +57,7 @@ public class ShowFiend implements Initializable {
 		List<GFriend> user = view.getItems();
 		for (GFriend lp : user) {
 			if (lp.getAction() == AddF.YES) {
-				mem.add(lp.getName());
+				mem.add(lp.getId());
 			}
 		}
 		System.out.println(mem.size());

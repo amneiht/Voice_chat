@@ -14,31 +14,32 @@
 						<Menu mnemonicParsing="false" text="User">
 							<items>
 								<MenuItem mnemonicParsing="false" text="Close" />
-                        <MenuItem mnemonicParsing="false" onAction="#showInfo" text="Thông tin" />
-                        <MenuItem mnemonicParsing="false" onAction="#newInfo" text="chinh sua" />
+								<MenuItem mnemonicParsing="false" onAction="#showInfo" text="Thông tin" />
+								<MenuItem mnemonicParsing="false" onAction="#newInfo" text="chinh sua" />
 							</items>
 						</Menu>
 						<Menu mnemonicParsing="false" text="%group">
 							<items>
-								<MenuItem fx:id="crtGroup" mnemonicParsing="false" text="%crtGroup" />
-								<MenuItem fx:id="Jon_group" mnemonicParsing="false" text="%jon_group" />
+								<MenuItem mnemonicParsing="false" onAction="#onCreateGroup" text="%crtGroup" />
+								<MenuItem mnemonicParsing="false" onAction="#openJoinGroup" text="%jon_group" />
 							</items>
 						</Menu>
 						<Menu mnemonicParsing="false" text="%help">
 							<items>
 								<MenuItem mnemonicParsing="false" text="About" />
-                        <Menu mnemonicParsing="false" text="%lang">
-                          <items>
-                            <MenuItem fx:id="vn" mnemonicParsing="false" text="vn" />
-                              <MenuItem fx:id="vn" mnemonicParsing="false" text="en" />
-                          </items>
-                        </Menu>
+								<Menu mnemonicParsing="false" text="%lang">
+									<items>
+										<MenuItem mnemonicParsing="false" text="vn" />
+										<MenuItem mnemonicParsing="false" text="en" />
+									</items>
+								</Menu>
 							</items>
 						</Menu>
 						<Menu mnemonicParsing="false" text="%friend">
 							<items>
-								<MenuItem fx:id="fmanager" mnemonicParsing="false" onAction="#openFriendList" text="%fmanager" />
-								<MenuItem fx:id="fadd" mnemonicParsing="false" onAction="#openAddFriend" text="%fadd" />
+								<MenuItem mnemonicParsing="false" onAction="#openFriendList" text="%fmanager" />
+								<MenuItem mnemonicParsing="false" onAction="#openAddFriend" text="%fadd" />
+                        <MenuItem mnemonicParsing="false" onAction="#openFriendRq" text="Yêu cầu" />
 							</items>
 						</Menu>
 					</menus>
@@ -47,7 +48,7 @@
 			<center>
 				<BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
 					<center>
-						<ScrollPane fx:id="schat" fitToHeight="true" fitToWidth="true" BorderPane.alignment="CENTER">
+						<ScrollPane fx:id="schat" fitToHeight="true" fitToWidth="true" onScroll="#getOldComment" BorderPane.alignment="CENTER">
 							<content>
 								<VBox fx:id="khungChat" prefHeight="472.0" prefWidth="708.0" />
 							</content>
@@ -56,10 +57,10 @@
 					<bottom>
 						<FlowPane prefHeight="26.0" prefWidth="864.0" BorderPane.alignment="CENTER">
 							<children>
-								<Button fx:id="call" mnemonicParsing="false" text="%call" />
-								<Button fx:id="File" mnemonicParsing="false" onAction="#openFile" text="%file" />
+								<Button fx:id="call" mnemonicParsing="false" onAction="#openVoiceCall" text="%call" />
+								<Button mnemonicParsing="false" onAction="#openFile" text="%file" />
 								<TextField fx:id="text" onKeyPressed="#checkEnter" prefHeight="25.0" prefWidth="551.0" />
-								<Button fx:id="send" mnemonicParsing="false" onAction="#sendComment" prefHeight="25.0" prefWidth="79.0" text="%send" />
+								<Button mnemonicParsing="false" onAction="#sendComment" prefHeight="25.0" prefWidth="79.0" text="%send" />
 							</children>
 						</FlowPane>
 					</bottom>
@@ -72,9 +73,9 @@
 					</top>
 					<center>
 						<ScrollPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-							<content>
-								<VBox fx:id="listGroup" prefHeight="491.0" prefWidth="122.0" />
-							</content>
+                     <content>
+                        <ListView fx:id="listGroup" prefHeight="516.0" prefWidth="130.0" />
+                     </content>
 						</ScrollPane>
 					</center>
 				</BorderPane>
@@ -82,21 +83,26 @@
 			<right>
 				<BorderPane prefHeight="542.0" prefWidth="145.0" BorderPane.alignment="CENTER">
 					<top>
-						<AnchorPane prefHeight="268.0" prefWidth="145.0" BorderPane.alignment="CENTER">
+						<AnchorPane fx:id="gm" prefHeight="268.0" prefWidth="145.0" BorderPane.alignment="CENTER">
 							<children>
-								<Button fx:id="rq" layoutX="14.0" layoutY="52.0" mnemonicParsing="false" text="Yêu Cầu" />
-								<Button fx:id="delete" layoutX="14.0" layoutY="92.0" mnemonicParsing="false" text="Xóa Thành Viên" />
-								<Button fx:id="setting" layoutX="14.0" layoutY="134.0" mnemonicParsing="false" text="Đặt Quản trị viên" />
+								<Button layoutX="14.0" layoutY="52.0" mnemonicParsing="false" onAction="#showRequestList" text="Yêu Cầu" />
+								<Button layoutX="14.0" layoutY="92.0" mnemonicParsing="false" onAction="#openDeleteMember" text="Xóa Thành Viên" />
+								<Button layoutX="14.0" layoutY="134.0" mnemonicParsing="false" onAction="#openSetAdmin" text="Đặt Quản trị viên" />
+								<Button layoutX="14.0" layoutY="229.0" mnemonicParsing="false" text="Xóa nhóm" />
+								<Button layoutX="14.0" layoutY="185.0" mnemonicParsing="false" onAction="#openDelAdmin" text="Xóa quản trị viên" />
 							</children>
 						</AnchorPane>
 					</top>
 					<center>
-						<ScrollPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-							<content>
-								<VBox fx:id="member" prefHeight="258.0" prefWidth="140.0" />
-							</content>
+						<ScrollPane hbarPolicy="NEVER" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                     <content>
+                        <ListView fx:id="member" prefHeight="247.0" prefWidth="142.0" />
+                     </content>
 						</ScrollPane>
 					</center>
+					<bottom>
+						<Button mnemonicParsing="false" onAction="#getIdGroup" text="Lấy mã mời" BorderPane.alignment="CENTER" />
+					</bottom>
 				</BorderPane>
 			</right>
 		</BorderPane>

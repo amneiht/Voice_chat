@@ -8,16 +8,21 @@ public class Client {
 	private static Remote rmi = null;
 	public static Communication connect;
 	static Registry registry;
+	public static String host = null;
+	public static String workPath;
 	static {
+		workPath = new File("").getAbsolutePath();
+		System.out.println("path : "+workPath);
 		Client.init("localhost");
+
 	}
 
-	public static void init(String host) {
+	public static void init(String hosts) {
 		try {
 			// setSettings();
 			// registry = LocateRegistry.getRegistry(host, 8888, new
 			// SslRMIClientSocketFactory());
-
+			host = hosts;
 			registry = LocateRegistry.getRegistry(host, 8888);
 			connect = (Communication) registry.lookup("Hello");
 			rmi = new Remote(connect);

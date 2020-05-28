@@ -2,11 +2,11 @@ package dccan.server.sql;
 
 import java.lang.reflect.Field;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
-
-import dccan.suport.Comment;
 
 public class ResultToList<E> {
 	Class<E> ob;
@@ -36,12 +36,25 @@ public class ResultToList<E> {
 	public ArrayList<E> progess(ResultSet rs) {
 		try {
 			ArrayList<E> res = new ArrayList<E>();
-			Field[] fl = ob.getDeclaredFields();
+			Field[] fl1 = ob.getDeclaredFields();
 			rs.beforeFirst();
+			ResultSetMetaData rsm = rs.getMetaData();
+			ArrayList<String> lp = new ArrayList<String>();
+			int col = rsm.getColumnCount();
+			for (int i = 1; i <= col; i++) {
+				lp.add(rsm.getColumnName(i));
+			}
+			List<Field> fl = new LinkedList<Field>();
+			for (Field obf : fl1) {
+				obf.setAccessible(true);
+				int h = lp.indexOf(obf.getName());
+				if (h > -1)
+					fl.add(obf);
+			}
+
 			while (rs.next()) {
 				E in = ob.newInstance();
 				for (Field obf : fl) {
-					obf.setAccessible(true);
 					obf.set(in, rs.getObject(obf.getName()));
 				}
 				res.add(in);
@@ -53,23 +66,4 @@ public class ResultToList<E> {
 		}
 	}
 
-	public ArrayList<E> stringProgess(ResultSet rs, Class<E> ob) {
-		// co the co loi
-		ArrayList<E> res = new ArrayList<E>();
-		Field[] fl = Comment.class.getDeclaredFields();
-		try {
-			rs.beforeFirst();
-			while (rs.next()) {
-				E in = ob.newInstance();
-				for (Field obf : fl) {
-					obf.set(in, rs.getString(obf.getName()));
-				}
-				res.add(in);
-			}
-			return res;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return res;
-		}
-	}
 }

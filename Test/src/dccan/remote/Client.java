@@ -5,34 +5,34 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
 public class Client {
-	// private static Communication rmi = null;
+	private static Remote rmi = null;
+	public static Communication connect;
 	static Registry registry;
+	public static String host = null;
+	public static String workPath;
 	static {
-		init("localhost");
-		System.out.println("init");
+		workPath = new File("").getAbsolutePath();
+		System.out.println("path : "+workPath);
+		Client.init("localhost");
+
 	}
 
-	public static void init(String host) {
+	public static void init(String hosts) {
 		try {
+			// setSettings();
+			// registry = LocateRegistry.getRegistry(host, 8888, new
+			// SslRMIClientSocketFactory());
+			host = hosts;
 			registry = LocateRegistry.getRegistry(host, 8888);
-
+			connect = (Communication) registry.lookup("Hello");
+			rmi = new Remote(connect);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
-	public static Communication getRmi() {
-		Communication rmi = null;
-		try {
-
-			// registry = LocateRegistry.getRegistry(host, 8888);
-			rmi = (Communication) registry.lookup("Hello");
-
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	public static Remote getRmi() {
 		return rmi;
 	}
 

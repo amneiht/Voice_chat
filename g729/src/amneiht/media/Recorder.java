@@ -48,7 +48,7 @@ public class Recorder implements Closeable {
 
 	public byte[] getSound(int d) {
 		byte[] data = new byte[d];
-		microphone.read(data, 0, count);
+		microphone.read(data, 0, d);
 		return data;
 	}
 

@@ -7,7 +7,7 @@ import java.net.InetAddress;
 import java.util.List;
 
 import dccan.remote.Client;
-import dccan.remote.Communication;
+import dccan.remote.Remote;
 import dccan.suport.GetList;
 import net.help.Convert;
 import net.packet.Nrtp.RtpClient;
@@ -16,12 +16,12 @@ import net.packet.rctp.Join;
 
 public class User1 implements Runnable {
 	String user, pass;
-	static String gp = "35u3WNgPoCaGmgRAWUgjRMbcgwfUZKKx";
+	static String gp = "0SKkCmU3sC8Bsp7FFeLM5yCjsATJ6oMN";
 	static boolean run = true;
 
 	public static void main(String[] args) {
 		new Thread(new User1("can2", "1")).start();
-		new Thread(new User1("can", "1")).start();
+		//new Thread(new User1("can", "1")).start();
 		
 	}
 
@@ -34,10 +34,10 @@ public class User1 implements Runnable {
 	
 	@Override
 	public void run() {
-		Communication rmi = Client.getRmi();
+		Remote rmi = Client.getRmi();
 		try {
-			String token = rmi.login(user, pass);
-			String ls = rmi.getUserkey(token,gp);
+			rmi.login(user, pass);
+			String ls = rmi.getUserkey(gp);
 			List<String> ld = GetList.listString(ls);
 			for (String up : ld) {
 				System.out.println(user + " " + up);

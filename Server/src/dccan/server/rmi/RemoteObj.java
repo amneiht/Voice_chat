@@ -70,7 +70,7 @@ public class RemoteObj implements Communication {
 		String user = ListUser2.getUserByToken(token);
 		if (user == null)
 			return false;
-		return Groups.addFriend(user, id);
+		return Requests.addFriendRequest(id, user);
 
 	}
 
@@ -168,8 +168,8 @@ public class RemoteObj implements Communication {
 		String user = ListUser2.getUserByToken(token);
 		if (user == null)
 			return false;
-		String rs = Groups.addGroup(user, member, name);
-		return rs.equals("true");
+		return  Groups.addGroup(user, member, name);
+		//return rs.equals("true");
 	}
 
 	@Override
@@ -338,5 +338,70 @@ public class RemoteObj implements Communication {
 		if (user == null)
 			return false;
 		return Groups.deleteFriend(user, mem);
+	}
+
+	@Override
+	public boolean isAdmin(String token, String group) throws RemoteException {
+		String user = ListUser2.getUserByToken(token);
+		if (user == null)
+			return false;
+		return Groups.isAdmin(user, group);
+	}
+
+	@Override
+	public void setAdmin(String token, String group, List<String> mem) throws RemoteException {
+		String user = ListUser2.getUserByToken(token);
+		if (user == null)
+			return;
+		Groups.setPri(user, group, mem, 1);
+
+	}
+
+	@Override
+	public void delAdmin(String token, String group, List<String> mem) throws RemoteException {
+		String user = ListUser2.getUserByToken(token);
+		if (user == null)
+			return;
+		Groups.setPri(user, group, mem, 0);
+	}
+
+	@Override
+	public String getAdminOnGroup(String token, String group) throws RemoteException {
+		String user = ListUser2.getUserByToken(token);
+		if (user == null)
+			return null;
+		return Groups.getPriMember(group, 1);
+	}
+
+	@Override
+	public String getNonAdminOnGroup(String token, String group) throws RemoteException {
+		String user = ListUser2.getUserByToken(token);
+		if (user == null)
+			return null;
+		return Groups.getPriMember(group, 0);
+	}
+
+	@Override
+	public String showFriendRq(String token) throws RemoteException {
+		String user = ListUser2.getUserByToken(token);
+		if (user == null)
+			return null;
+		return Requests.showFriendRq(user);
+	}
+
+	@Override
+	public boolean acceptFriendRequest(String token, List<String> member) throws RemoteException {
+		String user = ListUser2.getUserByToken(token);
+		if (user == null)
+			return false ;
+		return Requests.acceptFriend(user,member);
+	}
+
+	@Override
+	public boolean deleteFriendRequest(String token, List<String> member) throws RemoteException {
+		String user = ListUser2.getUserByToken(token);
+		if (user == null)
+			return false ;
+		return Requests.deleteFriendRq(user, member);
 	}
 }

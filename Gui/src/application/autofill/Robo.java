@@ -11,10 +11,10 @@ import javafx.scene.input.ClipboardContent;
 public class Robo {
 	Robot robot;
 
-
 	public Robo() {
 		try {
-			robot = Application.GetApplication().createRobot();;
+			robot = Application.GetApplication().createRobot();
+			;
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -30,5 +30,12 @@ public class Robo {
 		robot.keyPress(KeyEvent.VK_V);
 		robot.keyRelease(KeyEvent.VK_V);
 		robot.keyRelease(KeyEvent.VK_CONTROL);
+	}
+
+	public static void copy(String ps) {
+		Clipboard clipboard = Clipboard.getSystemClipboard();
+		ClipboardContent content = new ClipboardContent();
+		content.putString(ps);
+		clipboard.setContent(content);
 	}
 }

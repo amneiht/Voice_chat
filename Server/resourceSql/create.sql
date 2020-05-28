@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: db
--- Generation Time: May 03, 2020 at 02:34 PM
+-- Generation Time: May 28, 2020 at 08:29 AM
 -- Server version: 5.7.29
 -- PHP Version: 7.4.3
 
@@ -15,46 +15,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `chat`
 --
-
-DELIMITER $$
---
--- Procedures
---
-CREATE DEFINER=`root`@`%` PROCEDURE `addMember` (`gp` VARCHAR(35), `admin` VARCHAR(35), `mem` VARCHAR(35))  BEGIN
-DECLARE pri int(2) ;
-SELECT quyen into pri FROM tvNhom WHERE idNhom = gp and idTV = admin ;
-if ( pri = 1 ) THEN
-INSERT INTO tvNhom VALUES ( gp , mem , admin , 0 ) ;
-end if ;
-end$$
-
-CREATE DEFINER=`root`@`%` PROCEDURE `addPri` (`gp` VARCHAR(35), `admin` VARCHAR(35), `mem` VARCHAR(35), `dt` INT(2))  BEGIN
-DECLARE pri int(2) ;
-SELECT quyen into pri FROM tvNhom WHERE idNhom = gp and idTV = admin ;
-if ( pri = 1 ) THEN
-update tvNhom set quyen = dt where idNhom = gp and idTV = mem ;
-end if ;
-end$$
-
-CREATE DEFINER=`root`@`%` PROCEDURE `deleteGroup` (`gp` VARCHAR(35), `admin` VARCHAR(35))  BEGIN
-DECLARE pri int(2) ;
-SELECT quyen into pri FROM tvNhom WHERE idNhom = gp and idTV = admin ;
-if ( pri = 1 ) THEN
-delete from tinNhan where idNhan = gp ;
-delete from tvNhom where idNhom = gp ;
-delete from nhom where nhom.idNhom = gp ;
-end if ;
-end$$
-
-CREATE DEFINER=`root`@`%` PROCEDURE `deleteMember` (`gp` VARCHAR(35), `admin` VARCHAR(35), `mem` VARCHAR(35))  BEGIN
-DECLARE pri int(2) ;
-SELECT quyen into pri FROM tvNhom WHERE idNhom = gp and idTV = admin ;
-if ( pri = 1 ) THEN
-delete from  tvNhom where tvNhom.idNhom = gp and tvNhom.idTV = mem ;
-end if ;
-end$$
-
-DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -104,7 +64,8 @@ CREATE TABLE `thongtin` (
   `nguoiDung` varchar(70) COLLATE utf8_unicode_ci NOT NULL,
   `email` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `ten` varchar(35) COLLATE utf8_unicode_ci NOT NULL,
-  `matKhau` varchar(500) COLLATE utf8_unicode_ci NOT NULL
+  `matKhau` varchar(500) COLLATE utf8_unicode_ci NOT NULL,
+  `idAnh` varchar(35) COLLATE utf8_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -116,7 +77,7 @@ CREATE TABLE `thongtin` (
 CREATE TABLE `tinNhan` (
   `idNhan` varchar(35) COLLATE utf8_unicode_ci NOT NULL,
   `noiDung` varchar(500) CHARACTER SET utf16 COLLATE utf16_unicode_ci NOT NULL,
-  `idFile` varchar(300) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `idFile` varchar(35) COLLATE utf8_unicode_ci DEFAULT NULL,
   `ngayGui` bigint(20) NOT NULL,
   `idGui` varchar(35) COLLATE utf8_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -161,6 +122,12 @@ ALTER TABLE `banBe`
 --
 ALTER TABLE `nhom`
   ADD PRIMARY KEY (`idNhom`);
+
+--
+-- Indexes for table `tepTin`
+--
+ALTER TABLE `tepTin`
+  ADD PRIMARY KEY (`idFile`);
 
 --
 -- Indexes for table `thongtin`
@@ -216,6 +183,5 @@ ALTER TABLE `tvNhom`
 -- Constraints for table `yeuCau`
 --
 ALTER TABLE `yeuCau`
-  ADD CONSTRAINT `yeuCau_ibfk_1` FOREIGN KEY (`idNhom`) REFERENCES `nhom` (`idNhom`),
   ADD CONSTRAINT `yeuCau_ibfk_2` FOREIGN KEY (`idTv`) REFERENCES `thongtin` (`ten`);
 COMMIT;
