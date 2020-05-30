@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: db
--- Generation Time: May 28, 2020 at 08:29 AM
+-- Generation Time: May 28, 2020 at 02:07 PM
 -- Server version: 5.7.29
 -- PHP Version: 7.4.3
 
@@ -15,6 +15,48 @@ SET time_zone = "+00:00";
 --
 -- Database: `chat`
 --
+CREATE DATABASE IF NOT EXISTS `chat` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+USE `chat`;
+
+DELIMITER $$
+--
+-- Procedures
+--
+CREATE DEFINER=`root`@`%` PROCEDURE `addMember` (`gp` VARCHAR(35), `admin` VARCHAR(35), `mem` VARCHAR(35))  BEGIN
+DECLARE pri int(2) ;
+SELECT quyen into pri FROM tvNhom WHERE idNhom = gp and idTV = admin ;
+if ( pri = 1 ) THEN
+INSERT INTO tvNhom VALUES ( gp , mem , admin , 0 ) ;
+end if ;
+end$$
+
+CREATE DEFINER=`root`@`%` PROCEDURE `addPri` (`gp` VARCHAR(35), `admin` VARCHAR(35), `mem` VARCHAR(35), `dt` INT(2))  BEGIN
+DECLARE pri int(2) ;
+SELECT quyen into pri FROM tvNhom WHERE idNhom = gp and idTV = admin ;
+if ( pri = 1 ) THEN
+update tvNhom set quyen = dt where idNhom = gp and idTV = mem ;
+end if ;
+end$$
+
+CREATE DEFINER=`root`@`%` PROCEDURE `deleteGroup` (`gp` VARCHAR(35), `admin` VARCHAR(35))  BEGIN
+DECLARE pri int(2) ;
+SELECT quyen into pri FROM tvNhom WHERE idNhom = gp and idTV = admin ;
+if ( pri = 1 ) THEN
+delete from tinNhan where idNhan = gp ;
+delete from tvNhom where idNhom = gp ;
+delete from nhom where nhom.idNhom = gp ;
+end if ;
+end$$
+
+CREATE DEFINER=`root`@`%` PROCEDURE `deleteMember` (`gp` VARCHAR(35), `admin` VARCHAR(35), `mem` VARCHAR(35))  BEGIN
+DECLARE pri int(2) ;
+SELECT quyen into pri FROM tvNhom WHERE idNhom = gp and idTV = admin ;
+if ( pri = 1 ) THEN
+delete from  tvNhom where tvNhom.idNhom = gp and tvNhom.idTV = mem ;
+end if ;
+end$$
+
+DELIMITER ;
 
 -- --------------------------------------------------------
 

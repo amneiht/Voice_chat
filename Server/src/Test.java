@@ -1,13 +1,12 @@
-import dccan.server.sql.Requests;
+import dccan.server.rmi.RemoteObj;
 
 public class Test {
 	public static void main(String[] args) {
-		//RemoteObj rmi = new RemoteObj();
+		RemoteObj rmi = new RemoteObj();
 		try {
-//			String token = rmi.login("can2","1");
-//			System.out.println(Groups.getPriMember("35u3WNgPoCaGmgRAWUgjRMbcgwfUZKKx", 1)+token);
+			String token = rmi.login("can","1");
+			System.out.println(rmi.isAdmin(token, "0SKkCmU3sC8Bsp7FFeLM5yCjsATJ6oMN"));
 			
-			Requests.addRequest("can", "can2");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

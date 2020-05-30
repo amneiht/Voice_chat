@@ -17,7 +17,10 @@ import dccan.suport.Friend;
 import dccan.suport.Group;
 
 public class Groups {
-	private final static String getGroup = "select nhom.idNhom as idNhom, tenNhom from nhom ,tvNhom where nhom.idNhom = tvNhom.idNhom and idTV=?";
+	private final static String getGroup = "select gp.* from (select nhom.idNhom as idNhom, tenNhom from nhom ,tvNhom "
+			+ "where nhom.idNhom = tvNhom.idNhom and idTV= ? ) "
+			+ "as gp join (SELECT idNhan ,MAX(ngayGui) as ms FROM tinNhan GROUP by idNhan ) as b on b.idNhan = "
+			+ "gp.idNhom order BY ms DESC";
 
 	/**
 	 * lay thong tin cac nhom chat
@@ -141,7 +144,7 @@ public class Groups {
 	 *            nhom
 	 */
 	public static boolean addGroup(String id, List<String> member, String ten) {
-		boolean res = false ;
+		boolean res = false;
 		Connection con = Info.getCon();
 		try {
 
@@ -165,7 +168,7 @@ public class Groups {
 				ps.executeUpdate();
 			}
 			ps.close();
-			res = true ;
+			res = true;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -277,20 +280,32 @@ public class Groups {
 	 * @return
 	 */
 	public static boolean deleteMember(String group, List<String> mem, String user) {
+		System.out.println("xoa tv");
 		boolean res = false;
-		String sql = "call deleteMember(?,?,?)";
+		String sql = "delete from tvNhom where idNhom = ? and idTv = ?";
+		String sql2 = "select quyen from tvNhom where idNhom =? and idTv = ? ";
 		Connection con = Info.getCon();
 		try {
+			PreparedStatement pst = con.prepareStatement(sql2);
+			pst.setString(1, group);
+			pst.setString(2, user);
+			ResultSet rs = pst.executeQuery();
+			rs.first();
+			int h = rs.getInt("quyen");
 
-			CallableStatement cstm = con.prepareCall(sql);
-			cstm.setString(1, group);
-			cstm.setString(2, user);
-			for (String id : mem) {
-				cstm.setString(3, id);
-				cstm.executeUpdate();
+			System.out.println(pst.toString());
+			rs.close();
+			pst.close();
+			System.out.println(h);
+			if (h > 0) {
+				pst = con.prepareStatement(sql);
+				pst.setString(1, group);
+				for (String lp : mem) {
+					pst.setString(2, lp);
+					pst.executeUpdate();
+				}
+				pst.close();
 			}
-			cstm.close();
-			// con.close();
 			res = true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -387,12 +402,14 @@ public class Groups {
 			ResultSet rs = ps.executeQuery();
 			rs.first();
 			int d = rs.getInt("quyen");
+			System.out.println();
 			rs.close();
 			ps.close();
 			if (d != 0) {
-				sql = "update tvNhom set quyen = ? where idTv =?";
+				sql = "update tvNhom set quyen = ? where idTv =? and idNhom =?";
 				ps = con.prepareStatement(sql);
 				ps.setInt(1, pri);
+				ps.setString(3, group);
 				for (String ms : mem) {
 					ps.setString(2, ms);
 					ps.executeUpdate();

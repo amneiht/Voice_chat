@@ -13,6 +13,7 @@ import javax.swing.JTextField;
 
 import application.autofill.Popup;
 import application.manhinh.friend.AddF;
+import application.manhinh.friend.DelGroup;
 import application.manhinh.friend.DltMember;
 import application.manhinh.friend.RqFriend;
 import application.manhinh.friend.RqGroup;
@@ -54,6 +55,7 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
@@ -128,9 +130,9 @@ public class Chat implements Initializable {
 			}
 		};
 	}
-	@FXML 
-	private void openFriendRq()
-	{
+
+	@FXML
+	private void openFriendRq() {
 		FXMLLoader fxmlLoader = new FXMLLoader();
 		// fxmlLoader.setResources(ResourceBundle.getBundle("app.lang.vn"));
 		Parent root;
@@ -252,7 +254,7 @@ public class Chat implements Initializable {
 			// fxmlLoader.setResources(ResourceBundle.getBundle("app.lang.vn"));
 			Parent root;
 			try {
-				fxmlLoader.setController(new RqId(id));
+				fxmlLoader.setController(new DelGroup(id));
 				root = fxmlLoader.load(getClass().getResource("/application/manhinh/friend/Find.fxml").openStream());
 				Scene sen = new Scene(root);
 				Stage pr = new Stage();
@@ -367,9 +369,7 @@ public class Chat implements Initializable {
 		JTextField textp = new JTextField();
 
 		try {
-			// gm.setVisible(false);
 			gm.setMinSize(0, 0);
-			// gm.setMaxSize(0, 0);
 			khungChat.setOnDragOver(new EventHandler<DragEvent>() {
 				@Override
 				public void handle(DragEvent event) {
@@ -434,6 +434,7 @@ public class Chat implements Initializable {
 
 	private void getGroupList() {
 		try {
+			// TODO
 			String group = rmi.getGroup();
 			if (group != null) {
 				if (group != infoG) {
@@ -456,6 +457,9 @@ public class Chat implements Initializable {
 						int h = test.indexOf(id);
 						if (h < 0)
 							setGroup(lg.get(0).getIdNhom());
+						else {
+
+						}
 					}
 				}
 			}
@@ -466,25 +470,26 @@ public class Chat implements Initializable {
 	}
 
 	@FXML
-	private void getOldComment() {
+	private void getOldComment(ScrollEvent evt) {
 		try {
-			System.out.println("ss");
 			if (id != null) {
 
-				ObservableList<Node> ls = khungChat.getChildren();
-				double p = schat.getVvalue();
-				System.out.println(p);
-				if (p != 0)
+				if (evt.getDeltaY() < 0)
 					return;
+				double d = khungChat.getHeight();
+				ObservableList<Node> ls = khungChat.getChildren();
 				String cmt = rmi.getCommentList(id, odate, lold);
 				if (cmt != null) {
 					List<Comment> lp = GetList.cmts(cmt);
 					for (Comment cp : lp) {
 						addComment(cp, lold, ls);
 					}
-
 					if (lp.size() > 0) {
-						odate = lp.get(0).lgetNgayGui();
+						odate = lp.get(lp.size() - 1).lgetNgayGui();
+						khungChat.applyCss();
+						schat.layout();
+						double sp = 1.0 - d / khungChat.getHeight();
+						schat.setVvalue(sp);
 
 					}
 				}
@@ -623,14 +628,37 @@ public class Chat implements Initializable {
 
 	}
 
+	Comment cold = new Comment(lold);
+	Comment cnew = new Comment(lnew);
+	static long time = 5 * 1000;// 5s
+
 	private void addComment(Comment cp, boolean vt, ObservableList<Node> ls) {
 		int size = 100;
 		Label user = new Label("@" + cp.getIdGui());
 		user.getStyleClass().add("user");
-		if (vt)
-			ls.add(user);
-		else
-			ls.add(0, user);
+		if (vt) {
+			if (!cp.getIdGui().equals(cnew.getIdGui())) {
+
+				ls.add(user);
+
+			} else {
+				if (cp.lgetNgayGui() - cnew.lgetNgayGui() > time) {
+					ls.add(user);
+				}
+			}
+			cnew = cp;
+		} else {
+			if (!cp.getIdGui().equals(cold.getIdGui())) {
+
+				ls.add(0, user);
+
+			} else {
+				if (cold.lgetNgayGui() - cp.lgetNgayGui() > time) {
+					ls.add(0, user);
+				}
+			}
+			cold = cp;
+		}
 		if (cp.getIdFile() == null) {
 			Text tx = new Text(cp.getNoiDung());
 			tx.getStyleClass().add("cmt");
@@ -686,34 +714,57 @@ public class Chat implements Initializable {
 		}
 	}
 
+	String mem = "";
+
+	private void refreshGroup(String gp) {
+		// TODO
+		try {
+			boolean check = rmi.isAdmin(gp);
+			if (check)
+				gm.setMaxSize(300, 300);
+			else
+				gm.setMaxSize(00, 00);
+
+			String mem2 = rmi.getMember(gp);
+			if (mem2 != mem) {
+				mem = mem2;
+				List<Friend> lf = GetList.member(mem);
+				List<String> lp = new LinkedList<String>();
+				if (lf == null)
+					return;
+				for (int i = 0; i < lf.size(); i++) {
+					String d = lf.get(i).getNguoiDung();
+					lp.add(d);
+				}
+
+				// member.getChildren().clear();
+				member.getItems().clear();
+
+				ObservableList<Label> mb = member.getItems();
+				for (Friend ff : lf) {
+					Label lbm = new Label(ff.getNguoiDung());
+					lbm.setOnMouseClicked((e) -> {
+						if (e.getButton() == MouseButton.SECONDARY) {
+							// System.out.println();
+							FLpopup.show(lbm, ff);
+						}
+					});
+					mb.add(lbm);
+				}
+				Popup pop = new Popup(lp, "@");
+				text.setOnKeyReleased(pop);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		}
+	}
+
 	private void setGroup(String gp) {
 
 		id = gp;
 		try {
-			List<Friend> lf = GetList.member(rmi.getMember(gp));
-			List<String> lp = new LinkedList<String>();
-			if (lf == null)
-				return;
-			for (int i = 0; i < lf.size(); i++) {
-				String d = lf.get(i).getNguoiDung();
-				lp.add(d);
-			}
-			// member.getChildren().clear();
-			member.getItems().clear();
-
-			ObservableList<Label> mb = member.getItems();
-			for (Friend ff : lf) {
-				Label lbm = new Label(ff.getNguoiDung());
-				lbm.setOnMouseClicked((e) -> {
-					if (e.getButton() == MouseButton.SECONDARY) {
-						// System.out.println();
-						FLpopup.show(lbm, ff);
-					}
-				});
-				mb.add(lbm);
-			}
-			Popup pop = new Popup(lp, "@");
-			text.setOnKeyReleased(pop);
+			refreshGroup(id);
 			ObservableList<Node> ls = khungChat.getChildren();
 			ls.clear();
 			String cmt = rmi.getCommentList(id, -1, lold);
@@ -723,9 +774,13 @@ public class Chat implements Initializable {
 				if (cm.size() > 0) {
 					odate = cm.get(cm.size() - 1).lgetNgayGui();
 					ndate = cm.get(0).lgetNgayGui();
+					cold = new Comment(lold);
+					cnew = cm.get(0);
 				} else {
 					ndate = 0;
 					odate = Long.MAX_VALUE;
+					cold = new Comment(lold);
+					cnew = new Comment(lnew);
 				}
 				for (Comment cp : cm) {
 					addComment(cp, lold, ls);

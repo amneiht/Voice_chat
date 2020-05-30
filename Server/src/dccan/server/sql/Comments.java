@@ -88,7 +88,7 @@ public class Comments {
 		return System.currentTimeMillis();
 	}
 
-	private final static String getSql = "select * from tinNhan where idNhan = ? and ngayGui < ?  order by ngayGui DESC limit 10";
+	private final static String getSql = "select * from tinNhan where idNhan = ? and ngayGui < ?  order by ngayGui DESC limit 20";
 
 	/**
 	 * lay ve cac thong tin trong bang tin nhan

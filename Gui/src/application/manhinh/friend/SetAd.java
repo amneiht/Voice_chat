@@ -36,10 +36,10 @@ public class SetAd implements Initializable {
 		if (mem.size() > 0) {
 
 			try {
-				if (!mode)
-					rmi.setAdmin(gp, mem);
-				else
+				if (mode)
 					rmi.delAdmin(gp, mem);
+				else
+					rmi.setAdmin(gp, mem);
 			} catch (RemoteException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
