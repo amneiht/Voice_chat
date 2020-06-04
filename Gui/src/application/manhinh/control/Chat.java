@@ -15,6 +15,7 @@ import application.autofill.Popup;
 import application.manhinh.friend.AddF;
 import application.manhinh.friend.DelGroup;
 import application.manhinh.friend.DltMember;
+import application.manhinh.friend.OutGroup;
 import application.manhinh.friend.RqFriend;
 import application.manhinh.friend.RqGroup;
 import application.manhinh.friend.RqId;
@@ -429,12 +430,10 @@ public class Chat implements Initializable {
 		}));
 		grp.setCycleCount(Timeline.INDEFINITE);
 		grp.play();
-		System.out.println("show chat");
 	}
 
 	private void getGroupList() {
 		try {
-			// TODO
 			String group = rmi.getGroup();
 			if (group != null) {
 				if (group != infoG) {
@@ -442,11 +441,16 @@ public class Chat implements Initializable {
 					listGroup.getItems().clear();
 					List<Group> lg = GetList.groups(group);
 					List<String> test = new LinkedList<String>();
+					// TODO
 					for (Group p : lg) {
 						test.add(p.getIdNhom());
 						Label bt = new Label(p.getTenNhom());
 						bt.setOnMouseClicked(e -> {
-							setGroup(p.getIdNhom());
+							if (e.getButton() == MouseButton.PRIMARY)
+								setGroup(p.getIdNhom());
+							else if (e.getButton() == MouseButton.SECONDARY) {
+								OutPopup.show(bt, id);
+							}
 						});
 						listGroup.getItems().add(bt);
 					}
@@ -717,13 +721,13 @@ public class Chat implements Initializable {
 	String mem = "";
 
 	private void refreshGroup(String gp) {
-		// TODO
+
 		try {
 			boolean check = rmi.isAdmin(gp);
 			if (check)
-				gm.setMaxSize(300, 300);
+				gm.setVisible(true);
 			else
-				gm.setMaxSize(00, 00);
+				gm.setVisible(false);
 
 			String mem2 = rmi.getMember(gp);
 			if (mem2 != mem) {

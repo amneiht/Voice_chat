@@ -1,0 +1,16 @@
+@startuml
+title Hoạt Động upcomment
+actor user
+database sql
+!define rmc (Rmi client)
+!define rms (Rmi Server)
+!define ue user
+ue --> (chat) : nhập nội dung
+(chat) --> (kiểm tra)
+(kiểm tra) --> rmc : truyền tham số
+rmc -- rms : giao tiếp
+rms --> (Truy vấn)
+(Truy vấn) -right- sql : Truy vấn dữ liệu
+(Truy vấn) --> rms : trả về true/false
+rmc --> (chat) :trả kết quả
+@enduml

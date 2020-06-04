@@ -1,0 +1,9 @@
+@startuml
+title Hoạt Động Quản trị nhóm
+actor admin
+admin -left-> (Thêm quản trị viên)
+admin -right-> (Xóa quản trị viên)
+admin -up-> (Chấp nhận yêu cầu)
+admin -down-> (xóa nhóm)
+admin -down-> (Xóa Thành viên)
+@enduml

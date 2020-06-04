@@ -1,0 +1,15 @@
+@startuml
+title Phi chức năng 
+actor user
+database sql
+!define rmc (Rmi client)
+!define rms (Rmi Server)
+!define lp (Nhóm)
+user --> lp
+lp--> rmc
+rmc -left- rms
+rmc -up-> lp : danh sách nhóm
+rms -up- (Truy vấn) 
+lp -up-> user : hiển thị
+(Truy vấn) -up- sql
+@enduml

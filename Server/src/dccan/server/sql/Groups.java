@@ -17,10 +17,14 @@ import dccan.suport.Friend;
 import dccan.suport.Group;
 
 public class Groups {
+	public static void main(String[] args) {
+		System.out.println(getGroup);
+	}
+
 	private final static String getGroup = "select gp.* from (select nhom.idNhom as idNhom, tenNhom from nhom ,tvNhom "
 			+ "where nhom.idNhom = tvNhom.idNhom and idTV= ? ) "
-			+ "as gp join (SELECT idNhan ,MAX(ngayGui) as ms FROM tinNhan GROUP by idNhan ) as b on b.idNhan = "
-			+ "gp.idNhom order BY ms DESC";
+			+ "as gp left join (SELECT idNhan ,MAX(ngayGui) as ms FROM tinNhan GROUP by idNhan ) as b on b.idNhan = "
+			+ "gp.idNhom order BY ms DESC , tenNhom DESC";
 
 	/**
 	 * lay thong tin cac nhom chat

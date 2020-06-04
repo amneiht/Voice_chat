@@ -1,0 +1,15 @@
+@startuml
+title Hoạt Động Quản trị nhóm
+actor admin
+database sql
+!define rmc (Rmi client)
+!define rms (Rmi Server)
+!define xc (Xóa nhóm)
+admin --> xc
+
+xc --> rmc
+
+rmc -left- rms
+rms -up-> (Truy vấn) 
+(Truy vấn) -up-> sql
+@enduml

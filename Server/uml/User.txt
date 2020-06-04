@@ -1,0 +1,17 @@
+@startuml
+title Hoạt Động người dùng 
+actor user
+user --> (Đăng nhập)
+user --> (Thêm bạn)
+user --> (Nhắn tin)
+user --> (Tải Tệp)
+user --> (Gửi tệp)
+user -right-> (Xem bạn bè)
+user -left-> (Xóa bạn bè)
+user -up-> (Thoát Nhóm) 
+user -up-> (Chỉnh sửa thông tin)
+user -up-> (Voice chat)
+user -up-> (Đăng ký )
+user -down-> (Tạo nhóm)
+user -up-> (Tham gia nhóm)
+@enduml

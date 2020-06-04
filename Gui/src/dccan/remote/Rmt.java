@@ -76,4 +76,6 @@ public interface Rmt {
 
 	public boolean deleteFriendRequest( List<String> member) throws RemoteException;
 
+	public boolean deleteComment( String group, long date) throws RemoteException;
+
 }

@@ -1,0 +1,20 @@
+@startuml
+title Hoạt Động Tham gia nhóm
+actor userA
+actor admin
+!define a userA 
+!define b admin
+database sql
+!define rmc (Rmi client)
+!define rms (Rmi Server)
+
+a --> (Xin vào nhóm ) : nhập tham số
+ (Xin vào nhóm ) -->  rmc : gọi hàm
+rmc -left- rms : giao tiếp
+rms -up-> (Truy vấn)
+(Truy vấn) -up-> sql
+b --> (Xem yêu cầu )
+b --> (Chấp nhận )
+(Chấp nhận ) --> rmc
+(Xem yêu cầu ) --> rmc
+@enduml

@@ -1,0 +1,20 @@
+@startuml
+title Hoạt Động kết bạn
+actor userA
+actor userB
+!define a userA 
+!define b userB
+database sql
+!define rmc (Rmi client)
+!define rms (Rmi Server)
+
+a --> (Thêm bạn ) : nhập tham số
+(Thêm bạn ) -->  rmc : gọi hàm
+rmc -left- rms : giao tiếp
+rms -up-> (Truy vấn)
+(Truy vấn) -up-> sql
+b --> (Xem yêu cầu )
+b --> (Chấp nhận )
+(Chấp nhận ) --> rmc
+(Xem yêu cầu ) --> rmc
+@enduml

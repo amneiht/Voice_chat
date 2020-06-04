@@ -404,4 +404,12 @@ public class RemoteObj implements Communication {
 			return false ;
 		return Requests.deleteFriendRq(user, member);
 	}
+
+	@Override
+	public boolean deleteComment(String token,  String group, long date) throws RemoteException {
+		String user = ListUser2.getUserByToken(token);
+		if (user == null)
+			return false ;
+		return Comments.delCommand(user , group,  date);
+	}
 }

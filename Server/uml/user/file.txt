@@ -1,0 +1,18 @@
+@startuml
+title Hoạt Động Gửi tệp
+actor user
+database sql
+!define rmc (Rmi client)
+!define rms (Rmi Server)
+!define ue user
+ue -right-> (File) : truyền đường dẫn
+(File) --> (Tin nhắn ) : gửi tin
+(File) --> (Đọc tệp tin) 
+(Tin nhắn ) --> rmc
+(Đọc tệp tin) --> rmc
+rmc -left- rms : giao tiếp
+rms -up-> (Chat) : lưu tin nhắn
+rms -up-> (Tệp) : lưu tập tin
+(Chat) -up-> sql
+(Tệp) -up-> sql
+@enduml

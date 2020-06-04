@@ -1,0 +1,8 @@
+@startuml
+title Hoạt Động phi chức năng
+actor server 
+!define s server 
+s --> (quản lý kết nối)
+s --> (Quản lý token)
+s --> (quản lý Rmi )
+@enduml

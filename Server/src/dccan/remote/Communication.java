@@ -77,4 +77,6 @@ public interface Communication extends Remote {
 
 	public boolean deleteFriendRequest(String token, List<String> member) throws RemoteException;
 
+	public boolean deleteComment(String token, String group, long date) throws RemoteException;
+
 }

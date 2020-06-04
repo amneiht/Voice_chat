@@ -1,0 +1,18 @@
+@startuml
+title Hoạt Động Gửi tệp
+actor user
+database sql
+!define rmc (Rmi client)
+!define rms (Rmi Server)
+!define ue user
+ue -down->(Xem thông tin)  
+ue -right->(Chỉnh sửa)  
+(Xem thông tin)  --> rmc
+(Chỉnh sửa) --> rmc
+rmc -right-> (Xem thông tin) : hiển thị kết quả
+rmc -right- rms : giao tiếp
+rms -up-> (Xem)
+rms -up-> (Sửa)
+(Xem) -up-> sql
+(Sửa) -up-> sql
+@enduml

@@ -155,4 +155,25 @@ public class Comments {
 		Info.give(con);
 		return "false";
 	}
+
+	public static boolean delCommand(String user, String group, long date) {
+		Connection con = Info.getCon();
+		boolean res = false;
+		String sql = "delete from tinNhan where idNhan = ? and ngayGui = ? and idGui =? ";
+		try {
+			PreparedStatement ps = con.prepareStatement(sql);
+			ps.setString(1, group);
+			ps.setLong(2, date);
+			ps.setString(3, user);
+			ps.executeUpdate();
+			ps.close();
+			res = true;
+
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		Info.give(con);
+		return res;
+	}
 }

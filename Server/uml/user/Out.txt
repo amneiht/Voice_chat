@@ -1,0 +1,14 @@
+@startuml
+title Thoát nhóm
+actor user
+database sql
+!define rmc (Rmi client)
+!define rms (Rmi Server)
+!define ue user
+ue --> (Thoát nhóm) : nhóm cần thoát
+(Thoát nhóm) --> rmc : truyền tham số
+rmc -left- rms : giao tiếp
+rms -up-> (Truy vấn)
+(Truy vấn) -up- sql : Truy vấn dữ liệu
+(Truy vấn) --> rms
+@enduml

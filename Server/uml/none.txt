@@ -1,0 +1,9 @@
+@startuml
+title Hoạt Động phi chức năng
+actor system
+system -up-> (Cập nhật comment)
+system -right-> (Cập nhật nhóm)
+system -left-> (Sắp sếp nhóm )
+system -down-> (Lấy comment cũ)
+system -down-> (Chỉnh sửa hiển thị)
+@enduml

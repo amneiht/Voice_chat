@@ -1,0 +1,22 @@
+'login + regiter
+@startuml
+title Hoạt Động Đăng nhập
+actor user
+'agent server
+database sql
+!define login (Đăng Nhập) 
+!define rmc (Rmi client)
+!define rms (Rmi Server)
+user -left-> login : Nhâp tham số
+login -up-> (Kiểm tra) 
+(Kiểm tra) --> rmc : gọi hàm Rmi
+rmc -- rms : Giao tiếp
+rms --> (Truy vấn)
+(Truy vấn) -right- sql : Truy vấn dữ liệu
+(Truy vấn) --> rms : trả về true/false
+'rms -- rmc : truyền data
+rmc --> login : trả vế kết quả
+login --> user : Hiển thị 
+@enduml
+
+

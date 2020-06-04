@@ -31,7 +31,7 @@ public class FLpopup {
 		thong.setOnAction((e) -> {
 			showInfo();
 		});
-		pop.getItems().addAll(im,thong);
+		pop.getItems().addAll(im, thong);
 	}
 
 	static void show(Node e, Friend ls) {
@@ -54,7 +54,7 @@ public class FLpopup {
 		}
 	}
 
-private	static void showInfo() {
+	private static void showInfo() {
 		FXMLLoader fxmlLoader = new FXMLLoader();
 		// fxmlLoader.setResources(ResourceBundle.getBundle("app.lang.vn"));
 		Remote rmi = Client.getRmi();

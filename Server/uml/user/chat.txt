@@ -1,0 +1,24 @@
+@startuml
+title Hoạt Động voice chat
+actor user
+database sql
+agent room
+!define rmc (Rmi client)
+!define rms (Rmi Server)
+!define rtp (RTP Server)
+!define rtcp (RTCP Server)
+!define ue user
+
+ue -left-> (voice chat)
+(voice chat) --> (Lấy khóa)
+(Lấy khóa)  --> rmc
+rmc --> rms
+rms <--> sql
+rms --> room : truyến thông tin
+(voice chat) -left-> (kết nối)
+(kết nối) -left-> rtcp : xác nhận thông tin
+rtcp --> room : ghi thông tin
+(kết nối) --> (hội thoại)
+(hội thoại) <--> rtp : nhận và gửi gói tin
+rtp --> room : gửi hội thoại cho các máy khác
+@enduml
