@@ -17,6 +17,8 @@ import dccan.server.control.chat.Room;
 import dccan.server.control.chat.RoomMap;
 import dccan.server.control.chat.StaticMap;
 import dccan.server.control.user.ListUser2;
+import dccan.server.pass.ChangeMail;
+import dccan.server.pass.ChangePass;
 import dccan.server.sql.Comments;
 import dccan.server.sql.Groups;
 import dccan.server.sql.Requests;
@@ -168,8 +170,8 @@ public class RemoteObj implements Communication {
 		String user = ListUser2.getUserByToken(token);
 		if (user == null)
 			return false;
-		return  Groups.addGroup(user, member, name);
-		//return rs.equals("true");
+		return Groups.addGroup(user, member, name);
+		// return rs.equals("true");
 	}
 
 	@Override
@@ -179,6 +181,15 @@ public class RemoteObj implements Communication {
 			return false;
 		String res = Groups.addMember(id, group, user);
 		return res.equals("true");
+	}
+
+	@Override
+	public boolean addMember(String token, String group, List<String> id) throws RemoteException {
+		String user = ListUser2.getUserByToken(token);
+		if (user == null)
+			return false;
+
+		return Groups.addMember(group, user, id);
 	}
 
 	@Override
@@ -236,10 +247,7 @@ public class RemoteObj implements Communication {
 			return null;
 		Room room = rm.lp.get(id);
 		List<Client> ls = room.getMem();
-		for (Client cp : ls) {
-			lp.add(cp.getUser());
-		}
-		String up = new Gson().toJson(lp);
+		String up = new Gson().toJson(ls);
 		return up;
 	}
 
@@ -320,7 +328,11 @@ public class RemoteObj implements Communication {
 		if (user == null)
 			return false;
 
-		return User.changMail(user, mail);
+		return ChangeMail.addMailToken(user, mail);
+	}
+
+	public boolean confirmChangeMail(String id) throws RemoteException {
+		return ChangeMail.confrim(id);
 	}
 
 	@Override
@@ -393,23 +405,56 @@ public class RemoteObj implements Communication {
 	public boolean acceptFriendRequest(String token, List<String> member) throws RemoteException {
 		String user = ListUser2.getUserByToken(token);
 		if (user == null)
-			return false ;
-		return Requests.acceptFriend(user,member);
+			return false;
+		return Requests.acceptFriend(user, member);
 	}
 
 	@Override
 	public boolean deleteFriendRequest(String token, List<String> member) throws RemoteException {
 		String user = ListUser2.getUserByToken(token);
 		if (user == null)
-			return false ;
+			return false;
 		return Requests.deleteFriendRq(user, member);
 	}
 
 	@Override
-	public boolean deleteComment(String token,  String group, long date) throws RemoteException {
+	public boolean deleteComment(String token, String group, long date) throws RemoteException {
 		String user = ListUser2.getUserByToken(token);
 		if (user == null)
-			return false ;
-		return Comments.delCommand(user , group,  date);
+			return false;
+		return Comments.delCommand(user, group, date);
+	}
+
+	@Override
+	public boolean logout(String token) throws RemoteException {
+
+		return ListUser2.removeToken(token);
+	}
+
+	@Override
+	public boolean changeGroupName(String token, String group, String NewName) throws RemoteException {
+		String user = ListUser2.getUserByToken(token);
+		if (user == null)
+			return false;
+		return Groups.changeGroupName(user, group, NewName);
+	}
+
+	@Override
+	public boolean newPassword(String au, String pass) throws RemoteException {
+		return ChangePass.changePass(au, pass);
+
+	}
+
+	@Override
+	public void resetPass(String user) throws RemoteException {
+		ChangePass.sendToken(user);
+	}
+
+	@Override
+	public String showFriendInfo(String token, String s) throws RemoteException {
+		String user = ListUser2.getUserByToken(token);
+		if (user == null)
+			return null;
+		return User.getInfo(s);
 	}
 }

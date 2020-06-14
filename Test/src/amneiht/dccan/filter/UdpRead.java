@@ -9,7 +9,8 @@ import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 
-import org.mobicents.media.server.impl.dsp.audio.g729.Util;
+import org.mobicents.media.server.impl.dsp.audio.g729.Decoder;
+import org.mobicents.media.server.impl.dsp.audio.g729.Encoder;
 
 import amneiht.media.PlayMedia;
 
@@ -40,7 +41,7 @@ public class UdpRead implements Runnable {
 	 */
 
 	public void playSound(String filename) throws Exception {
-		
+		 
 		String strFilename = filename;
 		try {
 			soundFile = new File(strFilename);
@@ -62,6 +63,8 @@ public class UdpRead implements Runnable {
 			int nBytesRead = 0;
 			byte[] abData = new byte[BUFFER_SIZE];
 			byte[] res;
+			Encoder en = new Encoder();
+			Decoder dec = new Decoder();
 			while (nBytesRead != -1) {
 				try {
 					nBytesRead = audioStream.read(abData, 0, abData.length);
@@ -69,10 +72,9 @@ public class UdpRead implements Runnable {
 					e.printStackTrace();
 				}
 				if (nBytesRead >= 0) {
-					short[] rm = Util.byteArrayToShortArray(abData);
-					rm = hangming(rm);
-					res = Util.shortArrayToByteArray(rm);
-					// res = abData.clone();
+					res = abData.clone();
+					res = en.process(res);
+					res= dec.process(res);
 					lp.add(res);
 					// Thread.sleep(10);
 				}

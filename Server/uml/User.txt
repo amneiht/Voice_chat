@@ -1,17 +1,32 @@
 @startuml
-title Hoạt Động người dùng 
+title Hoạt Động Quản Người dùng
 actor user
-user --> (Đăng nhập)
-user --> (Thêm bạn)
-user --> (Nhắn tin)
-user --> (Tải Tệp)
-user --> (Gửi tệp)
-user -right-> (Xem bạn bè)
-user -left-> (Xóa bạn bè)
-user -up-> (Thoát Nhóm) 
-user -up-> (Chỉnh sửa thông tin)
-user -up-> (Voice chat)
-user -up-> (Đăng ký )
-user -down-> (Tạo nhóm)
-user -up-> (Tham gia nhóm)
+!define u  user 
+u --> (Đăng nhập)
+u -up->  (Đăng ký)
+u -left-> (Sửa thông tin)
+u -right-> (Đặt lại mật khẩu)
+u --> (Đăng xuất)
+@enduml
+
+@startuml
+title Hoạt Động Quản Người dùng
+actor user
+!define u  user 
+u -up-> (Tải file)
+u -left-> (Nhắn tin)
+u -right-> (Voice chat)
+u --> (Tạo nhóm)
+@enduml
+
+@startuml
+title Hoạt Động Người dùng
+actor user
+!define u  user 
+u -up-> (Thêm bạn)
+u -up-> (Xem danh sách bạn bè)
+u -down-> (Chấp nhận yêu cầu kết bạn)
+u -right-> (Xem yêu cầu kết bạn)
+u -left-> (Xóa yêu cầu kết bạn)
+u --> (Xem thông tin bạn bè)
 @enduml

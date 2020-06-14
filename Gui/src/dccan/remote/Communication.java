@@ -31,7 +31,13 @@ public interface Communication extends Remote {
 
 	public boolean addMember(String token, String group, String id) throws RemoteException;
 
+	public boolean addMember(String token, String group, List<String> id) throws RemoteException;
+
+	public boolean logout(String token) throws RemoteException;
+
 	public boolean upComment(String token, String group, String nDung) throws RemoteException;
+
+	public String showFriendInfo(String token, String s) throws RemoteException;
 
 	public void outGroup(String token, String group) throws RemoteException;
 
@@ -50,6 +56,12 @@ public interface Communication extends Remote {
 	public boolean deleteRequest(String token, String group, List<String> member) throws RemoteException;
 
 	public boolean changeName(String token, String NewName) throws RemoteException;
+
+	public boolean changeGroupName(String token, String group, String NewName) throws RemoteException;
+
+	public boolean newPassword(String au, String pass) throws RemoteException;
+
+	public void resetPass(String user) throws RemoteException;
 
 	public boolean changeMail(String token, String mail) throws RemoteException;
 

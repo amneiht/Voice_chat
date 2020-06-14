@@ -3,8 +3,11 @@ package amneiht.media.buffer;
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+
+import amneiht.media.NetAudioFormat;
 
 public class StackList implements Runnable, Closeable {
 	Map<Long, Voice> mp = new HashMap<Long, Voice>();
@@ -14,9 +17,7 @@ public class StackList implements Runnable, Closeable {
 		run = false;
 		Set<Long> key = mp.keySet();
 		for (long id : key) {
-
 			mp.get(id).close();
-
 		}
 	}
 
@@ -26,10 +27,8 @@ public class StackList implements Runnable, Closeable {
 			d.addList(p);
 		} else {
 			try {
-
-				NoControl nc = new NoControl();
+				NoControl nc = new NoControl(NetAudioFormat.getG729AudioFormat(),80);	
 				nc.addList(p);
-				new Thread(nc).start();
 				mp.put(id, nc);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
@@ -43,12 +42,12 @@ public class StackList implements Runnable, Closeable {
 	public void run() {
 		try {
 			while (run) {
-				Thread.sleep(2 * 60 * 1000);// ngu 2 phut roi xoa cac luong khong ton tai
-				Set<Long> key = mp.keySet();
-				for (long id : key) {
-					if (!mp.get(id).isrun()) {
-						mp.remove(id);
-					}
+				Thread.sleep(5 * 60 * 1000);// ngu 2 phut roi xoa cac luong khong ton tai
+				Iterator<Map.Entry<Long, Voice>> it = mp.entrySet().iterator();
+				for (; it.hasNext();) {
+					Map.Entry<Long, Voice> x = it.next();
+					if (x.getValue().isrun())
+						it.remove();
 				}
 			}
 		} catch (Exception e) {

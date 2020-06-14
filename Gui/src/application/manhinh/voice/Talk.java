@@ -60,7 +60,7 @@ public class Talk implements Initializable {
 		try {
 			String lt = rmi.getMember(id);
 			if (lt != null) {
-				mem = GetList.friend(lt);
+				mem = GetList.friendList(lt);
 				for (Friend p : mem) {
 					if (p.getIdAnh() != null) {
 						mp.put(p.getTen(), create(p.getIdAnh()));

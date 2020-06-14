@@ -2,13 +2,11 @@ package application.manhinh.control;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
-import java.util.List;
 
 import application.manhinh.user.Info;
 import dccan.remote.Client;
 import dccan.remote.Remote;
 import dccan.suport.Friend;
-import dccan.suport.GetList;
 import dccan.suport.ShowAlert;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Side;
@@ -57,12 +55,10 @@ public class FLpopup {
 	private static void showInfo() {
 		FXMLLoader fxmlLoader = new FXMLLoader();
 		// fxmlLoader.setResources(ResourceBundle.getBundle("app.lang.vn"));
-		Remote rmi = Client.getRmi();
 		Parent root;
 		try {
-			String lp = rmi.getInfo();
-			List<Friend> ls = GetList.friend(lp);
-			fxmlLoader.setController(new Info(ls.get(0)));
+			
+			fxmlLoader.setController(new Info(inf));
 			root = fxmlLoader.load(FLpopup.class.getResource("/application/manhinh/user/Info.fxml").openStream());
 			Scene sen = new Scene(root);
 			Stage pr = new Stage();

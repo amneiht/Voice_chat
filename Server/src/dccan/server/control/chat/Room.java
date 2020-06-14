@@ -1,8 +1,8 @@
 package dccan.server.control.chat;
 
-import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -74,8 +74,7 @@ public class Room {
 	DatagramSocket sc;
 	protected String group;
 	// long rtp; // ma tham so rtp
-	List<DatagramPacket> list = new LinkedList<DatagramPacket>(); // khoi tao de dang , phu hop thay doi
-	protected List<Client> mem = new LinkedList<Client>();// tru nhap de dang
+	protected List<Client> mem = new ArrayList<Client>();// tru nhap de dang
 
 	public List<Client> getMem() {
 		return mem;
@@ -105,7 +104,7 @@ public class Room {
 		long now = System.currentTimeMillis();
 		for (int i = mem.size() - 1; i > -1; i--) {
 			if (now - mem.get(i).live > timeout) {
-				mem.remove(i);
+			mem.remove(i);
 			}
 		}
 		if (mem.size() == 0)
@@ -114,9 +113,5 @@ public class Room {
 
 	public void addClient(Client s) {
 		mem.add(s);
-	}
-
-	public void addPacket(DatagramPacket dp) {
-		list.add(dp);
 	}
 }

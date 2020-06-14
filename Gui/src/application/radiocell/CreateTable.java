@@ -25,6 +25,7 @@ public class CreateTable {
 		TableColumn<UserRq, String> name = new TableColumn<UserRq, String>("Ten user");
 		name.setCellValueFactory(new PropertyValueFactory<UserRq, String>("name"));
 		name.setMinWidth(200);
+		name.setCellFactory((e)->new LabelCell<UserRq, String>());
 		TableColumn<UserRq, Chose> act = new TableColumn<UserRq, Chose>("Chap nhan");
 		act.setCellValueFactory(new PropertyValueFactory<UserRq, Chose>("action"));
 		act.setCellFactory((param) -> new RadioButtonCell<UserRq, Chose>(EnumSet.allOf(Chose.class)));
@@ -85,6 +86,8 @@ public class CreateTable {
 	}
 
 }
+
+
 
 class RadioButtonCell<S, T extends Enum<T>> extends TableCell<S, T> {
 

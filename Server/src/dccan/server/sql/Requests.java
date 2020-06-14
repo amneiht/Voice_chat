@@ -88,7 +88,7 @@ public class Requests {
 		return res;
 	}
 
-	static boolean checkpri(String group, String user) {
+	public static boolean checkpri(String group, String user) {
 		boolean res = false;
 		String sql = "select quyen from tvNhom where idNhom = ? and idTv = ?";
 		Connection con = Info.getCon();

@@ -32,14 +32,11 @@ public class UdpServer implements Runnable {
 			while (run) {
 
 				ser.receive(dp);
-				if (dp.getLength() > 9) {
-					lp.add(dp.getData().clone());
+				byte[] dt = dp.getData().clone();
+				synchronized (lp) {
+					lp.add(dt);
 				}
-				if (set != dp.getLength() + 4) {
-					set = dp.getLength() + 4;
-					dp = new DatagramPacket(new byte[set], set);
-					System.out.println(set);
-				}
+
 			}
 			ser.close();
 		} catch (Exception e) {
@@ -68,10 +65,11 @@ public class UdpServer implements Runnable {
 				}
 				if (dt != null) {
 					dt = dec.process(dt);
-					sl.add(1L, new Pack(sq, dt));
-					sq++;
-					// pm.play(dt);
+//					sl.add(1L, new Pack(sq, dt));
+//					sq++;
+					pm.play(dt);
 				}
+
 			}
 			sl.close();
 

@@ -83,17 +83,13 @@ public class Ninfo implements Initializable {
 		rmi = Client.getRmi();
 		try {
 			String fp = rmi.getInfo();
-			if (fp != null) {
-
-			}
-			List<Friend> ls = GetList.friend(fp);
-			Friend fv = ls.get(0);
+			Friend fv =GetList.toFriend(fp);
 			tuser = fv.getNguoiDung();
 			tmail = fv.getEmail();
 			email.setText(tmail);
 			name.setText(tuser);
-			if (ls.get(0).getIdAnh() != null) {
-				byte[] data = rmi.dowload(ls.get(0).getIdAnh());
+			if (fv.getIdAnh() != null) {
+				byte[] data = rmi.dowload(fv.getIdAnh());
 				ByteArrayInputStream bis = new ByteArrayInputStream(data);
 				Image ims = new Image(bis);
 				double h = ims.getHeight();

@@ -17,7 +17,7 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Rtp"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/g729"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/g729"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/Rtp"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

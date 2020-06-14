@@ -45,7 +45,6 @@ public class RtpSystem {
 				voice = new DatagramSocket();
 				port = voice.getLocalPort();
 				String host = Client.host;
-
 				key = ls.get(0);
 				String user = ls.get(1);
 				inet = InetAddress.getByName(host);

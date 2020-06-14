@@ -1,7 +1,7 @@
 package dccan.server.control.chat;
 
-import java.net.DatagramPacket;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -10,12 +10,6 @@ public class RoomMap implements Runnable {
 	public Map<String, Long> lr = new HashMap<String, Long>();
 	boolean run = true;
 
-	public void send(long id, DatagramPacket ps) {
-		Room rm = lp.get(id);
-		if (rm == null)
-			return;
-		rm.addPacket(ps);
-	}
 
 	/**
 	 * kiem tra co nhom chat hay khong
@@ -94,7 +88,7 @@ public class RoomMap implements Runnable {
 	}
 
 	public String createUserKey(String gp, String user) {
-		System.out.println("user key +"+user);
+		// System.out.println("user key +"+user);
 		Object ps = lr.get(gp);
 		if (ps == null)
 			return null;
@@ -138,14 +132,15 @@ public class RoomMap implements Runnable {
 			try {
 				Thread.sleep(10000);
 				synchronized (lr) {
-					Set<String> sp = lr.keySet();
-					for (String name : sp) {
-						long id = lr.get(name);
+					Iterator<Map.Entry<String, Long>> it = lr.entrySet().iterator();
+					for (; it.hasNext();) {
+						Map.Entry<String, Long> x = it.next();
+						long id = x.getValue();
 						Room rm = lp.get(id);
 						rm.clear();
 						if (rm.end) {
 							lp.remove(id);
-							lr.remove(name);
+							it.remove();
 							System.out.println("remove room on room map");
 						}
 					}

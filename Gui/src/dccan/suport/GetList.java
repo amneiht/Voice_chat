@@ -16,7 +16,8 @@ public class GetList {
 	static final Gson gson = new Gson();
 	static final Type listString = new TypeToken<List<String>>() {
 	}.getType();
-
+	static final Type friend = new TypeToken<Friend>() {
+	}.getType();
 	public static List<Group> groups(String s) {
 		return gson.fromJson(s, group);
 	}
@@ -27,11 +28,15 @@ public class GetList {
 		return gson.fromJson(s, cmt);
 	}
 
-	public static List<Friend> friend(String s) {
+	public static List<Friend> friendList(String s) {
 		return gson.fromJson(s, User);
 	}
 
 	public static List<Friend> member(String s) {
 		return gson.fromJson(s, User);
+	}
+	public static Friend toFriend(String s)
+	{
+		return gson.fromJson(s, friend);
 	}
 }

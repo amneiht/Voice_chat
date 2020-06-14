@@ -15,12 +15,13 @@ import application.autofill.Popup;
 import application.manhinh.friend.AddF;
 import application.manhinh.friend.DelGroup;
 import application.manhinh.friend.DltMember;
-import application.manhinh.friend.OutGroup;
 import application.manhinh.friend.RqFriend;
 import application.manhinh.friend.RqGroup;
 import application.manhinh.friend.RqId;
 import application.manhinh.friend.SetAd;
 import application.manhinh.friend.ShowFiend;
+import application.manhinh.group.Addmember;
+import application.manhinh.group.ChangeName;
 import application.manhinh.user.Info;
 import application.manhinh.voice.Talk;
 import dccan.remote.Client;
@@ -79,7 +80,7 @@ public class Chat implements Initializable {
 	@FXML
 	private ScrollPane schat;
 	@FXML
-	private AnchorPane gm;
+	VBox admin;
 	@FXML
 	private Button delete;
 
@@ -370,7 +371,7 @@ public class Chat implements Initializable {
 		JTextField textp = new JTextField();
 
 		try {
-			gm.setMinSize(0, 0);
+
 			khungChat.setOnDragOver(new EventHandler<DragEvent>() {
 				@Override
 				public void handle(DragEvent event) {
@@ -441,7 +442,6 @@ public class Chat implements Initializable {
 					listGroup.getItems().clear();
 					List<Group> lg = GetList.groups(group);
 					List<String> test = new LinkedList<String>();
-					// TODO
 					for (Group p : lg) {
 						test.add(p.getIdNhom());
 						Label bt = new Label(p.getTenNhom());
@@ -462,7 +462,7 @@ public class Chat implements Initializable {
 						if (h < 0)
 							setGroup(lg.get(0).getIdNhom());
 						else {
-
+							setGroup(id);
 						}
 					}
 				}
@@ -601,7 +601,7 @@ public class Chat implements Initializable {
 		Parent root;
 		try {
 			String lp = rmi.getInfo();
-			List<Friend> ls = GetList.friend(lp);
+			List<Friend> ls = GetList.friendList(lp);
 			fxmlLoader.setController(new Info(ls.get(0)));
 			root = fxmlLoader.load(getClass().getResource("/application/manhinh/user/Info.fxml").openStream());
 			Scene sen = new Scene(root);
@@ -724,11 +724,7 @@ public class Chat implements Initializable {
 
 		try {
 			boolean check = rmi.isAdmin(gp);
-			if (check)
-				gm.setVisible(true);
-			else
-				gm.setVisible(false);
-
+			admin.setVisible(check);
 			String mem2 = rmi.getMember(gp);
 			if (mem2 != mem) {
 				mem = mem2;
@@ -799,7 +795,62 @@ public class Chat implements Initializable {
 			e.printStackTrace();
 		}
 	}
-
+	@FXML
+	private void logOut()
+	{
+		Stage pr =(Stage) (ap.getScene().getWindow());
+		FXMLLoader fxmlLoader = new FXMLLoader();
+		fxmlLoader.setResources(ResourceBundle.getBundle("app.lang.vn"));
+		fxmlLoader.setController(new Login());
+		Parent root;
+		try {
+			root = fxmlLoader.load(getClass().getResource("/application/manhinh/Login.fxml").openStream());
+			Scene sen = new Scene(root);
+			sen.getStylesheets().add("/application/manhinh/boder.css");
+			pr.setScene(sen);
+			pr.show();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	@FXML
+	private void  openChangeGroupName()
+	{
+	
+		FXMLLoader fxmlLoader = new FXMLLoader();
+		// fxmlLoader.setResources(ResourceBundle.getBundle("app.lang.vn"));
+		Parent root;
+		try {
+			fxmlLoader.setController(new ChangeName(id));
+			root = fxmlLoader.load(getClass().getResource("/application/manhinh/friend/Find.fxml").openStream());
+			Scene sen = new Scene(root);
+			Stage pr = new Stage();
+			pr.setTitle("Doi ten nhom");
+			pr.setScene(sen);
+			pr.show();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	@FXML
+	private void openAddMember()
+	{
+		FXMLLoader fxmlLoader = new FXMLLoader();
+		// fxmlLoader.setResources(ResourceBundle.getBundle("app.lang.vn"));
+		Parent root;
+		try {
+			fxmlLoader.setController(new Addmember(id));
+			root = fxmlLoader.load(getClass().getResource("/application/manhinh/friend/ShowFriend.fxml").openStream());
+			Scene sen = new Scene(root);
+			Stage pr = new Stage();
+			pr.setTitle("Them than vien nhom");
+			pr.setScene(sen);
+			pr.show();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 	@FXML
 	private void checkEnter(KeyEvent e) {
 		if (e.getCode() == KeyCode.ENTER) {

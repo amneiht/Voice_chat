@@ -27,7 +27,7 @@ public class Join extends RctpSample {
 			PWrite._16bitToArray(res, type, 0);
 			PWrite._16bitToArray(res, length, 2);
 			PWrite._64bitToArray(res, ntp, 4);
-			PWrite._32bitToArray(res, port, 12);
+			PWrite._16bitToArray(res, port, 12);
 			PWrite.copyArray(ps, res, 16);
 			PWrite.copyArray(re, res, length);
 			return res;

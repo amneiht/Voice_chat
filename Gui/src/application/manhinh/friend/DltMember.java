@@ -41,7 +41,7 @@ public class DltMember implements Initializable {
 
 			if (s == null)
 				return;
-			List<Friend> Flist = GetList.friend(s);
+			List<Friend> Flist = GetList.friendList(s);
 			List<GFriend> lg = new LinkedList<GFriend>();
 			for (Friend ss : Flist) {
 				lg.add(new GFriend(ss));

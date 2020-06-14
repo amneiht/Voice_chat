@@ -69,7 +69,7 @@ public class User {
 			ResultSet rs = ps.executeQuery();
 			rs.beforeFirst();// dich con tro
 			if (rs.next()) {
-				System.out.println("user :" + user + " da co tk");
+				// System.out.println("user :" + user + " da co tk");
 				ps.close();
 				// con.close();
 				Info.give(con);
@@ -143,7 +143,7 @@ public class User {
 			ps.setString(1, user);
 			ResultSet rs = ps.executeQuery();
 			List<Friend> lp = new ResultToList<Friend>(Friend.class).progess(rs);
-			res = new Gson().toJson(lp);
+			res = new Gson().toJson(lp.get(0));
 			rs.close();
 			ps.close();
 
@@ -184,7 +184,7 @@ public class User {
 			PreparedStatement ps = con.prepareStatement(sql);
 			name = name + "%";
 			ps.setString(1, name);
-			System.out.println(ps.toString());
+			// System.out.println(ps.toString());
 			ResultSet rs = ps.executeQuery();
 			List<String> lp = new ResultToList<String>(String.class).getListFromResult(rs, "ten");
 			res = new Gson().toJson(lp);

@@ -55,7 +55,7 @@ public class RctpServer implements Runnable {
 
 	private class Handle implements Runnable {
 		public void run() {
-			System.out.println("Rctp handle server run : ");
+			// System.out.println("Rctp handle server run : ");
 			while (run) {
 				try {
 					Flagment fg = null;
@@ -69,7 +69,7 @@ public class RctpServer implements Runnable {
 						switch (type) {
 						case 1000: // goi tin create of join
 							int length = (int) PRead.getLong(res, 2, 2);
-							int pos = (int) PRead.getLong(res, 12, 4);
+							int pos = (int) PRead.getLong(res, 12, 2);
 							int z = length - 16;
 							String group = PRead.getString(res, 16, z);
 							long gid = rm.getRoomId(group);
@@ -79,7 +79,7 @@ public class RctpServer implements Runnable {
 								break;
 							}
 							byte[] en = Convert.encrypt(PRead.getByte(res, length, 8), rm.getGroupKey(group));
-							
+
 							String ck = rm.checkUserKey(gid, en);
 							System.out.println("user ket noi" + ck);
 							System.out.println();
@@ -88,7 +88,7 @@ public class RctpServer implements Runnable {
 								break; // kiem tra key false la cho bay luon
 							}
 							long id = (long) (Math.random() * 0xffffffffL);
-							//System.out.println("id "+id);
+							// System.out.println("id "+id);
 							InetAddress inet = fg.inet;
 							Client s = new Client(pos, inet, id, ck);
 							rm.addClient(gid, s);
@@ -130,8 +130,8 @@ public class RctpServer implements Runnable {
 			// System.out.println("send to client");
 			byte res[] = new byte[14];
 			PWrite._32bitToArray(res, System.currentTimeMillis(), 2);
-			PWrite._32bitToArray(res, id, 6);
-			PWrite._32bitToArray(res, gp, 10);
+			PWrite._32bitToArray(res, gp, 6);
+			PWrite._32bitToArray(res, id, 10);
 			byte[] dta = Convert.encrypt(res, key);
 			PWrite._16bitToArray(dta, 2000, 0);
 			DatagramPacket dp = new DatagramPacket(dta, dta.length, fg.inet, fg.port);

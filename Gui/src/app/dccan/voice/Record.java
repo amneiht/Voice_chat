@@ -7,6 +7,7 @@ import org.mobicents.media.server.impl.dsp.audio.g729.Encoder;
 
 import amneiht.media.NetAudioFormat;
 import amneiht.media.Recorder;
+import net.help.Convert;
 import net.packet.Nrtp.RtpClient;
 
 public class Record implements Runnable {
@@ -35,6 +36,7 @@ public class Record implements Runnable {
 					}
 					if (dat != null) {
 						byte[] send = en.process(dat);
+						send = Convert.encrypt(send, RtpSystem.key);
 						if (cmp(send))
 							rtp.send(send);
 					}

@@ -68,7 +68,7 @@ public class CrtGroup implements Initializable {
 		try {
 			String fl = rmi.getFriendList();
 			if (fl != null) {
-				List<Friend> lf = GetList.friend(fl);
+				List<Friend> lf = GetList.friendList(fl);
 				CreateTable.makeChoiseFrendTable(tab);
 				List<GFriend> sh = new LinkedList<GFriend>();
 				for (Friend p : lf) {

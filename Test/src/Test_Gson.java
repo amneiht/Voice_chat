@@ -1,15 +1,18 @@
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.lang.reflect.Type;
 import com.google.gson.Gson;
-
-import dccan.suport.Friend;
-import net.help.Convert;
+import com.google.gson.reflect.TypeToken;
 
 public class Test_Gson {
-	public static void main(String[] args) {
-		Friend lp = new Friend();
-		byte [] ls = Convert.objectToByte(lp);
-		System.out.println("Độ dài chuỗi byte object:"+ls.length);
-		String gd = new Gson().toJson(lp);
-		System.out.println("Chuỗi  json:"+gd);
-		System.out.println("Độ dài json:"+gd.length());
+	public static void main(String[] args) throws UnknownHostException {
+		InetAddress inet = InetAddress.getByName("google.com");
+		Gson gp = new Gson();
+		String lp = new Gson().toJson(inet);
+		Type ts = new TypeToken<InetAddress>() {
+		}.getType();
+		InetAddress is = gp.fromJson(lp, ts);
+		System.out.println(is.getHostName());
+		System.out.println(inet.getHostName());
 	}
 }

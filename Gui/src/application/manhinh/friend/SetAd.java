@@ -70,7 +70,7 @@ public class SetAd implements Initializable {
 			else
 				lp = rmi.getNonAdminOnGroup(gp);
 			if (lp != null) {
-				List<Friend> lf = GetList.friend(lp);
+				List<Friend> lf = GetList.friendList(lp);
 				List<GFriend> data = new LinkedList<GFriend>();
 				for (Friend op : lf) {
 					data.add(new GFriend(op));

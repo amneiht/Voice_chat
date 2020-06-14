@@ -24,8 +24,8 @@ public class KeepLive implements Runnable {
 				byte[] data = new byte[dp.getLength()];
 				copyData(data, dp.getData(), dp.getLength());
 				data = Convert.encrypt(data, RtpSystem.key);
-				long id = PRead.getLong(data, 6, 4);
-				long group = PRead.getLong(data, 10, 4);
+				long group = PRead.getLong(data, 6, 4);
+				long id = PRead.getLong(data, 10, 4);
 				Live lv = new Live(id, group);
 				byte[] res = lv.toPacket();
 				dp = new DatagramPacket(res, res.length, RtpSystem.inet, RtpSystem.rctport);

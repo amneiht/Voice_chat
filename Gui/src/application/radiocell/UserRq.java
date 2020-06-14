@@ -13,9 +13,6 @@ public class UserRq {
 		return name;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
 
 	public Chose getAction() {
 		return action;

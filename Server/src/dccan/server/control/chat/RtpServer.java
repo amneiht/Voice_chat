@@ -32,7 +32,9 @@ public class RtpServer implements Runnable {
 		while (true) {
 			try {
 				ds.receive(dp);
-				ls.add(new Flagment(dp));
+				synchronized (ls) {
+					ls.add(new Flagment(dp));
+				}
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -45,8 +47,8 @@ public class RtpServer implements Runnable {
 			byte[] send = flg.data;
 			long tid = PRead.getLong(send, 10, 4);
 			for (Client c : mem) {
+
 				if (c.id != tid) {
-					System.out.println("send to" + c.port);
 					DatagramPacket sd = new DatagramPacket(send, send.length, c.ina, c.port);
 					sc.send(sd);
 				} else {
@@ -69,15 +71,15 @@ public class RtpServer implements Runnable {
 						fg = ls.remove(0);
 				}
 				if (fg != null) {
+					long tm = System.currentTimeMillis();
 					byte data[] = fg.data;
 					long gp = PRead.getLong(data, 6, 4);
 
 					Room m = rm.lp.get(gp);
 					if (m != null) {
 						send(fg, m.mem);
-					} else {
-						//System.out.println("no room" + gp);
 					}
+					System.out.println(System.currentTimeMillis() - tm);
 				}
 			}
 		}

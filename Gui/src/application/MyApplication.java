@@ -1,9 +1,8 @@
 package application;
 
-import java.rmi.RemoteException;
 import java.util.ResourceBundle;
 
-import dccan.remote.Client;
+import application.manhinh.control.Login;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -18,7 +17,8 @@ public class MyApplication extends Application {
 
 			FXMLLoader fxmlLoader = new FXMLLoader();
 			fxmlLoader.setResources(ResourceBundle.getBundle("app.lang.vn"));
-			Parent root = fxmlLoader.load(getClass().getResource("/application/manhinh/Chat.fxml").openStream());
+			fxmlLoader.setController(new Login());
+			Parent root = fxmlLoader.load(getClass().getResource("/application/manhinh/Login.fxml").openStream());
 			Scene sen = new Scene(root);
 			sen.getStylesheets().add("/application/manhinh/boder.css");
 			primaryStage.setScene(sen);
@@ -30,13 +30,6 @@ public class MyApplication extends Application {
 	}
 
 	public static void main(String[] args) {
-		// Client.init("localhost");
-		try {
-			Client.getRmi().login("can", "1");
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		launch(args);
 	}
 

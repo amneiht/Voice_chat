@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="147.0" prefWidth="136.0"
+	xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="application.manhinh.pass.Diff"
+	fx:id="ap"
+	>
+	<children>
+		<Button layoutX="15.0" layoutY="30.0" mnemonicParsing="false"
+			onAction="#openChangePass" text="Đổi mật khẩu" />
+		<Button layoutX="15.0" layoutY="108.0" mnemonicParsing="false"
+			onAction="#openRegis" text="Đăng kí" />
+		<Button layoutX="14.0" layoutY="68.0" mnemonicParsing="false"
+			onAction="#openXacThuc" text="Xác thực đổi" />
+	</children>
+</AnchorPane>

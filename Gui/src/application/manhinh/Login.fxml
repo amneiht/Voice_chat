@@ -9,18 +9,17 @@
 <!-- man hinh dang nhap -->
 
 <AnchorPane fx:id="ap" prefHeight="187.0" prefWidth="258.0"
-	xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-	fx:controller="application.manhinh.control.Login">
+	xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
 	<children>
-		<Label layoutX="14.0" layoutY="37.0" prefHeight="19.0"
-			prefWidth="50.0" text="User" />
+		<Label fx:id="name" layoutX="14.0" layoutY="37.0"
+			prefHeight="19.0" prefWidth="50.0" text="User" />
 		<Label layoutX="14.0" layoutY="88.0" text="Pass" />
 		<TextField fx:id="ten" layoutX="73.0" layoutY="34.0" />
-		<Button fx:id="btn" layoutX="182.0" layoutY="152.0"
-			mnemonicParsing="false" onAction="#click" text="Login" />
+		<Button fx:id="btn" layoutX="159.0" layoutY="152.0"
+			mnemonicParsing="false" onAction="#click" text="Dang nhap" />
 		<PasswordField fx:id="mk" layoutX="73.0" layoutY="81.0" />
 		<Button fx:id="regis" layoutX="33.0" layoutY="152.0"
-			mnemonicParsing="false" onAction="#register" text="Register" />
+			mnemonicParsing="false" onAction="#register" text="Khac" />
 		<Label fx:id="note" layoutX="11.0" layoutY="125.0" />
 	</children>
 </AnchorPane>

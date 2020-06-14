@@ -17,9 +17,6 @@ import dccan.suport.Friend;
 import dccan.suport.Group;
 
 public class Groups {
-	public static void main(String[] args) {
-		System.out.println(getGroup);
-	}
 
 	private final static String getGroup = "select gp.* from (select nhom.idNhom as idNhom, tenNhom from nhom ,tvNhom "
 			+ "where nhom.idNhom = tvNhom.idNhom and idTV= ? ) "
@@ -70,7 +67,6 @@ public class Groups {
 			pps.close();
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 
 		}
@@ -85,7 +81,7 @@ public class Groups {
 	 * @return
 	 */
 	public static String getMember(String id) {
-		String res = "false";
+		String res = null ;
 		Connection con = Info.getCon();
 		try {
 
@@ -135,6 +131,12 @@ public class Groups {
 		}
 		Info.give(con);
 		return res;
+	}
+
+	public static boolean addMember(String group, String user, List<String> mem) {
+		if (!Requests.checkpri(group, user))
+			return false;
+		return Groups.acceptMem(user, group, mem);
 	}
 
 	/**
@@ -284,7 +286,7 @@ public class Groups {
 	 * @return
 	 */
 	public static boolean deleteMember(String group, List<String> mem, String user) {
-		System.out.println("xoa tv");
+		//System.out.println("xoa tv");
 		boolean res = false;
 		String sql = "delete from tvNhom where idNhom = ? and idTv = ?";
 		String sql2 = "select quyen from tvNhom where idNhom =? and idTv = ? ";
@@ -297,10 +299,10 @@ public class Groups {
 			rs.first();
 			int h = rs.getInt("quyen");
 
-			System.out.println(pst.toString());
+			//System.out.println(pst.toString());
 			rs.close();
 			pst.close();
-			System.out.println(h);
+			//System.out.println(h);
 			if (h > 0) {
 				pst = con.prepareStatement(sql);
 				pst.setString(1, group);
@@ -366,7 +368,7 @@ public class Groups {
 			CallableStatement cstm = con.prepareCall(sql);
 			cstm.setString(1, group);
 			cstm.setString(2, user);
-			System.out.println(cstm.toString());
+			//System.out.println(cstm.toString());
 			cstm.executeUpdate();
 			cstm.close();
 		} catch (Exception e) {
@@ -406,7 +408,7 @@ public class Groups {
 			ResultSet rs = ps.executeQuery();
 			rs.first();
 			int d = rs.getInt("quyen");
-			System.out.println();
+			//System.out.println();
 			rs.close();
 			ps.close();
 			if (d != 0) {
@@ -442,6 +444,28 @@ public class Groups {
 			res = new Gson().toJson(lp);
 			rs.close();
 			ps.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		Info.give(con);
+		return res;
+	}
+
+	public static boolean changeGroupName(String user, String group, String newName) {
+		if (!Requests.checkpri(group, user))
+			return false;
+		//System.out.println("sss");
+		Connection con = Info.getCon();
+		boolean res = false;
+		try {
+			String sql = "update nhom set tenNhom = ? where idNhom = ?";
+			PreparedStatement ps = con.prepareStatement(sql);
+			ps.setString(1, newName);
+			ps.setString(2, group);
+			ps.executeUpdate();
+			ps.close();
+			res = true;
 
 		} catch (Exception e) {
 			e.printStackTrace();

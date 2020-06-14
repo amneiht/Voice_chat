@@ -5,22 +5,32 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity"
+	minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
+	prefWidth="600.0" xmlns="http://javafx.com/javafx/8"
+	xmlns:fx="http://javafx.com/fxml/1">
 	<center>
-		<ScrollPane fx:id="sp" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-         <content>
-            <FlowPane fx:id="fl" prefHeight="345.0" prefWidth="591.0" />
-         </content></ScrollPane>
+		<ScrollPane fx:id="sp" prefHeight="200.0" prefWidth="200.0"
+			BorderPane.alignment="CENTER">
+			<content>
+				<FlowPane fx:id="fl" prefHeight="345.0" prefWidth="591.0" />
+			</content>
+		</ScrollPane>
 	</center>
 	<bottom>
-		<AnchorPane prefHeight="30.0" prefWidth="600.0" BorderPane.alignment="CENTER">
-         <children>
-            <Button fx:id="call" layoutX="22.0" layoutY="4.0" mnemonicParsing="false" text="out" />
-            <Button layoutX="186.0" layoutY="2.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="170.0" text="mute" />
-            <Button layoutX="501.0" layoutY="2.0" mnemonicParsing="false" text="Button" />
-         </children></AnchorPane>
+		<AnchorPane prefHeight="30.0" prefWidth="600.0"
+			BorderPane.alignment="CENTER">
+			<children>
+				<Button fx:id="call" layoutX="22.0" layoutY="4.0"
+					mnemonicParsing="false" text="out" />
+				<Button layoutX="186.0" layoutY="2.0" mnemonicParsing="false"
+					prefHeight="25.0" prefWidth="170.0" text="mute" />
+				<Button layoutX="501.0" layoutY="2.0" mnemonicParsing="false"
+					text="Button" />
+			</children>
+		</AnchorPane>
 	</bottom>
-   <top>
-      <Label text="status" BorderPane.alignment="CENTER" />
-   </top>
+	<top>
+		<Label text="status" BorderPane.alignment="CENTER" />
+	</top>
 </BorderPane>

@@ -7,7 +7,7 @@ public class NetAudioFormat {
 	public static AudioFormat getG729AudioFormat() {
         float sampleRate = 8000;
         int sampleSizeInBits = 16;
-        int channels = 1;
+        int channels = 2;
         boolean signed = true;
         boolean bigEndian = false;
         AudioFormat format = new AudioFormat(sampleRate, sampleSizeInBits,
@@ -17,7 +17,7 @@ public class NetAudioFormat {
 	public static AudioFormat getG729AudioFormat(float x) {
         float sampleRate = 8000*x;
         int sampleSizeInBits = 16;
-        int channels = 1;
+        int channels = 2;
         boolean signed = true;
         boolean bigEndian = false;
         AudioFormat format = new AudioFormat(sampleRate, sampleSizeInBits,
@@ -30,7 +30,7 @@ public class NetAudioFormat {
         int sampleSizeInBits = 8;
         int channels = 1;
         boolean signed = true;
-        boolean bigEndian = true;
+        boolean bigEndian = false;
         AudioFormat format = new AudioFormat(sampleRate, sampleSizeInBits,
                                              channels, signed, bigEndian);
         return format;

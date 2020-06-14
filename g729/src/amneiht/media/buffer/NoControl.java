@@ -2,101 +2,77 @@ package amneiht.media.buffer;
 
 import java.io.Closeable;
 import java.util.LinkedList;
-import java.util.List;
 
+import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.LineUnavailableException;
 
-import amneiht.media.NetAudioFormat;
 import amneiht.media.PlayMedia;
 
 public class NoControl extends Voice implements Closeable {
-	public static int siz = 10;
-	boolean run = true;
+	public static int siz = 15;
 	boolean status = false;
 	PlayMedia pm;
-	PlayMedia pm2;
-	PlayMedia pm3;
-	static long lose = 1 * 1000 * 60;// 1 p
-	List<Pack> np = new LinkedList<Pack>();
+	long last = 0, pre = 0;
+	static final long lose = 1 * 1000 * 60;// 1 p
+	LinkedList<Pack> np = new LinkedList<Pack>();
 	Long live;
+	int packetsize;
 
-	public NoControl() throws LineUnavailableException {
-		pm = new PlayMedia(NetAudioFormat.getG729AudioFormat());
-		pm2 = new PlayMedia(NetAudioFormat.getG729AudioFormat(1.2F));
-		pm3 = new PlayMedia(NetAudioFormat.getG729AudioFormat(0.8F));
-		live = System.currentTimeMillis();
-	}
-
-	public List<Pack> getNp() {
-		return np;
-	}
-
-	@Override
-	public void run() {
-		while (run) {
-			play();
-			// System.out.println("pla");
-		}
+	public NoControl(AudioFormat af, int packetsize) throws LineUnavailableException {
+		pm = new PlayMedia(af);
+		this.packetsize = packetsize;
 
 	}
+
+	int dem = 0;
+	int spl = 500;
+	long disconnect = 100;// 100ms
 
 	@Override
 	public void addList(Pack con) {
 		live = System.currentTimeMillis();
-
-		synchronized (np) {
-
-			int k = np.size();
-			if (k == 0)
-				np.add(con);
-			else {
-				if (con.sq < np.get(0).sq)
-					return;
-				if (con.sq > np.get(k - 1).sq) {
+		
+			if (dem == 0)
+				last = live;
+			dem++;
+			if (con.sq < pre)
+				return;
+			if (con.sq - pre > disconnect) {
+				 
+					status = false;
 					np.add(con);
-					if (k > siz)
-						status = true;
-					return;
-				}
-				for (int i = k - 2; i > -1; i--) {
-					if (con.sq > np.get(i).sq) {
-						np.add(i + 1, con);
-						if (k > siz)
-							status = true;
-						return;
+					dem = np.size();
+					last = live;
+					pre = con.sq;
+				return;
+			}
+			pre = con.sq;
+			if (!status) {
+				if (dem > siz) {
+					status = true;
+					while (!np.isEmpty()) {
+						pm.play(np.removeFirst().data);
 					}
+					pm.play(con.data);
+				} else {
+					np.add(con);
 				}
-
+			} else {
+				pm.play(con.data);
+				if ((pm.isSampleSupport()) && dem > spl) {
+					long gm = live - last;
+					double k = (dem - 1) * 1000;// doi don vi voi do tinh la ms
+					k = k / gm;// Time on one packet
+					float sr = (float) (k * packetsize);
+					pm.setSample(sr); // thay doi toc do phat
+					dem = 0;
+				}
 			}
-		}
-	}
 
-	public void play() {
-		// System.out.println("tt");
-		if (status) {
-			byte[] dt;
-			synchronized (np) {
-				dt = np.remove(0).data;
-			}
-			if (np.size() > 14)
-				pm2.play(dt);
-			else if (np.size() < 7)
-				pm3.play(dt);
-			else
-				pm.play(dt);
-			if (np.size() == 0)
-				status = false;
-
-		} else {
-			if (System.currentTimeMillis() - live > lose)
-				close();
-		}
-
+		System.out.println(System.currentTimeMillis() - live);
 	}
 
 	public void close() {
-		// TODO Auto-generated method stub
-		run = false;
 		status = false;
 		pm.stop();
 	}
@@ -104,7 +80,7 @@ public class NoControl extends Voice implements Closeable {
 	@Override
 	public boolean isrun() {
 		// TODO Auto-generated method stub
-		return run;
+		return System.currentTimeMillis() - live < lose;
 	}
 
 }

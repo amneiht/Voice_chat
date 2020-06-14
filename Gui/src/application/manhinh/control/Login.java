@@ -40,35 +40,37 @@ public class Login implements Initializable {
 		String pass = mk.getText();
 		Remote rmi = Client.getRmi();
 		try {
-		String d = rmi.login(user, pass);
-			if (d!=null) {
-				((Stage) ap.getScene().getWindow()).close();
+
+			String d = rmi.login(user, pass);
+			if (d != null) {
+				Stage primaryStage = ((Stage) ap.getScene().getWindow());
+
 				FXMLLoader fxmlLoader = new FXMLLoader();
-				Parent root = fxmlLoader.load(getClass().getResource("/application/manhinh/Work.fxml").openStream());
+				fxmlLoader.setResources(ResourceBundle.getBundle("app.lang.vn"));
+				Parent root = fxmlLoader.load(getClass().getResource("/application/manhinh/Chat2.fxml").openStream());
 				Scene sen = new Scene(root);
 				sen.getStylesheets().add("/application/manhinh/boder.css");
-				Stage primaryStage = new Stage();
 				primaryStage.setScene(sen);
 				primaryStage.show();
+
 			} else {
 				note.setText("khong thanh cong");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			// TODO: handle exception
+			// System.out.println("ssss");
 		}
 	}
 
 	@FXML
 	void register(ActionEvent event) {
-
-		((Stage) ap.getScene().getWindow()).close();
 		FXMLLoader fxmlLoader = new FXMLLoader();
 		Parent root;
 		try {
-			root = fxmlLoader.load(getClass().getResource("/application/manhinh/Register.fxml").openStream());
+			fxmlLoader.setResources(ResourceBundle.getBundle("app.lang.vn"));
+			root = fxmlLoader.load(getClass().getResource("/application/manhinh/pass/Dif.fxml").openStream());
 			Scene sen = new Scene(root);
-			Stage primaryStage = new Stage();
+			Stage primaryStage = ((Stage) ap.getScene().getWindow());
 			primaryStage.setScene(sen);
 			primaryStage.show();
 		} catch (IOException e) {

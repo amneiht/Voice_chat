@@ -1,11 +1,11 @@
 package test.buffered;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.util.LinkedList;
-import java.util.List;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -13,13 +13,13 @@ import javax.sound.sampled.AudioSystem;
 import org.mobicents.media.server.impl.dsp.audio.g729.Encoder;
 
 public class UdpRead implements Runnable {
-	private List<byte[]> lp = new LinkedList<byte[]>();
+	private LinkedList<byte[]> lp = new LinkedList<byte[]>();
 
 	public static void main(String[] args) {
 		try {
 			UdpRead up = new UdpRead();
 			new Thread(up).start();
-			up.playSound("/home/dccan/Music/rc.wav");
+			up.playSound("/home/dccan/Music/p2.wav");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -36,8 +36,6 @@ public class UdpRead implements Runnable {
 	 */
 	public void playSound(String filename) throws Exception {
 
-		@SuppressWarnings("resource")
-
 		String strFilename = filename;
 		try {
 			soundFile = new File(strFilename);
@@ -45,8 +43,7 @@ public class UdpRead implements Runnable {
 			e.printStackTrace();
 			System.exit(1);
 		}
-		// Decoder dc = new Decoder();
-		// PlayMedia pm = new PlayMedia(NetAudioFormat.getG729AudioFormat());
+
 		while (true) {
 
 			try {
@@ -65,14 +62,19 @@ public class UdpRead implements Runnable {
 					e.printStackTrace();
 				}
 				if (nBytesRead >= 0) {
-					lp.add(abData.clone());
-					Thread.sleep(10);
+					byte[] res = abData.clone();
+					synchronized (lp) {
+						lp.addLast(res);
+					}
+					Thread.sleep(8);
+				
 				}
+				//System.out.println(System.currentTimeMillis() - tm);
 			}
 			audioStream.close();
-			run = false;
+
 		}
-		
+
 	}
 
 	boolean run = true;
@@ -86,10 +88,16 @@ public class UdpRead implements Runnable {
 			Encoder en = new Encoder();
 			DatagramPacket dp;
 			while (run) {
-				if (!lp.isEmpty()) {					
-					byte[] res = en.process(lp.remove(0));
+				byte[] res = null;
+				synchronized (lp) {
+					if (!lp.isEmpty()) {
+						res = lp.removeFirst();
+					}
+				}
+				if (res != null) {
+					res = en.process(res);
 					dp = new DatagramPacket(res, res.length, inet, port);
-					client.send(dp);		
+					client.send(dp);
 				}
 
 			}

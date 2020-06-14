@@ -3,6 +3,7 @@ package application.manhinh.control;
 import java.rmi.RemoteException;
 
 import dccan.remote.Remote;
+import dccan.suport.Mail;
 import dccan.remote.Client;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -48,6 +49,11 @@ public class Regis {
 			note.setText("Email kh\u00F4ng \u0111\u01B0\u1EE3c tr\u1ED1ng");
 			return;
 		}
+		if(!Mail.emailValidator(em))
+		{
+			note.setText("Email kh\u00F4ng h\u1EE3p l\u1EC7");
+			return ;
+		}
 		String nd = name.getText().trim();
 		if (nd.length() == 0) {
 			note.setText("H\u1ECD t\u00EAn kh\u00F4ng th\u1EC3 \u0111\u1EC3 tr\u1ED1ng ");
@@ -63,6 +69,7 @@ public class Regis {
 			note.setText("M\u1EADt kh\u1EA9u kh\u00F4ng kh\u1EDBp");
 			return;
 		}
+		
 		Remote rmi = Client.getRmi();
 		try {
 			String rs = rmi.register(ur, mk, nd, em);
