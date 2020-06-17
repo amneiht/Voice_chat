@@ -6,7 +6,6 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.util.LinkedList;
-import java.util.List;
 
 import net.help.Convert;
 import net.packet.io.PRead;
@@ -17,7 +16,7 @@ public class RctpServer implements Runnable {
 	RoomMap rm;
 	int maxlg = 10 * 1024;// 10 kb
 	private DatagramSocket ds;
-	private List<Flagment> ls = new LinkedList<Flagment>();
+	private LinkedList<Flagment> ls = new LinkedList<Flagment>();
 	private boolean run = true;
 	DatagramSocket clients = new DatagramSocket();
 
@@ -46,7 +45,10 @@ public class RctpServer implements Runnable {
 		while (run) {
 			try {
 				ds.receive(dp);
-				ls.add(new Flagment(dp));
+				Flagment fg = new Flagment(dp);
+				synchronized (ls) {
+					ls.add(fg);
+				}
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -61,7 +63,7 @@ public class RctpServer implements Runnable {
 					Flagment fg = null;
 					synchronized (ls) {
 						if (!ls.isEmpty())
-							fg = ls.remove(0);
+							fg = ls.removeFirst();
 					}
 					if (fg != null) {
 						byte[] res = fg.data;
@@ -69,7 +71,7 @@ public class RctpServer implements Runnable {
 						switch (type) {
 						case 1000: // goi tin create of join
 							int length = (int) PRead.getLong(res, 2, 2);
-							int pos = (int) PRead.getLong(res, 12, 2);
+							//int pos = (int) PRead.getLong(res, 12, 2);
 							int z = length - 16;
 							String group = PRead.getString(res, 16, z);
 							long gid = rm.getRoomId(group);
@@ -90,14 +92,14 @@ public class RctpServer implements Runnable {
 							long id = (long) (Math.random() * 0xffffffffL);
 							// System.out.println("id "+id);
 							InetAddress inet = fg.inet;
-							Client s = new Client(pos, inet, id, ck);
+							Client s = new Client(fg.port, inet, id, ck);
 							rm.addClient(gid, s);
 							sendid(id, gid, fg, rm.getGroupKey(group));
 							break;
 						case 1001:
 							long gid1 = PRead.getLong(res, 12, 4);
 							long live = PRead.getLong(res, 16, 4);
-							rm.live(gid1, live);
+							rm.live(gid1, live ,fg);
 							break;
 						case 1111:
 							long byegroup = PRead.getLong(res, 12, 4);
@@ -115,7 +117,6 @@ public class RctpServer implements Runnable {
 		}
 
 		private void sendid(Flagment fg) {
-			// System.out.println("send to client");
 			byte res[] = new byte[14];
 			PWrite._16bitToArray(res, 2001, 0);
 			DatagramPacket dp = new DatagramPacket(res, res.length, fg.inet, fg.port);
@@ -127,7 +128,6 @@ public class RctpServer implements Runnable {
 		}
 
 		private void sendid(long id, long gp, Flagment fg, String key) {
-			// System.out.println("send to client");
 			byte res[] = new byte[14];
 			PWrite._32bitToArray(res, System.currentTimeMillis(), 2);
 			PWrite._32bitToArray(res, gp, 6);

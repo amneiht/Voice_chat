@@ -17,6 +17,7 @@ import dccan.server.control.chat.Room;
 import dccan.server.control.chat.RoomMap;
 import dccan.server.control.chat.StaticMap;
 import dccan.server.control.user.ListUser2;
+import dccan.server.control.user.UserToken;
 import dccan.server.pass.ChangeMail;
 import dccan.server.pass.ChangePass;
 import dccan.server.sql.Comments;
@@ -39,12 +40,14 @@ public class RemoteObj implements Communication {
 	}
 
 	@Override
-	public String register(String user, String pass, String hoten, String email) throws RemoteException {
-		boolean td = User.register(user, pass, email, hoten);
-		if (td) {
-			return ListUser2.addNew(user);
-		}
-		return null;
+	public void register(String user, String pass, String hoten, String email) throws RemoteException {
+		UserToken.addNew(user, pass, hoten, email);
+	}
+
+	@Override
+	public boolean confirmRegister(String au) throws RemoteException {
+		String s = UserToken.confirm(au);
+		return s != null;
 	}
 
 	@Override
@@ -240,7 +243,6 @@ public class RemoteObj implements Communication {
 			return null;
 		if (!Groups.checkMember(group, user))
 			return null;
-		List<String> lp = new LinkedList<String>();
 		RoomMap rm = StaticMap.getRm();
 		long id = rm.getRoomId(group);
 		if (id == -1)
@@ -457,4 +459,5 @@ public class RemoteObj implements Communication {
 			return null;
 		return User.getInfo(s);
 	}
+
 }

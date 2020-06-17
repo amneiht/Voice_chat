@@ -1,0 +1,15 @@
+@startuml
+actor user
+database sql
+!define rmc (Rmi client)
+!define rms (Rmi Server)
+!define ue user
+ue --> (Đổi mật khẩu)
+ue --> (Xác thực)
+(Đổi mật khẩu) --> rmc
+(Xác thực) --> rmc
+rmc -right- rms
+rms -- (email)
+(email) -right- ue 
+rms --> sql
+@enduml

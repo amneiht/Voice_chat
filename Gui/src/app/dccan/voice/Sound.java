@@ -29,7 +29,7 @@ public class Sound implements Runnable {
 			try {
 				Decoder dec = new Decoder();
 				StackList sl = new StackList();
-				//PlayMedia pm = new PlayMedia(NetAudioFormat.getG729AudioFormat());
+				// PlayMedia pm = new PlayMedia(NetAudioFormat.getG729AudioFormat());
 				new Thread(sl).start();
 				while (RtpSystem.run) {
 					byte data[] = null;
@@ -44,7 +44,6 @@ public class Sound implements Runnable {
 						sound = Convert.encrypt(sound, key);
 						sound = dec.process(sound);
 						sl.add(id, new Pack(time, sound));
-						//pm.play(sound);
 					}
 				}
 				sl.close();
@@ -57,14 +56,15 @@ public class Sound implements Runnable {
 
 	@Override
 	public void run() {
-		DatagramSocket ds = RtpSystem.voice;
+		DatagramSocket ds = RtpSystem.rctp;
 		new Thread(new Loa()).start();
 		try {
 			DatagramPacket dp = new DatagramPacket(new byte[30], 30);
 			while (RtpSystem.run) {
 				ds.receive(dp);
+				byte[] res = dp.getData().clone();
 				synchronized (lp) {
-					lp.add(dp.getData().clone());
+					lp.addLast(res);
 				}
 
 			}

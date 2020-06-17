@@ -2,6 +2,7 @@ package application.manhinh.pass;
 
 import java.io.IOException;
 
+import application.manhinh.LinkScense;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -20,7 +21,7 @@ public class Diff {
 			((Stage) (ap.getScene().getWindow())).close();
 			FXMLLoader fm = new FXMLLoader();
 			fm.setController(new ChangePass());
-			Parent root = fm.load(getClass().getResource("/application/manhinh/friend/Find.fxml").openStream());
+			Parent root = fm.load(getClass().getResource(LinkScense.nhap).openStream());
 			Scene sen = new Scene(root);
 			Stage pr = new Stage();
 			pr.setScene(sen);
@@ -38,7 +39,7 @@ public class Diff {
 		((Stage) (ap.getScene().getWindow())).close();
 		FXMLLoader fm = new FXMLLoader();
 		try {
-			Parent root = fm.load(getClass().getResource("/application/manhinh/Register.fxml").openStream());
+			Parent root = fm.load(getClass().getResource(LinkScense.register).openStream());
 			Scene sen = new Scene(root);
 			Stage pr = new Stage();
 			pr.setScene(sen);
@@ -56,7 +57,7 @@ public class Diff {
 			((Stage) (ap.getScene().getWindow())).close();
 			FXMLLoader fm = new FXMLLoader();
 			fm.setController(new XacThuc());
-			Parent root = fm.load(getClass().getResource("/application/manhinh/Login.fxml").openStream());
+			Parent root = fm.load(getClass().getResource(LinkScense.login).openStream());
 			Scene sen = new Scene(root);
 			Stage pr = new Stage();
 			pr.setScene(sen);

@@ -7,7 +7,9 @@ import java.util.List;
 public interface Communication extends Remote {
 	public String login(String user, String pass) throws RemoteException;
 
-	public String register(String user, String pass, String hoten, String email) throws RemoteException;
+	public void register(String user, String pass, String hoten, String email) throws RemoteException;
+
+	public boolean confirmRegister(String au) throws RemoteException ;
 
 	public String getMember(String token, String group) throws RemoteException;
 
@@ -64,6 +66,8 @@ public interface Communication extends Remote {
 	public void resetPass(String user) throws RemoteException;
 
 	public boolean changeMail(String token, String mail) throws RemoteException;
+
+	public boolean confirmChangeMail(String id) throws RemoteException;
 
 	public boolean setImage(String token, String img, byte[] data) throws RemoteException;
 

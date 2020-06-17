@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import application.manhinh.LinkScense;
 import dccan.remote.Client;
 import dccan.remote.Remote;
 import javafx.event.ActionEvent;
@@ -47,7 +48,7 @@ public class Login implements Initializable {
 
 				FXMLLoader fxmlLoader = new FXMLLoader();
 				fxmlLoader.setResources(ResourceBundle.getBundle("app.lang.vn"));
-				Parent root = fxmlLoader.load(getClass().getResource("/application/manhinh/Chat2.fxml").openStream());
+				Parent root = fxmlLoader.load(getClass().getResource(LinkScense.chat).openStream());
 				Scene sen = new Scene(root);
 				sen.getStylesheets().add("/application/manhinh/boder.css");
 				primaryStage.setScene(sen);
@@ -68,7 +69,7 @@ public class Login implements Initializable {
 		Parent root;
 		try {
 			fxmlLoader.setResources(ResourceBundle.getBundle("app.lang.vn"));
-			root = fxmlLoader.load(getClass().getResource("/application/manhinh/pass/Dif.fxml").openStream());
+			root = fxmlLoader.load(getClass().getResource(LinkScense.dif).openStream());
 			Scene sen = new Scene(root);
 			Stage primaryStage = ((Stage) ap.getScene().getWindow());
 			primaryStage.setScene(sen);

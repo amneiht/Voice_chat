@@ -3,6 +3,7 @@ package application.manhinh.control;
 import java.io.IOException;
 import java.rmi.RemoteException;
 
+import application.manhinh.LinkScense;
 import application.manhinh.user.Info;
 import dccan.remote.Client;
 import dccan.remote.Remote;
@@ -59,7 +60,7 @@ public class FLpopup {
 		try {
 			
 			fxmlLoader.setController(new Info(inf));
-			root = fxmlLoader.load(FLpopup.class.getResource("/application/manhinh/user/Info.fxml").openStream());
+			root = fxmlLoader.load(FLpopup.class.getResource(LinkScense.show).openStream());
 			Scene sen = new Scene(root);
 			Stage pr = new Stage();
 			pr.setScene(sen);

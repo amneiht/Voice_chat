@@ -21,10 +21,9 @@ public class Remote implements Rmt {
 	}
 
 	@Override
-	public String register(String user, String pass, String hoten, String email) throws RemoteException {
-		token = rmi.register(user, pass, hoten, email);
-		id = user;
-		return token;
+	public void register(String user, String pass, String hoten, String email) throws RemoteException {
+		rmi.register(user, pass, hoten, email);
+
 	}
 
 	@Override
@@ -235,6 +234,16 @@ public class Remote implements Rmt {
 	@Override
 	public void resetPass(String user) throws RemoteException {
 		rmi.resetPass(user);
+	}
+
+	@Override
+	public boolean confirmRegister(String au) throws RemoteException {
+		return rmi.confirmChangeMail(au);
+	}
+
+	@Override
+	public boolean confirmChangeMail(String id) throws RemoteException {
+		return rmi.confirmChangeMail(id);
 	}
 
 }

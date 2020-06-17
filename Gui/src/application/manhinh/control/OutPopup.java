@@ -2,6 +2,7 @@ package application.manhinh.control;
 
 import java.io.IOException;
 
+import application.manhinh.LinkScense;
 import application.manhinh.friend.OutGroup;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Side;
@@ -34,7 +35,7 @@ public class OutPopup {
 			Parent root;
 			try {
 				fxmlLoader.setController(new OutGroup(id));
-				root = fxmlLoader.load(OutPopup.class.getResource("/application/manhinh/friend/Find.fxml").openStream());
+				root = fxmlLoader.load(OutPopup.class.getResource(LinkScense.nhap).openStream());
 				Scene sen = new Scene(root);
 				Stage pr = new Stage();
 				pr.setTitle("nhap \"yes\" de thoat");

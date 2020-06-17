@@ -24,7 +24,7 @@ public class PassToken {
 
 	public static boolean check(String user) {
 		String lp = mp2.get(user);
-		if (lp != null)
+		if (lp == null)
 			return true;
 		Member ls = op.get(lp);
 		if (System.currentTimeMillis() - ls.time > mtime) {
@@ -52,7 +52,7 @@ public class PassToken {
 	}
 
 	public static void clear() {
-		Iterator<Map.Entry<String, Member>> mp = ListUser2.op.entrySet().iterator();
+		Iterator<Map.Entry<String, Member>> mp = op.entrySet().iterator();
 		for (; mp.hasNext();) {
 			Map.Entry<String, Member> x = mp.next();
 			if (System.currentTimeMillis() - x.getValue().getTime() > mtime) {

@@ -12,6 +12,7 @@ import java.util.ResourceBundle;
 import javax.swing.JTextField;
 
 import application.autofill.Popup;
+import application.manhinh.LinkScense;
 import application.manhinh.friend.AddF;
 import application.manhinh.friend.DelGroup;
 import application.manhinh.friend.DltMember;
@@ -140,7 +141,8 @@ public class Chat implements Initializable {
 		Parent root;
 		try {
 			fxmlLoader.setController(new RqFriend());
-			root = fxmlLoader.load(getClass().getResource("/application/manhinh/friend/ShowFriend.fxml").openStream());
+			//root = fxmlLoader.load(getClass().getResource(LinkScense.show).openStream());
+			root = fxmlLoader.load(getClass().getResource(LinkScense.show).openStream());
 			Scene sen = new Scene(root);
 			Stage pr = new Stage();
 			pr.setScene(sen);
@@ -158,7 +160,7 @@ public class Chat implements Initializable {
 		Parent root;
 		try {
 			fxmlLoader.setController(new SetAd(id, true));
-			root = fxmlLoader.load(getClass().getResource("/application/manhinh/friend/ShowFriend.fxml").openStream());
+			root = fxmlLoader.load(getClass().getResource(LinkScense.show).openStream());
 			Scene sen = new Scene(root);
 			Stage pr = new Stage();
 			pr.setScene(sen);
@@ -176,7 +178,7 @@ public class Chat implements Initializable {
 		Parent root;
 		try {
 			fxmlLoader.setController(new SetAd(id, false));
-			root = fxmlLoader.load(getClass().getResource("/application/manhinh/friend/ShowFriend.fxml").openStream());
+			root = fxmlLoader.load(getClass().getResource(LinkScense.show).openStream());
 			Scene sen = new Scene(root);
 			Stage pr = new Stage();
 			pr.setScene(sen);
@@ -195,7 +197,7 @@ public class Chat implements Initializable {
 		Parent root;
 		try {
 			fxmlLoader.setController(new Talk(id));
-			root = fxmlLoader.load(getClass().getResource("/application/manhinh/voice/Talk.fxml").openStream());
+			root = fxmlLoader.load(getClass().getResource(LinkScense.talk).openStream());
 			Scene sen = new Scene(root);
 			Stage pr = new Stage();
 			pr.setScene(sen);
@@ -214,7 +216,7 @@ public class Chat implements Initializable {
 		Parent root;
 		try {
 			fxmlLoader.setController(new DltMember(id));
-			root = fxmlLoader.load(getClass().getResource("/application/manhinh/friend/ShowFriend.fxml").openStream());
+			root = fxmlLoader.load(getClass().getResource(LinkScense.show).openStream());
 			Scene sen = new Scene(root);
 			Stage pr = new Stage();
 			pr.setScene(sen);
@@ -257,7 +259,7 @@ public class Chat implements Initializable {
 			Parent root;
 			try {
 				fxmlLoader.setController(new DelGroup(id));
-				root = fxmlLoader.load(getClass().getResource("/application/manhinh/friend/Find.fxml").openStream());
+				root = fxmlLoader.load(getClass().getResource(LinkScense.nhap).openStream());
 				Scene sen = new Scene(root);
 				Stage pr = new Stage();
 				pr.setTitle("nhap \"yes\" de xoa");
@@ -277,7 +279,7 @@ public class Chat implements Initializable {
 			Parent root;
 			try {
 				fxmlLoader.setController(new RqId(id));
-				root = fxmlLoader.load(getClass().getResource("/application/manhinh/friend/Find.fxml").openStream());
+				root = fxmlLoader.load(getClass().getResource(LinkScense.nhap).openStream());
 				Scene sen = new Scene(root);
 				Stage pr = new Stage();
 				pr.setScene(sen);
@@ -296,7 +298,7 @@ public class Chat implements Initializable {
 			Parent root;
 			try {
 				fxmlLoader.setController(new ReQuest(id));
-				root = fxmlLoader.load(getClass().getResource("/application/manhinh/ReQuest.fxml").openStream());
+				root = fxmlLoader.load(getClass().getResource(LinkScense.request).openStream());
 				Scene sen = new Scene(root);
 				Stage pr = new Stage();
 				pr.setTitle("Tham gia nhom");
@@ -315,7 +317,7 @@ public class Chat implements Initializable {
 		Parent root;
 		try {
 			fxmlLoader.setController(new RqGroup());
-			root = fxmlLoader.load(getClass().getResource("/application/manhinh/friend/Find.fxml").openStream());
+			root = fxmlLoader.load(getClass().getResource(LinkScense.nhap).openStream());
 			Scene sen = new Scene(root);
 			Stage pr = new Stage();
 			pr.setScene(sen);
@@ -333,7 +335,7 @@ public class Chat implements Initializable {
 		Parent root;
 		try {
 			fxmlLoader.setController(new ShowFiend());
-			root = fxmlLoader.load(getClass().getResource("/application/manhinh/friend/ShowFriend.fxml").openStream());
+			root = fxmlLoader.load(getClass().getResource(LinkScense.show).openStream());
 			Scene sen = new Scene(root);
 			Stage pr = new Stage();
 			pr.setScene(sen);
@@ -353,7 +355,7 @@ public class Chat implements Initializable {
 		Parent root;
 		try {
 			fxmlLoader.setController(new AddF());
-			root = fxmlLoader.load(getClass().getResource("/application/manhinh/friend/Find.fxml").openStream());
+			root = fxmlLoader.load(getClass().getResource(LinkScense.nhap).openStream());
 			Scene sen = new Scene(root);
 			Stage pr = new Stage();
 			pr.setScene(sen);
@@ -512,7 +514,7 @@ public class Chat implements Initializable {
 		Parent root;
 		try {
 			// fxmlLoader.setController(new Info());
-			root = fxmlLoader.load(getClass().getResource("/application/manhinh/group/CrtGroup.fxml").openStream());
+			root = fxmlLoader.load(getClass().getResource(LinkScense.createG).openStream());
 			Scene sen = new Scene(root);
 			Stage pr = new Stage();
 			pr.setTitle("Tao nhom");
@@ -603,7 +605,7 @@ public class Chat implements Initializable {
 			String lp = rmi.getInfo();
 			List<Friend> ls = GetList.friendList(lp);
 			fxmlLoader.setController(new Info(ls.get(0)));
-			root = fxmlLoader.load(getClass().getResource("/application/manhinh/user/Info.fxml").openStream());
+			root = fxmlLoader.load(getClass().getResource(LinkScense.info).openStream());
 			Scene sen = new Scene(root);
 			Stage pr = new Stage();
 			pr.setScene(sen);
@@ -621,7 +623,7 @@ public class Chat implements Initializable {
 		Parent root;
 		try {
 			// fxmlLoader.setController(new Ninfo());
-			root = fxmlLoader.load(getClass().getResource("/application/manhinh/user/NewInfo.fxml").openStream());
+			root = fxmlLoader.load(getClass().getResource(LinkScense.ninfo).openStream());
 			Scene sen = new Scene(root);
 			Stage pr = new Stage();
 			pr.setScene(sen);
@@ -804,7 +806,7 @@ public class Chat implements Initializable {
 		fxmlLoader.setController(new Login());
 		Parent root;
 		try {
-			root = fxmlLoader.load(getClass().getResource("/application/manhinh/Login.fxml").openStream());
+			root = fxmlLoader.load(getClass().getResource(LinkScense.login).openStream());
 			Scene sen = new Scene(root);
 			sen.getStylesheets().add("/application/manhinh/boder.css");
 			pr.setScene(sen);
@@ -823,7 +825,7 @@ public class Chat implements Initializable {
 		Parent root;
 		try {
 			fxmlLoader.setController(new ChangeName(id));
-			root = fxmlLoader.load(getClass().getResource("/application/manhinh/friend/Find.fxml").openStream());
+			root = fxmlLoader.load(getClass().getResource(LinkScense.nhap).openStream());
 			Scene sen = new Scene(root);
 			Stage pr = new Stage();
 			pr.setTitle("Doi ten nhom");
@@ -841,7 +843,7 @@ public class Chat implements Initializable {
 		Parent root;
 		try {
 			fxmlLoader.setController(new Addmember(id));
-			root = fxmlLoader.load(getClass().getResource("/application/manhinh/friend/ShowFriend.fxml").openStream());
+			root = fxmlLoader.load(getClass().getResource(LinkScense.show).openStream());
 			Scene sen = new Scene(root);
 			Stage pr = new Stage();
 			pr.setTitle("Them than vien nhom");

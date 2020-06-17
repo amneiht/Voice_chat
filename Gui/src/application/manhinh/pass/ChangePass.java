@@ -7,6 +7,7 @@ import java.util.ResourceBundle;
 
 import application.autofill.AutoFill;
 import application.autofill.InfoList;
+import application.manhinh.LinkScense;
 import dccan.remote.Client;
 import dccan.remote.Remote;
 import dccan.suport.GetList;
@@ -41,7 +42,7 @@ public class ChangePass implements Initializable {
 				((Stage) (ap.getScene().getWindow())).close();
 				FXMLLoader fm = new FXMLLoader();
 				fm.setController(new XacThuc());
-				Parent root = fm.load(getClass().getResource("/application/manhinh/Login.fxml").openStream());
+				Parent root = fm.load(getClass().getResource(LinkScense.login).openStream());
 				Scene sen = new Scene(root);
 				Stage pr = new Stage();
 				pr.setScene(sen);

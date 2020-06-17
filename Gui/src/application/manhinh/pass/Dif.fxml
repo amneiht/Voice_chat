@@ -7,9 +7,7 @@
 
 <AnchorPane prefHeight="147.0" prefWidth="136.0"
 	xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-	fx:controller="application.manhinh.pass.Diff"
-	fx:id="ap"
-	>
+	fx:controller="application.manhinh.pass.Diff" fx:id="ap">
 	<children>
 		<Button layoutX="15.0" layoutY="30.0" mnemonicParsing="false"
 			onAction="#openChangePass" text="Đổi mật khẩu" />

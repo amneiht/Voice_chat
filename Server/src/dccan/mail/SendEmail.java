@@ -37,6 +37,19 @@ public class SendEmail {
 		}
 
 	}
+	public static void sendRegiterConFirm(String email, String id) {
+		MimeMessage message = new MimeMessage(session);
+		try {
+			message.setSubject("Demo Đồ án : Mã xác thực đăng ký");
+			message.setText("Mã token đăng kí của bạn là : " + id);
+			message.addRecipient(Message.RecipientType.TO, new InternetAddress(email));
+			Transport.send(message);
+		} catch (MessagingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
 	public static void sendEmailToken(String email, String id) {
 		MimeMessage message = new MimeMessage(session);
 		try {

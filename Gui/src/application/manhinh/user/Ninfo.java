@@ -65,10 +65,15 @@ public class Ninfo implements Initializable {
 			}
 			text = email.getText();
 			if (!text.equals(tmail)) {
-				rmi.changeName(text);
+				rmi.changeMail(text);
 			}
-			Stage lps=(Stage)(ap.getScene().getWindow());
+			Stage lps = (Stage) (ap.getScene().getWindow());
+			if (text.equals(tmail))
 			lps.close();
+			else
+			{
+				
+			}
 			ShowAlert.pr("Cap nhat thong Tin thanh cong");
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
@@ -76,6 +81,7 @@ public class Ninfo implements Initializable {
 			ShowAlert.pr("loi ket noi");
 		}
 	}
+
 	int size = 150;
 
 	@Override
@@ -83,7 +89,7 @@ public class Ninfo implements Initializable {
 		rmi = Client.getRmi();
 		try {
 			String fp = rmi.getInfo();
-			Friend fv =GetList.toFriend(fp);
+			Friend fv = GetList.toFriend(fp);
 			tuser = fv.getNguoiDung();
 			tmail = fv.getEmail();
 			email.setText(tmail);

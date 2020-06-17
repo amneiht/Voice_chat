@@ -2,8 +2,9 @@ package dccan.server.control.chat;
 
 import java.net.DatagramSocket;
 import java.net.SocketException;
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -34,8 +35,6 @@ public class Room {
 		synchronized (map) {
 			res = map.remove(test);
 		}
-		System.out.println(test);
-		System.out.println(res);
 		if (res == null)
 			return res;
 		return checkListUser(res);
@@ -48,9 +47,8 @@ public class Room {
 	 * @return
 	 */
 	private String checkListUser(String res) {
-		
-		
-		for (Client cl : mem) {
+		Collection<Client> mem2 = mem.values();
+		for (Client cl : mem2) {
 			if (cl.user.equals(res))
 				return null;
 		}
@@ -74,44 +72,46 @@ public class Room {
 	DatagramSocket sc;
 	protected String group;
 	// long rtp; // ma tham so rtp
-	protected List<Client> mem = new ArrayList<Client>();// tru nhap de dang
+	// protected List<Client> mem = new ArrayList<Client>();// tru nhap de dang
+	protected Map<Long, Client> mem = new HashMap<Long, Client>();
 
 	public List<Client> getMem() {
-		return mem;
+		
+		return new LinkedList<Client>(mem.values());
 	}
 
 	boolean end = false;
 
-	public void live(long p) {
-		for (Client c : mem) {
-			if (c.id == p) {
-				c.live = System.currentTimeMillis();
-				return;
-			}
+	public void live(long p, Flagment fg) {
+		Client c = mem.get(p);
+		if (c != null) {
+			c.live = System.currentTimeMillis();
+			c.port = fg.port;
+			c.ina = fg.inet;
 		}
 	}
 
 	public void bye(long id) {
-		for (int i = 0; i < mem.size(); i++) {
-			if (mem.get(i).id == id) {
-				mem.remove(i);
-				return;
-			}
-		}
+		mem.remove(id);
 	}
 
 	public void clear() {
 		long now = System.currentTimeMillis();
-		for (int i = mem.size() - 1; i > -1; i--) {
-			if (now - mem.get(i).live > timeout) {
-			mem.remove(i);
+		synchronized (mem) {
+			Iterator<Map.Entry<Long, Client>> ms = mem.entrySet().iterator();
+			for (; ms.hasNext();) {
+				Map.Entry<Long, Client> x = ms.next();
+				if (now - x.getValue().live > timeout)
+					ms.remove();
 			}
+			end = mem.size() > 0;
 		}
-		if (mem.size() == 0)
-			end = true;
+
 	}
 
 	public void addClient(Client s) {
-		mem.add(s);
+		synchronized (mem) {
+			mem.put(s.id, s);
+		}
 	}
 }

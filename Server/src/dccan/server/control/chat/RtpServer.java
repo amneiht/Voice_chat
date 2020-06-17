@@ -77,7 +77,7 @@ public class RtpServer implements Runnable {
 
 					Room m = rm.lp.get(gp);
 					if (m != null) {
-						send(fg, m.mem);
+						send(fg, m.getMem());
 					}
 					System.out.println(System.currentTimeMillis() - tm);
 				}

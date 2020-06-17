@@ -5,7 +5,6 @@ import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 
 import dccan.server.control.chat.RctpServer;
-import dccan.server.control.chat.RtpServer;
 
 public class ChatSer {
 
@@ -18,7 +17,7 @@ public class ChatSer {
 		try {
 			// setSettings();
 			new Thread(new RctpServer()).start();
-			new Thread(new RtpServer()).start();
+			//new Thread(new RtpServer()).start();
 			System.setProperty("java.rmi.server.hostname", host);
 			RemoteObj call = new RemoteObj();
 			// LocateRegistry.createRegistry(8888, new SslRMIClientSocketFactory(),
