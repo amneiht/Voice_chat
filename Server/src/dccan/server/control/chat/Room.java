@@ -12,7 +12,7 @@ import java.util.Map;
 import org.apache.commons.lang3.RandomStringUtils;
 
 public class Room {
-	public static long timeout = 5 * 1000;// 5 s
+	public static long timeout = 10 * 1000;// 5 s
 	private String key;
 	protected List<String> user = new LinkedList<String>();
 	protected Map<String, String> map = new HashMap<String, String>();
@@ -76,7 +76,7 @@ public class Room {
 	protected Map<Long, Client> mem = new HashMap<Long, Client>();
 
 	public List<Client> getMem() {
-		
+
 		return new LinkedList<Client>(mem.values());
 	}
 
@@ -104,7 +104,7 @@ public class Room {
 				if (now - x.getValue().live > timeout)
 					ms.remove();
 			}
-			end = mem.size() > 0;
+			end = mem.size() == 0;
 		}
 
 	}

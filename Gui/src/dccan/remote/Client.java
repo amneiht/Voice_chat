@@ -5,7 +5,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
 public class Client {
-	private static Remote rmi = null;
+	private static NoToken rmi = null;
 	public static Communication connect;
 	static Registry registry;
 	public static String host = null;
@@ -25,14 +25,14 @@ public class Client {
 			host = hosts;
 			registry = LocateRegistry.getRegistry(host, 8888);
 			connect = (Communication) registry.lookup("Hello");
-			rmi = new Remote(connect);
+			rmi = new NoToken(connect);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
-	public static Remote getRmi() {
+	public static NoToken getRmi() {
 		return rmi;
 	}
 

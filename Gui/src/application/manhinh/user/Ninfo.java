@@ -3,12 +3,12 @@ package application.manhinh.user;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.net.URL;
-import java.rmi.RemoteException;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import application.manhinh.LinkScense;
 import dccan.remote.Client;
-import dccan.remote.Remote;
+import dccan.remote.NoToken;
 import dccan.suport.CheckImage;
 import dccan.suport.FileVsByte;
 import dccan.suport.Friend;
@@ -16,7 +16,10 @@ import dccan.suport.GetList;
 import dccan.suport.ShowAlert;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -43,7 +46,7 @@ public class Ninfo implements Initializable {
 
 	@FXML
 	private AnchorPane ap;
-	Remote rmi;
+	NoToken rmi;
 
 	@FXML
 	void sendInfo(ActionEvent event) {
@@ -69,13 +72,18 @@ public class Ninfo implements Initializable {
 			}
 			Stage lps = (Stage) (ap.getScene().getWindow());
 			if (text.equals(tmail))
-			lps.close();
-			else
-			{
-				
+				lps.close();
+			else {
+
+				FXMLLoader fxmlLoader = new FXMLLoader();
+				fxmlLoader.setController(new ConfirmMail());
+				Parent root = fxmlLoader.load(getClass().getResource(LinkScense.nhap).openStream());
+				Scene sen = new Scene(root);
+				lps.setTitle("xac thuc email");
+				lps.setScene(sen);
+				lps.show();
 			}
-			ShowAlert.pr("Cap nhat thong Tin thanh cong");
-		} catch (RemoteException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			ShowAlert.pr("loi ket noi");

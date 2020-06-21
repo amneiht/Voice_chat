@@ -10,7 +10,7 @@ import application.radiocell.Chose;
 import application.radiocell.CreateTable;
 import application.radiocell.UserRq;
 import dccan.remote.Client;
-import dccan.remote.Remote;
+import dccan.remote.NoToken;
 import dccan.suport.GetList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -47,7 +47,7 @@ public class RqFriend implements Initializable {
 	}
 
 	TableView<UserRq> tab;
-	Remote rmi;
+	NoToken rmi;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {

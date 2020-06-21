@@ -6,7 +6,7 @@ import java.util.ResourceBundle;
 
 import application.manhinh.LinkScense;
 import dccan.remote.Client;
-import dccan.remote.Remote;
+import dccan.remote.NoToken;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -39,7 +39,7 @@ public class Login implements Initializable {
 		System.out.println(mk.getText());
 		String user = ten.getText().trim();
 		String pass = mk.getText();
-		Remote rmi = Client.getRmi();
+		NoToken rmi = Client.getRmi();
 		try {
 
 			String d = rmi.login(user, pass);

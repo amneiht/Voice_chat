@@ -45,7 +45,7 @@ public class PassToken {
 
 				res = lp;
 			}
-			String user = op.remove(lg).getId();
+			String user = lp.getId();
 			mp2.remove(user);
 			return res;
 		}

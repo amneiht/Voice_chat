@@ -8,6 +8,9 @@ import org.apache.commons.lang3.RandomStringUtils;
 
 public class ListUser2 {
 	public static Map<String, Member> op = new HashMap<String, Member>();
+	static {
+		new Thread(new ClearToken()).start();
+	}
 
 	public static String addNew(String string) {
 		Member mp = new Member(string);
@@ -32,11 +35,13 @@ public class ListUser2 {
 	}
 
 	public static void clear() {
-		Iterator<Map.Entry<String, Member>> mp = ListUser2.op.entrySet().iterator();
-		for (; mp.hasNext();) {
-			Map.Entry<String, Member> x = mp.next();
-			if (x.getValue().outDate()) {
-				mp.remove();
+		synchronized (op) {
+			Iterator<Map.Entry<String, Member>> mp = op.entrySet().iterator();
+			for (; mp.hasNext();) {
+				Map.Entry<String, Member> x = mp.next();
+				if (x.getValue().outDate()) {
+					mp.remove();
+				}
 			}
 		}
 	}

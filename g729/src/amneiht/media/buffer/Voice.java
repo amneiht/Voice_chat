@@ -2,7 +2,7 @@ package amneiht.media.buffer;
 
 import java.io.Closeable;
 
-public abstract class Voice implements Closeable {
+public abstract class Voice implements Closeable{
 	/**
 	 * them 1 ban ghi am thanh vao play list
 	 * 

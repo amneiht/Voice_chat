@@ -5,7 +5,7 @@ import java.rmi.RemoteException;
 import java.util.ResourceBundle;
 
 import dccan.remote.Client;
-import dccan.remote.Remote;
+import dccan.remote.NoToken;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -34,7 +34,7 @@ public class OutGroup implements Initializable{
 		btn.setOnAction(e -> {
 			String cf = text.getText();
 			if (cf.equals("yes")) {
-				Remote rmi = Client.getRmi();
+				NoToken rmi = Client.getRmi();
 				try {
 					rmi.outGroup(gp);
 				} catch (RemoteException e1) {

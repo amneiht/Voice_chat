@@ -4,14 +4,14 @@ import java.rmi.RemoteException;
 
 import app.dccan.voice.RtpSystem;
 import dccan.remote.Client;
-import dccan.remote.Remote;
+import dccan.remote.NoToken;
 
 public class TestRecv {
-	static String gp = "Adw5nIIKxO7wyLSk57nCdE1TS1vlSdKa";
+	static String gp = "6oSA7wthxFrYq0wgwwR5YW3WQ8bS9JnS";
 	public static void main(String[] args) {
-		Remote rmi = Client.getRmi();
+		NoToken rmi = Client.getRmi();
 		try {
-			rmi.login("pikapika", "12345678");
+			rmi.login("test1", "1");
 			RtpSystem.Connect(gp);
 			RtpSystem.mute();
 		} catch (RemoteException e) {

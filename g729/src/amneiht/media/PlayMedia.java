@@ -11,16 +11,35 @@ public class PlayMedia {
 	SourceDataLine speakers;
 	FloatControl sample;
 	boolean support;
+	static int size = 15;
 
-	public PlayMedia(AudioFormat format) throws LineUnavailableException {
+	public PlayMedia(AudioFormat format, int packetSize) throws LineUnavailableException {
 		DataLine.Info dataLineInfo = new DataLine.Info(SourceDataLine.class, format);
 		speakers = (SourceDataLine) AudioSystem.getLine(dataLineInfo);
-		speakers.open(format);
+
+		speakers.open(format, packetSize * size);
+
 		support = speakers.isControlSupported(FloatControl.Type.SAMPLE_RATE);
 		if (support) {
 			sample = (FloatControl) speakers.getControl(FloatControl.Type.SAMPLE_RATE);
 		}
 		speakers.start();
+		System.out.println(speakers.getBufferSize());
+
+	}
+
+	public PlayMedia(AudioFormat format) throws LineUnavailableException {
+		DataLine.Info dataLineInfo = new DataLine.Info(SourceDataLine.class, format);
+		speakers = (SourceDataLine) AudioSystem.getLine(dataLineInfo);
+
+		speakers.open(format);
+
+		support = speakers.isControlSupported(FloatControl.Type.SAMPLE_RATE);
+		if (support) {
+			sample = (FloatControl) speakers.getControl(FloatControl.Type.SAMPLE_RATE);
+		}
+		speakers.start();
+		System.out.println(speakers.getBufferSize());
 
 	}
 

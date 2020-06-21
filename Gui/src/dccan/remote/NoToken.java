@@ -3,12 +3,12 @@ package dccan.remote;
 import java.rmi.RemoteException;
 import java.util.List;
 
-public class Remote implements Rmt {
+public class NoToken implements Rmt {
 	private String token = null;
 	public String id = null;
 	Communication rmi;
 
-	public Remote(Communication rmi) {
+	public NoToken(Communication rmi) {
 		this.rmi = rmi;
 	}
 
@@ -238,7 +238,7 @@ public class Remote implements Rmt {
 
 	@Override
 	public boolean confirmRegister(String au) throws RemoteException {
-		return rmi.confirmChangeMail(au);
+		return rmi.confirmRegister(au);
 	}
 
 	@Override

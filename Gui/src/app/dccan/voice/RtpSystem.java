@@ -6,14 +6,14 @@ import java.net.InetAddress;
 import java.util.List;
 
 import dccan.remote.Client;
-import dccan.remote.Remote;
+import dccan.remote.NoToken;
 import dccan.suport.GetList;
 import net.packet.rctp.Join;
 
 public class RtpSystem {
 	public static boolean run = true;
 	public static boolean mute = false;
-	public static DatagramSocket rctp, voice;
+	public static DatagramSocket rctp = null;
 	public static InetAddress inet;
 	static int port, rctport = 8890, rtport = 8889;
 	static String key;
@@ -34,7 +34,7 @@ public class RtpSystem {
 
 	public static void Connect(String group) {
 		try {
-			Remote rmi = Client.getRmi();
+			NoToken rmi = Client.getRmi();
 
 			String lp = rmi.getUserkey(group);
 			if (lp != null) {
@@ -42,8 +42,7 @@ public class RtpSystem {
 				run = true;
 				mute = false;
 				rctp = new DatagramSocket();
-				voice = new DatagramSocket();
-				port = voice.getLocalPort();
+				port = rctp.getLocalPort();
 				String host = Client.host;
 				key = ls.get(0);
 				String user = ls.get(1);

@@ -6,7 +6,7 @@ import java.rmi.RemoteException;
 import java.util.ResourceBundle;
 
 import dccan.remote.Client;
-import dccan.remote.Remote;
+import dccan.remote.NoToken;
 import dccan.suport.Friend;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -27,7 +27,7 @@ public class Info implements Initializable{
     @FXML
     private Label name;
 
-    Remote rmi ;
+    NoToken rmi ;
     public Info(Friend i)
     {
     	inf = i ;

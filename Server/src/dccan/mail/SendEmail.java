@@ -14,6 +14,10 @@ public class SendEmail {
 	static String pass = "Dccan1591997";
 	static Session session;
 
+	public static void main(String[] args) {
+		sendEmailToken("dccntd@gmail.com", "11322", "djjdjdj");
+	}
+
 	static {
 		String host = "smtp.gmail.com";
 		Properties properties = System.getProperties();
@@ -24,11 +28,13 @@ public class SendEmail {
 		session = Session.getInstance(properties, new Gmail(user, pass));
 		session.setDebug(false);
 	}
+
 	public static void sendPassWordToken(String email, String id) {
 		MimeMessage message = new MimeMessage(session);
 		try {
 			message.setSubject("Demo Đồ án : khôi phục mật khâu");
-			message.setText("Mã token khôi phục của đồng chí là : " + id);
+			message.setContent("Mã token khôi phục của đồng chí là :<b><H1> " + id + "</H1></b>",
+					"text/html; charset=utf-8");
 			message.addRecipient(Message.RecipientType.TO, new InternetAddress(email));
 			Transport.send(message);
 		} catch (MessagingException e) {
@@ -37,11 +43,13 @@ public class SendEmail {
 		}
 
 	}
+
 	public static void sendRegiterConFirm(String email, String id) {
+		System.out.println(email);
 		MimeMessage message = new MimeMessage(session);
 		try {
 			message.setSubject("Demo Đồ án : Mã xác thực đăng ký");
-			message.setText("Mã token đăng kí của bạn là : " + id);
+			message.setContent("Mã token đăng kí của bạn là :<b><H1> " + id + "</H1></b>", "text/html; charset=utf-8");
 			message.addRecipient(Message.RecipientType.TO, new InternetAddress(email));
 			Transport.send(message);
 		} catch (MessagingException e) {
@@ -50,11 +58,15 @@ public class SendEmail {
 		}
 
 	}
-	public static void sendEmailToken(String email, String id) {
+
+	public static void sendEmailToken(String email, String id, String Nmail) {
 		MimeMessage message = new MimeMessage(session);
 		try {
 			message.setSubject("Demo Đồ án : Thay Đổi email");
-			message.setText("Mã token thay đổi của đồng chí là : " + id);
+			message.setContent("Email mới là <b>" + Nmail + "</b><br> Mã token thay đổi của đồng chí là : <h1><b> " + id
+					+ "</h1></b> ", "text/html; charset=utf-8");
+			// message.setText("Email mới là <b>"+Nmail+"</b><br> Mã token thay đổi của đồng
+			// chí là : " + id);
 			message.addRecipient(Message.RecipientType.TO, new InternetAddress(email));
 			Transport.send(message);
 		} catch (MessagingException e) {

@@ -4,7 +4,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import dccan.remote.Client;
-import dccan.remote.Remote;
+import dccan.remote.NoToken;
 import dccan.suport.ShowAlert;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -26,7 +26,7 @@ public class ConfirmMail implements Initializable{
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		btn.setText("gui");
-		Remote rmi = Client.getRmi();
+		NoToken rmi = Client.getRmi();
 		btn.setOnAction(evt -> {
 			String lp = text.getText();
 			try {

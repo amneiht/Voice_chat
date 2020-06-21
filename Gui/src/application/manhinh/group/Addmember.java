@@ -10,7 +10,7 @@ import application.radiocell.AddF;
 import application.radiocell.CreateTable;
 import application.radiocell.GFriend;
 import dccan.remote.Client;
-import dccan.remote.Remote;
+import dccan.remote.NoToken;
 import dccan.suport.Friend;
 import dccan.suport.GetList;
 import javafx.event.ActionEvent;
@@ -50,7 +50,7 @@ public class Addmember implements Initializable {
 		((Stage) (scp.getScene().getWindow())).close();
 	}
 
-	Remote rmi = Client.getRmi();
+	NoToken rmi = Client.getRmi();
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {

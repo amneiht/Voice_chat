@@ -12,7 +12,7 @@ import java.util.ResourceBundle;
 
 import app.dccan.voice.RtpSystem;
 import dccan.remote.Client;
-import dccan.remote.Remote;
+import dccan.remote.NoToken;
 import dccan.suport.FileVsByte;
 import dccan.suport.Friend;
 import dccan.suport.GetList;
@@ -49,7 +49,7 @@ public class Talk implements Initializable {
 	private FlowPane fp;
 	List<Friend> mem;
 
-	Remote rmi;
+	NoToken rmi;
 	Map<String, ImageView> mp = new HashMap<String, ImageView>();
 	List<String> user = new ArrayList<String>();
 

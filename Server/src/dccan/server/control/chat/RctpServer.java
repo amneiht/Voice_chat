@@ -97,6 +97,7 @@ public class RctpServer implements Runnable {
 							sendid(id, gid, fg, rm.getGroupKey(group));
 							break;
 						case 1001:
+							//System.out.println("s");
 							long gid1 = PRead.getLong(res, 12, 4);
 							long live = PRead.getLong(res, 16, 4);
 							rm.live(gid1, live ,fg);

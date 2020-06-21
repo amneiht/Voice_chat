@@ -8,7 +8,7 @@ import java.util.ResourceBundle;
 import application.autofill.AutoFill;
 import application.autofill.InfoList;
 import dccan.remote.Client;
-import dccan.remote.Remote;
+import dccan.remote.NoToken;
 import dccan.suport.GetList;
 import dccan.suport.ShowAlert;
 import javafx.event.ActionEvent;
@@ -27,7 +27,7 @@ public class AddF implements Initializable {
 	private Button btn;
 	@FXML
 	private AnchorPane ap;
-	Remote rmi;
+	NoToken rmi;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {

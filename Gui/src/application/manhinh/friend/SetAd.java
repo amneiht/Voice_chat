@@ -10,7 +10,7 @@ import application.radiocell.AddF;
 import application.radiocell.CreateTable;
 import application.radiocell.GFriend;
 import dccan.remote.Client;
-import dccan.remote.Remote;
+import dccan.remote.NoToken;
 import dccan.suport.Friend;
 import dccan.suport.GetList;
 import javafx.event.ActionEvent;
@@ -52,7 +52,7 @@ public class SetAd implements Initializable {
 
 	private TableView<GFriend> tab = new TableView<GFriend>();
 	private String gp;
-	private Remote rmi;
+	private NoToken rmi;
 	boolean mode;
 
 	public SetAd(String id, boolean mode) {

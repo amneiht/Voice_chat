@@ -44,7 +44,7 @@ public class ChangeMail {
 		}
 		Info.give(con);
 		if (mail != null)
-			SendEmail.sendEmailToken(mail, token);
+			SendEmail.sendEmailToken(mail, token,Nmail);
 		return true ;
 	}
 

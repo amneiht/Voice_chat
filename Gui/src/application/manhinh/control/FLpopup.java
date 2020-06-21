@@ -6,7 +6,7 @@ import java.rmi.RemoteException;
 import application.manhinh.LinkScense;
 import application.manhinh.user.Info;
 import dccan.remote.Client;
-import dccan.remote.Remote;
+import dccan.remote.NoToken;
 import dccan.suport.Friend;
 import dccan.suport.ShowAlert;
 import javafx.fxml.FXMLLoader;
@@ -40,7 +40,7 @@ public class FLpopup {
 
 	private static void addFriend() {
 		String fl = inf.getTen();
-		Remote rmi = Client.getRmi();
+		NoToken rmi = Client.getRmi();
 		try {
 			boolean t = rmi.addFriend(fl);
 			if (t)

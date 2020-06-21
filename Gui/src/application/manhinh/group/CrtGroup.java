@@ -10,7 +10,7 @@ import application.radiocell.AddF;
 import application.radiocell.CreateTable;
 import application.radiocell.GFriend;
 import dccan.remote.Client;
-import dccan.remote.Remote;
+import dccan.remote.NoToken;
 import dccan.suport.Friend;
 import dccan.suport.GetList;
 import dccan.suport.ShowAlert;
@@ -59,7 +59,7 @@ public class CrtGroup implements Initializable {
 		}
 	}
 
-	Remote rmi;
+	NoToken rmi;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {

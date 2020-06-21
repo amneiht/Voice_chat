@@ -2,7 +2,7 @@ package application.manhinh.control;
 
 import application.manhinh.LinkScense;
 import dccan.remote.Client;
-import dccan.remote.Remote;
+import dccan.remote.NoToken;
 import dccan.suport.Mail;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -42,10 +42,10 @@ public class Regis {
 	void send(ActionEvent event) {
 		note.setText("");
 		String ur = user.getText().trim();
-		if (ur.length() < 8) {
-			note.setText("T\u00EAn \u0111\u0103ng nh\u1EADp ph\u1EA3i l\u1EDBn h\u01A1n 8");
-			return;
-		}
+//		if (ur.length() < 8) {
+//			note.setText("T\u00EAn \u0111\u0103ng nh\u1EADp ph\u1EA3i l\u1EDBn h\u01A1n 8");
+//			return;
+//		}
 		String em = email.getText().trim();
 		if (em.length() == 0) {
 			note.setText("Email kh\u00F4ng \u0111\u01B0\u1EE3c tr\u1ED1ng");
@@ -61,17 +61,17 @@ public class Regis {
 			return;
 		}
 		String mk = pass.getText().trim();
-		if (mk.length() < 8) {
-			note.setText("M\u1EADt kh\u1EA9u ph\u1EA3i l\u1EDBn h\u01A1n 8 ");
-			return;
-		}
+//		if (mk.length() < 8) {
+//			note.setText("M\u1EADt kh\u1EA9u ph\u1EA3i l\u1EDBn h\u01A1n 8 ");
+//			return;
+//		}
 		String lp = epass.getText().trim();
 		if (!lp.equals(mk)) {
 			note.setText("M\u1EADt kh\u1EA9u kh\u00F4ng kh\u1EDBp");
 			return;
 		}
 
-		Remote rmi = Client.getRmi();
+		NoToken rmi = Client.getRmi();
 		try {
 			rmi.register(ur, mk, nd, em);
 			Stage primaryStage = (Stage) ap.getScene().getWindow();

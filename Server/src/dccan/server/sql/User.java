@@ -9,6 +9,7 @@ import java.util.List;
 import com.google.gson.Gson;
 
 import dccan.server.sql.config.Info;
+import dccan.suport.BCrypt;
 import dccan.suport.Friend;
 
 public class User {
@@ -25,16 +26,19 @@ public class User {
 		Connection con = Info.getCon();
 		String id = null;
 		try {
-
-			String sql = "select nguoiDung from thongtin where ten = ? and matKhau = ?";
+			String p2 = null;
+			String sql = "select matKhau from thongtin where ten = ? ";
 			PreparedStatement ps = con.prepareStatement(sql);
 			ps.setString(1, user);
-			ps.setString(2, Info.getMD5(pass));
 			ResultSet rs = ps.executeQuery();
 			rs.beforeFirst();// dich con tro
 			if (rs.next()) {
-				id = rs.getString(1);
+				p2 = rs.getString(1);
+				if (BCrypt.checkpw(pass, p2)) {
+					id = user;
+				}
 			}
+			rs.close();
 			ps.close();
 			// con.close();
 
@@ -79,7 +83,7 @@ public class User {
 			sql = "insert into thongtin(ten , matKhau,email,nguoiDung) values(?,?,?,?)";
 			ps = con.prepareStatement(sql);
 			ps.setString(1, user);
-			ps.setString(2, Info.getMD5(pass));
+			ps.setString(2, BCrypt.hashpw(pass, BCrypt.gensalt()));
 			ps.setString(3, email);
 			ps.setString(4, hoten);
 			ps.executeUpdate();

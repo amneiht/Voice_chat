@@ -5,7 +5,7 @@ import java.rmi.RemoteException;
 import java.util.ResourceBundle;
 
 import dccan.remote.Client;
-import dccan.remote.Remote;
+import dccan.remote.NoToken;
 import dccan.suport.ShowAlert;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -23,7 +23,7 @@ public class RqGroup implements Initializable {
 	private Button btn;
 	@FXML
 	private AnchorPane ap;
-	Remote rmi;
+	NoToken rmi;
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {

@@ -27,7 +27,8 @@ public class StackList implements Runnable, Closeable {
 			d.addList(p);
 		} else {
 			try {
-				NoControl nc = new NoControl(NetAudioFormat.getG729AudioFormat(),80);	
+				// Voice nc = new NoControl(NetAudioFormat.getG729AudioFormat(),160);
+				Voice nc = new BufferCotrol(NetAudioFormat.getG729AudioFormat(), 160);
 				nc.addList(p);
 				mp.put(id, nc);
 			} catch (Exception e) {

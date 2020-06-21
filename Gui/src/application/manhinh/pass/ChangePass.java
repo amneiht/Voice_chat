@@ -1,16 +1,11 @@
 package application.manhinh.pass;
 
 import java.net.URL;
-import java.rmi.RemoteException;
-import java.util.List;
 import java.util.ResourceBundle;
 
-import application.autofill.AutoFill;
-import application.autofill.InfoList;
 import application.manhinh.LinkScense;
 import dccan.remote.Client;
-import dccan.remote.Remote;
-import dccan.suport.GetList;
+import dccan.remote.NoToken;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -34,7 +29,7 @@ public class ChangePass implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		//((Stage) (ap.getScene().getWindow())).setTitle("Thay doi mat Khau");
-		Remote rmi = Client.getRmi();
+		NoToken rmi = Client.getRmi();
 		btn.setOnAction((e) -> {
 			String text = this.text.getText();
 			try {
@@ -54,22 +49,6 @@ public class ChangePass implements Initializable {
 				e1.printStackTrace();
 			}
 		});
-		InfoList ip = new InfoList() {
-
-			@Override
-			public List<String> getList(String tx) {
-				List<String> lp = null;
-				try {
-					String s = rmi.getUserOnLimit(tx);
-					lp = GetList.listString(s);
-				} catch (RemoteException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				return lp;
-			}
-		};
-		new AutoFill(ip, text);
 	}
 
 }

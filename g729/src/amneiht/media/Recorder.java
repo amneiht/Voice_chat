@@ -21,7 +21,17 @@ public class Recorder implements Closeable {
 		microphone = (TargetDataLine) AudioSystem.getLine(info);
 		microphone.open(af);
 		microphone.start();
+		System.out.println(microphone.getBufferSize());
 
+	}
+
+	public static void main(String[] args) {
+		try {
+			Recorder rd = new Recorder(NetAudioFormat.getG729AudioFormat());
+		} catch (LineUnavailableException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -34,7 +44,7 @@ public class Recorder implements Closeable {
 	public Recorder(AudioFormat af, double d) throws LineUnavailableException {
 
 		count = (int) (af.getFrameRate() * d);
-		DataLine.Info info = new DataLine.Info(TargetDataLine.class, af);
+		DataLine.Info info = new DataLine.Info(TargetDataLine.class, af, 160);
 		microphone = (TargetDataLine) AudioSystem.getLine(info);
 		microphone.open(af);
 		microphone.start();

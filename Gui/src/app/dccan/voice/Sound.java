@@ -7,6 +7,8 @@ import java.util.LinkedList;
 
 import org.mobicents.media.server.impl.dsp.audio.g729.Decoder;
 
+import amneiht.media.NetAudioFormat;
+import amneiht.media.PlayMedia;
 import amneiht.media.buffer.Pack;
 import amneiht.media.buffer.StackList;
 import net.help.Convert;
@@ -29,7 +31,7 @@ public class Sound implements Runnable {
 			try {
 				Decoder dec = new Decoder();
 				StackList sl = new StackList();
-				// PlayMedia pm = new PlayMedia(NetAudioFormat.getG729AudioFormat());
+//				PlayMedia pm = new PlayMedia(NetAudioFormat.getG729AudioFormat());
 				new Thread(sl).start();
 				while (RtpSystem.run) {
 					byte data[] = null;
@@ -44,6 +46,9 @@ public class Sound implements Runnable {
 						sound = Convert.encrypt(sound, key);
 						sound = dec.process(sound);
 						sl.add(id, new Pack(time, sound));
+					}else
+					{
+						Thread.sleep(9);
 					}
 				}
 				sl.close();

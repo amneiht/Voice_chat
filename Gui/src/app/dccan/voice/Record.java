@@ -10,7 +10,7 @@ import org.mobicents.media.server.impl.dsp.audio.g729.Encoder;
 
 import amneiht.media.NetAudioFormat;
 import amneiht.media.Recorder;
-import dccan.remote.Remote;
+import dccan.remote.Client;
 import dccan.suport.GetList;
 import dccan.suport.Member;
 import net.packet.Nrtp.SendRtp;
@@ -20,18 +20,16 @@ public class Record implements Runnable {
 	private long id, gp;
 	LinkedList<byte[]> lp = new LinkedList<byte[]>();
 	String group;
-	List<Member> clp = new LinkedList<Member>();
+	static List<Member> clp = new LinkedList<Member>();
 
 	public Record(long id, long gp) {
 		this.id = id;
 		this.gp = gp;
 	}
 
-	Remote rmi;
-
-	public List<Member> getMemList(String group) {
+	public static List<Member> getMemList(String group) {
 		try {
-			String lop = rmi.chatMember(group);
+			String lop = Client.getRmi().chatMember(group);
 			List<Member> lp = GetList.chatMember(lop);
 			synchronized (clp) {
 				clp.clear();
@@ -39,7 +37,6 @@ public class Record implements Runnable {
 			}
 			return lp;
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
@@ -49,7 +46,7 @@ public class Record implements Runnable {
 
 		@Override
 		public void run() {
-			// TODO Auto-generated method stub
+
 			DatagramSocket socket;
 			try {
 				socket = new DatagramSocket();
@@ -57,6 +54,7 @@ public class Record implements Runnable {
 				Encoder en = new Encoder();
 
 				SendRtp pack = new SendRtp(gp, id, RtpSystem.key);
+
 				while (RtpSystem.run) {
 					byte[] dat = null;
 					synchronized (lp) {
@@ -66,10 +64,13 @@ public class Record implements Runnable {
 					if (dat != null) {
 						byte[] data = en.process(dat);
 						data = pack.send(data);
-						for (Member mp : clp) {
-							DatagramPacket dp = new DatagramPacket(data, data.length, mp.getIna(), mp.getPort());
-							socket.send(dp);
+						synchronized (clp) {
+							for (Member mp : clp) {
+								DatagramPacket dp = new DatagramPacket(data, data.length, mp.getIna(), mp.getPort());
+								socket.send(dp);
+							}
 						}
+
 					}
 				}
 			} catch (Exception e) {
@@ -104,7 +105,6 @@ public class Record implements Runnable {
 			}
 			rd.close();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

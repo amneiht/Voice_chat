@@ -26,7 +26,7 @@ import application.manhinh.group.ChangeName;
 import application.manhinh.user.Info;
 import application.manhinh.voice.Talk;
 import dccan.remote.Client;
-import dccan.remote.Remote;
+import dccan.remote.NoToken;
 import dccan.suport.CheckImage;
 import dccan.suport.Comment;
 import dccan.suport.FileVsByte;
@@ -72,7 +72,7 @@ import javafx.util.Duration;
 
 public class Chat implements Initializable {
 	long odate = -1, ndate = -1;
-	Remote rmi = Client.getRmi();
+	NoToken rmi = Client.getRmi();
 	static final boolean lold = false;
 	static final boolean lnew = true;
 	EventHandler<Event> enter, exit;
