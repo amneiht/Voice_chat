@@ -21,7 +21,6 @@ public class MyApplication extends Application {
 			fxmlLoader.setController(new Login());
 			Parent root = fxmlLoader.load(getClass().getResource(LinkScense.login).openStream());
 			Scene sen = new Scene(root);
-			sen.getStylesheets().add("/application/manhinh/boder.css");
 			primaryStage.setTitle("Chat App");
 			primaryStage.setScene(sen);
 			primaryStage.show();

@@ -10,12 +10,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import app.dccan.voice.Record;
 import app.dccan.voice.RtpSystem;
 import dccan.remote.Client;
 import dccan.remote.NoToken;
 import dccan.suport.FileVsByte;
 import dccan.suport.Friend;
 import dccan.suport.GetList;
+import dccan.suport.Member;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.collections.ObservableList;
@@ -78,9 +80,9 @@ public class Talk implements Initializable {
 			}));
 			get.setCycleCount(Timeline.INDEFINITE);
 			get.play();
-			
+
 			RtpSystem.Connect(id);
-			
+
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
@@ -91,7 +93,12 @@ public class Talk implements Initializable {
 		try {
 			String lls = rmi.chatMember(id);
 			if (lls != null) {
-				List<String> lnew = GetList.listString(lls);
+				// List<String> lnew = GetList.listString(lls);
+				List<Member> input = Record.getMemList(id);
+				List<String> lnew = new LinkedList<String>();
+				for (Member d : input) {
+					lnew.add(d.getUser());
+				}
 				ObservableList<Node> text = fp.getChildren();
 				List<String> oldList = getNoList(user, lnew);
 				for (String p : oldList) {

@@ -17,6 +17,7 @@
 								<MenuItem mnemonicParsing="false" text="Close" />
 								<MenuItem mnemonicParsing="false" onAction="#showInfo" text="Thông tin" />
 								<MenuItem mnemonicParsing="false" onAction="#newInfo" text="chinh sua" />
+                        <MenuItem mnemonicParsing="false" onAction="#openLogout" text="Đăng Xuất" />
 							</items>
 						</Menu>
 						<Menu mnemonicParsing="false" text="%group">
@@ -69,9 +70,6 @@
 			</center>
 			<left>
 				<BorderPane prefHeight="542.0" prefWidth="125.0" BorderPane.alignment="CENTER">
-					<top>
-						<TextField fx:id="vilgax" BorderPane.alignment="CENTER" />
-					</top>
 					<center>
 						<ScrollPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                      <content>
@@ -79,6 +77,9 @@
                      </content>
 						</ScrollPane>
 					</center>
+               <top>
+                  <Label fx:id="vilgax" text="Label" BorderPane.alignment="CENTER" />
+               </top>
 				</BorderPane>
 			</left>
 			<right>

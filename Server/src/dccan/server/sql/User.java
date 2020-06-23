@@ -179,15 +179,16 @@ public class User {
 		return res;
 	}
 
-	public static String getLimitName(String name) {
+	public static String getLimitName(String name, String user) {
 		String res = null;
 		Connection con = Info.getCon();
-		String sql = "select  ten from thongtin where ten like ? limit 10";
+		String sql = "select  ten from thongtin where ten like ? and ten not like ? limit 10";
 
 		try {
 			PreparedStatement ps = con.prepareStatement(sql);
 			name = name + "%";
 			ps.setString(1, name);
+			ps.setString(2, user);
 			// System.out.println(ps.toString());
 			ResultSet rs = ps.executeQuery();
 			List<String> lp = new ResultToList<String>(String.class).getListFromResult(rs, "ten");

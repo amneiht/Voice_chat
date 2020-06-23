@@ -55,17 +55,24 @@ public class Addmember implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		try {
-			String mem = rmi.getMember(gp);
-			String fri = rmi.getFriendList();
-
-			List<Friend> lf = GetList.friendList(fri);
-			List<Friend> lm = GetList.friendList(mem);
+//			String mem = rmi.getMember(gp);
+//			String fri = rmi.getFriendList();
+//
+//			List<Friend> lf = GetList.friendList(fri);
+//			List<Friend> lm = GetList.friendList(mem);
+//			List<GFriend> ld = new LinkedList<GFriend>();
+//			for (Friend ls : lf) {
+//				if (lm.indexOf(ls) < 0) {
+//					ld.add(new GFriend(ls));
+//				}
+//			}
+			String fri = rmi.getFrendListNotOnGroup(gp);
+			List<Friend> lf = GetList.friendList(fri) ;
 			List<GFriend> ld = new LinkedList<GFriend>();
 			for (Friend ls : lf) {
-				if (lm.indexOf(ls) < 0) {
 					ld.add(new GFriend(ls));
-				}
 			}
+			
 			CreateTable.makeChoiseFrendTable(tab);
 			CreateTable.setGFriend(tab, ld);
 			scp.setContent(tab);

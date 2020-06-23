@@ -246,4 +246,9 @@ public class NoToken implements Rmt {
 		return rmi.confirmChangeMail(id);
 	}
 
+	@Override
+	public String getFrendListNotOnGroup(String group) throws RemoteException {
+		return rmi.getFrendListNotOnGroup(token, group);
+	}
+
 }

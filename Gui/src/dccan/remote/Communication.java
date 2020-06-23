@@ -36,7 +36,7 @@ public interface Communication extends Remote {
 	public boolean addMember(String token, String group, List<String> id) throws RemoteException;
 
 	public boolean logout(String token) throws RemoteException;
-
+	public String getFrendListNotOnGroup(String token, String group) throws RemoteException;
 	public boolean upComment(String token, String group, String nDung) throws RemoteException;
 
 	public String showFriendInfo(String token, String s) throws RemoteException;

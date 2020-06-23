@@ -133,7 +133,13 @@ public class RemoteObj implements Communication {
 			return null;
 		}
 	}
-
+	public String getFrendListNotOnGroup(String token, String group) throws RemoteException
+	{
+		String user = ListUser2.getUserByToken(token);
+		if (user == null)
+			return null ;
+		return Groups.getFrendListNotOnGroup(token, group);
+	}
 	@Override
 	public boolean upload(String token, String name, byte[] data, String group) throws RemoteException {
 		String user = ListUser2.getUserByToken(token);
@@ -342,7 +348,7 @@ public class RemoteObj implements Communication {
 		String user = ListUser2.getUserByToken(token);
 		if (user == null)
 			return null;
-		return User.getLimitName(name);
+		return User.getLimitName(name,user);
 
 	}
 

@@ -9,7 +9,7 @@ public interface Communication extends Remote {
 
 	public void register(String user, String pass, String hoten, String email) throws RemoteException;
 
-	public boolean confirmRegister(String au) throws RemoteException ;
+	public boolean confirmRegister(String au) throws RemoteException;
 
 	public String getMember(String token, String group) throws RemoteException;
 
@@ -30,6 +30,8 @@ public interface Communication extends Remote {
 	public boolean deleteFriend(String token, List<String> mem) throws RemoteException;
 
 	public boolean createGroup(String token, String name, List<String> member) throws RemoteException;
+
+	public String getFrendListNotOnGroup(String token, String group) throws RemoteException;
 
 	public boolean addMember(String token, String group, String id) throws RemoteException;
 

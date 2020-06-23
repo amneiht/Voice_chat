@@ -95,7 +95,7 @@ public class Chat implements Initializable {
 	private Button call;
 
 	@FXML
-	private TextField vilgax;
+	private Label vilgax;
 
 	@FXML
 	private ListView<Node> listGroup;
@@ -141,7 +141,7 @@ public class Chat implements Initializable {
 		Parent root;
 		try {
 			fxmlLoader.setController(new RqFriend());
-			//root = fxmlLoader.load(getClass().getResource(LinkScense.show).openStream());
+			// root = fxmlLoader.load(getClass().getResource(LinkScense.show).openStream());
 			root = fxmlLoader.load(getClass().getResource(LinkScense.show).openStream());
 			Scene sen = new Scene(root);
 			Stage pr = new Stage();
@@ -149,6 +149,24 @@ public class Chat implements Initializable {
 			pr.setTitle("Chon ban");
 			pr.show();
 		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@FXML
+	private void openLogout() {
+		try {
+			rmi.logout();
+			Stage primaryStage = (Stage) (ap.getScene().getWindow());
+			FXMLLoader fxmlLoader = new FXMLLoader();
+			fxmlLoader.setResources(ResourceBundle.getBundle("app.lang.vn"));
+			fxmlLoader.setController(new Login());
+			Parent root = fxmlLoader.load(getClass().getResource(LinkScense.login).openStream());
+			Scene sen = new Scene(root);
+			primaryStage.setTitle("Chat App");
+			primaryStage.setScene(sen);
+			primaryStage.show();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -449,7 +467,7 @@ public class Chat implements Initializable {
 						Label bt = new Label(p.getTenNhom());
 						bt.setOnMouseClicked(e -> {
 							if (e.getButton() == MouseButton.PRIMARY)
-								setGroup(p.getIdNhom());
+								setGroup(p.getIdNhom(), p.getTenNhom());
 							else if (e.getButton() == MouseButton.SECONDARY) {
 								OutPopup.show(bt, id);
 							}
@@ -457,15 +475,13 @@ public class Chat implements Initializable {
 						listGroup.getItems().add(bt);
 					}
 					if (id == null) {
-						if (lg.size() > 0)
-							setGroup(lg.get(0).getIdNhom());
+						if (lg.size() > 0) {
+							setGroup(lg.get(0).getIdNhom(), lg.get(0).getTenNhom());
+						}
 					} else {
 						int h = test.indexOf(id);
 						if (h < 0)
-							setGroup(lg.get(0).getIdNhom());
-						else {
-							setGroup(id);
-						}
+							setGroup(lg.get(0).getIdNhom(), lg.get(0).getTenNhom());
 					}
 				}
 			}
@@ -603,8 +619,8 @@ public class Chat implements Initializable {
 		Parent root;
 		try {
 			String lp = rmi.getInfo();
-			List<Friend> ls = GetList.friendList(lp);
-			fxmlLoader.setController(new Info(ls.get(0)));
+			Friend ls = GetList.toFriend(lp);
+			fxmlLoader.setController(new Info(ls));
 			root = fxmlLoader.load(getClass().getResource(LinkScense.info).openStream());
 			Scene sen = new Scene(root);
 			Stage pr = new Stage();
@@ -762,7 +778,7 @@ public class Chat implements Initializable {
 		}
 	}
 
-	private void setGroup(String gp) {
+	private void setGroup(String gp, String ten) {
 
 		id = gp;
 		try {
@@ -770,7 +786,7 @@ public class Chat implements Initializable {
 			ObservableList<Node> ls = khungChat.getChildren();
 			ls.clear();
 			String cmt = rmi.getCommentList(id, -1, lold);
-
+			vilgax.setText("Nhóm:" + ten);
 			if (cmt != null && cmt.trim().length() > 0) {
 				List<Comment> cm = GetList.cmts(cmt);
 				if (cm.size() > 0) {
@@ -797,10 +813,10 @@ public class Chat implements Initializable {
 			e.printStackTrace();
 		}
 	}
+
 	@FXML
-	private void logOut()
-	{
-		Stage pr =(Stage) (ap.getScene().getWindow());
+	private void logOut() {
+		Stage pr = (Stage) (ap.getScene().getWindow());
 		FXMLLoader fxmlLoader = new FXMLLoader();
 		fxmlLoader.setResources(ResourceBundle.getBundle("app.lang.vn"));
 		fxmlLoader.setController(new Login());
@@ -814,12 +830,12 @@ public class Chat implements Initializable {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 	}
+
 	@FXML
-	private void  openChangeGroupName()
-	{
-	
+	private void openChangeGroupName() {
+
 		FXMLLoader fxmlLoader = new FXMLLoader();
 		// fxmlLoader.setResources(ResourceBundle.getBundle("app.lang.vn"));
 		Parent root;
@@ -835,9 +851,9 @@ public class Chat implements Initializable {
 			e.printStackTrace();
 		}
 	}
+
 	@FXML
-	private void openAddMember()
-	{
+	private void openAddMember() {
 		FXMLLoader fxmlLoader = new FXMLLoader();
 		// fxmlLoader.setResources(ResourceBundle.getBundle("app.lang.vn"));
 		Parent root;
@@ -853,6 +869,7 @@ public class Chat implements Initializable {
 			e.printStackTrace();
 		}
 	}
+
 	@FXML
 	private void checkEnter(KeyEvent e) {
 		if (e.getCode() == KeyCode.ENTER) {

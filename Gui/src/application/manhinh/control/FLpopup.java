@@ -60,7 +60,7 @@ public class FLpopup {
 		try {
 			
 			fxmlLoader.setController(new Info(inf));
-			root = fxmlLoader.load(FLpopup.class.getResource(LinkScense.show).openStream());
+			root = fxmlLoader.load(FLpopup.class.getResource(LinkScense.info).openStream());
 			Scene sen = new Scene(root);
 			Stage pr = new Stage();
 			pr.setScene(sen);
