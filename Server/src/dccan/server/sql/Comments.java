@@ -4,9 +4,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.google.gson.Gson;
 
+import dccan.server.sercu.AES;
 import dccan.server.sql.config.Info;
 import dccan.suport.Comment;
 
@@ -30,24 +32,31 @@ public class Comments {
 		String res = "false";
 		Connection con = Info.getCon();
 		try {
-
 			Long tm = System.currentTimeMillis();
 			PreparedStatement ps = con.prepareStatement(upFilesql);
 			ps.setString(1, idnhan);
 			ps.setString(2, idGui);
-			ps.setString(3, noiDung);
+			ps.setString(3, StringEnCrypt(idnhan, noiDung));
 			ps.setLong(4, tm);
 			ps.setString(5, idFile);
 			ps.executeUpdate();
 			ps.close();
-			// con.close();
 			res = "ok";
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 		}
 		Info.give(con);
 		return res;
+	}
+
+	public static void StringDeCrypt(String group, List<Comment> ap) {
+		for (Comment cmt : ap) {
+			cmt.setNoiDung(AES.deCrypt(cmt.getNoiDung()));
+		}
+	}
+
+	public static String StringEnCrypt(String group, String noiDung) {
+		return AES.enCrypt(noiDung);
 	}
 
 	/**
@@ -69,7 +78,7 @@ public class Comments {
 			long time = getTime();
 			ps.setString(1, idnhan);
 			ps.setString(2, idGui);
-			ps.setString(3, noiDung);
+			ps.setString(3, StringEnCrypt(idnhan, noiDung));
 			ps.setLong(4, time);
 			ps.executeUpdate();
 			ps.close();
@@ -77,7 +86,6 @@ public class Comments {
 			res = "ok";
 
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 		}
 		Info.give(con);
@@ -103,17 +111,16 @@ public class Comments {
 		Connection con = Info.getCon();
 		String gson = null;
 		try {
-
 			PreparedStatement ps = con.prepareStatement(getSql);
 			ps.setString(1, id);
 			ps.setLong(2, time);
 			ResultSet rs = ps.executeQuery();
 			ArrayList<Comment> ap = new ResultToList<Comment>(Comment.class).progess(rs);
+			StringDeCrypt(id, ap);
 			gson = new Gson().toJson(ap);
 			rs.close();
 			ps.close();
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 		}
 		Info.give(con);
@@ -141,6 +148,7 @@ public class Comments {
 			ps.setLong(2, time);
 			ResultSet rs = ps.executeQuery();
 			ArrayList<Comment> ap = new ResultToList<Comment>(Comment.class).progess(rs);
+			StringDeCrypt(id, ap);
 			String gson = new Gson().toJson(ap);
 			rs.close();
 			ps.close();
@@ -149,7 +157,6 @@ public class Comments {
 			Info.give(con);
 			return gson;
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 		}
 		Info.give(con);
@@ -170,7 +177,6 @@ public class Comments {
 			res = true;
 
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 		}
 		Info.give(con);

@@ -21,8 +21,8 @@ public class NoToken implements Rmt {
 	}
 
 	@Override
-	public void register(String user, String pass, String hoten, String email) throws RemoteException {
-		rmi.register(user, pass, hoten, email);
+	public boolean register(String user, String pass, String hoten, String email) throws RemoteException {
+		return rmi.register(user, pass, hoten, email);
 
 	}
 

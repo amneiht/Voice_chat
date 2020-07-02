@@ -6,7 +6,8 @@ import net.packet.io.PWrite;
 public class Join extends RctpSample {
 	byte[] ps;
 	int port;
-	String key, user;
+	byte[] key ;
+	String user;
 
 	public Join(String g, int pt, String key, String user) {
 		port = pt;
@@ -14,7 +15,7 @@ public class Join extends RctpSample {
 		ntp = System.currentTimeMillis();
 		type = 1000;
 		length = 16 + ps.length;
-		this.key = key;
+		this.key = key.getBytes();
 		this.user = user;
 	}
 

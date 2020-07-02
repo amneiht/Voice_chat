@@ -23,7 +23,7 @@ public class KeepLive implements Runnable {
 			else if (type == 2000) {
 				byte[] data = new byte[dp.getLength()];
 				copyData(data, dp.getData(), dp.getLength());
-				data = Convert.encrypt(data, RtpSystem.key);
+				data = Convert.encrypt(data, RtpSystem.key.getBytes());
 				long group = PRead.getLong(data, 6, 4);
 				long id = PRead.getLong(data, 10, 4);
 				Live lv = new Live(id, group);
@@ -31,7 +31,7 @@ public class KeepLive implements Runnable {
 				dp = new DatagramPacket(res, res.length, RtpSystem.inet, RtpSystem.rctport);
 				new Thread(new Record(id, group)).start();
 				new Thread(new Sound(RtpSystem.key)).start();
-				while (RtpSystem.run) {
+				while (RtpSystem.isRun()) {
 					cls.send(dp);
 					try {
 						Thread.sleep(2000);
@@ -40,7 +40,7 @@ public class KeepLive implements Runnable {
 						e.printStackTrace();
 					}
 				}
-
+				System.out.println("end keep live");
 				Bye bt = new Bye(id, group);
 				byte[] bby = bt.toPacket();
 				dp = new DatagramPacket(bby, bby.length, RtpSystem.inet, RtpSystem.rctport);

@@ -11,16 +11,31 @@ import dccan.suport.GetList;
 import net.packet.rctp.Join;
 
 public class RtpSystem {
-	public static boolean run = true;
-	public static boolean mute = false;
+	static Object lock = new Object();
+	private static boolean run = true;
+	private static boolean mute = false;
+
+	public static boolean isMute() {
+		return mute;
+	}
+
+	public static boolean isRun() {
+		synchronized (lock) {
+			return run;
+		}
+	}
+
 	public static DatagramSocket rctp = null;
 	public static InetAddress inet;
 	static int port, rctport = 8890, rtport = 8889;
 	static String key;
 
 	public static void end() {
-		run = false;
-		mute = true;
+		synchronized (lock) {
+			run = false;
+			mute = true;
+		}
+
 	}
 
 	public static void mute() {

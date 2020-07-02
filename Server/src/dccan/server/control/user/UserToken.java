@@ -12,22 +12,27 @@ import dccan.server.sql.User;
 public class UserToken {
 	public static Map<String, UserInfo> op = new HashMap<String, UserInfo>();
 	public static Map<String, String> mp2 = new HashMap<String, String>();
-	public static String ts ;
+	public static String ts;
+
 	public static void main(String[] args) {
 		addNew("thien ma", "1", "pikachu", "dccntd@gmail.com");
 		System.out.println(ts);
 		confirm(ts);
 	}
-	public static void addNew(String ten, String pass, String hoten, String email) {
+
+	public static boolean addNew(String ten, String pass, String hoten, String email) {
 		if (!check(ten))
-			return;
+			return false;
+		if (User.checkUser(ten))
+			return false;
 		String token = RandomStringUtils.randomNumeric(6);
 		System.out.println(token);
 		SendEmail.sendRegiterConFirm(email, token);
 		op.put(token, new UserInfo(ten, pass, hoten, email));
 		mp2.put(ten, token);
-
+		return true;
 	}
+
 	public static String confirm(String lp) {
 		UserInfo up = getUserByToken(lp);
 		if (up == null)

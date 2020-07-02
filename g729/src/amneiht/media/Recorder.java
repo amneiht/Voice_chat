@@ -24,16 +24,6 @@ public class Recorder implements Closeable {
 		System.out.println(microphone.getBufferSize());
 
 	}
-
-	public static void main(String[] args) {
-		try {
-			Recorder rd = new Recorder(NetAudioFormat.getG729AudioFormat());
-		} catch (LineUnavailableException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
 	/**
 	 * ghi d giay thoi gian
 	 * 

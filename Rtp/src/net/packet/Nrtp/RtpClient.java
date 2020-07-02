@@ -15,7 +15,7 @@ public class RtpClient implements Closeable{
 	DatagramSocket client;
 	InetAddress inet;
 	int sq = 1234;
-	String key;
+	byte[] key;
 
 	// type :0 ; ntp : 2 ; group 6 ,id :10 , data :14
 	public int getClientPort() {
@@ -26,7 +26,7 @@ public class RtpClient implements Closeable{
 		try {
 			inet = InetAddress.getByName(host);
 			client = new DatagramSocket();
-			this.key = key;
+			this.key = key.getBytes();
 			port = ports;
 			createHeader(group, id);
 		} catch (Exception e) {
@@ -38,7 +38,7 @@ public class RtpClient implements Closeable{
 		try {
 			inet = it;
 			client = new DatagramSocket();
-			this.key = key;
+			this.key = key.getBytes();
 			port = ports;
 			createHeader(group, id);
 		} catch (Exception e) {

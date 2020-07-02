@@ -73,8 +73,8 @@ public class UdpRead implements Runnable {
 				}
 				if (nBytesRead >= 0) {
 					res = abData.clone();
-					res = en.process(res);
-					res= dec.process(res);
+//					res = en.process(res);
+//					res= dec.process(res);
 					lp.add(res);
 					// Thread.sleep(10);
 				}

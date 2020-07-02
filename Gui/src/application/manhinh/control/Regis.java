@@ -4,6 +4,7 @@ import application.manhinh.LinkScense;
 import dccan.remote.Client;
 import dccan.remote.NoToken;
 import dccan.suport.Mail;
+import dccan.suport.ShowAlert;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -42,10 +43,11 @@ public class Regis {
 	void send(ActionEvent event) {
 		note.setText("");
 		String ur = user.getText().trim();
-//		if (ur.length() < 8) {
-//			note.setText("T\u00EAn \u0111\u0103ng nh\u1EADp ph\u1EA3i l\u1EDBn h\u01A1n 8");
-//			return;
-//		}
+		// if (ur.length() < 8) {
+		// note.setText("T\u00EAn \u0111\u0103ng nh\u1EADp ph\u1EA3i l\u1EDBn h\u01A1n
+		// 8");
+		// return;
+		// }
 		String em = email.getText().trim();
 		if (em.length() == 0) {
 			note.setText("Email kh\u00F4ng \u0111\u01B0\u1EE3c tr\u1ED1ng");
@@ -61,10 +63,10 @@ public class Regis {
 			return;
 		}
 		String mk = pass.getText().trim();
-//		if (mk.length() < 8) {
-//			note.setText("M\u1EADt kh\u1EA9u ph\u1EA3i l\u1EDBn h\u01A1n 8 ");
-//			return;
-//		}
+		// if (mk.length() < 8) {
+		// note.setText("M\u1EADt kh\u1EA9u ph\u1EA3i l\u1EDBn h\u01A1n 8 ");
+		// return;
+		// }
 		String lp = epass.getText().trim();
 		if (!lp.equals(mk)) {
 			note.setText("M\u1EADt kh\u1EA9u kh\u00F4ng kh\u1EDBp");
@@ -73,7 +75,10 @@ public class Regis {
 
 		NoToken rmi = Client.getRmi();
 		try {
-			rmi.register(ur, mk, nd, em);
+			if (!rmi.register(ur, mk, nd, em)) {
+				ShowAlert.pr("Dang ki that bai");
+				return;
+			}
 			Stage primaryStage = (Stage) ap.getScene().getWindow();
 			FXMLLoader fxmlLoader = new FXMLLoader();
 			fxmlLoader.setController(new ConfirmRegis());

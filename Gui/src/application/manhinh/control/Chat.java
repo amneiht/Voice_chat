@@ -11,6 +11,7 @@ import java.util.ResourceBundle;
 
 import javax.swing.JTextField;
 
+import app.dccan.voice.RtpSystem;
 import application.autofill.Popup;
 import application.manhinh.LinkScense;
 import application.manhinh.friend.AddF;
@@ -61,6 +62,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -96,7 +98,8 @@ public class Chat implements Initializable {
 
 	@FXML
 	private Label vilgax;
-
+	@FXML
+	private BorderPane amneiht;
 	@FXML
 	private ListView<Node> listGroup;
 	@FXML
@@ -214,11 +217,15 @@ public class Chat implements Initializable {
 		// fxmlLoader.setResources(ResourceBundle.getBundle("app.lang.vn"));
 		Parent root;
 		try {
+			// RtpSystem.end();
 			fxmlLoader.setController(new Talk(id));
 			root = fxmlLoader.load(getClass().getResource(LinkScense.talk).openStream());
 			Scene sen = new Scene(root);
 			Stage pr = new Stage();
 			pr.setScene(sen);
+			pr.setOnCloseRequest(e -> {
+				RtpSystem.end();
+			});
 			pr.setTitle("Delete member");
 			pr.show();
 		} catch (IOException e) {
@@ -386,7 +393,7 @@ public class Chat implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		// TODO
+
 		@SuppressWarnings("unused")
 		JTextField textp = new JTextField();
 
@@ -442,11 +449,14 @@ public class Chat implements Initializable {
 				newComment();
 			}
 		}));
+		admin.setMinSize(0, 0);
 		get.setCycleCount(Timeline.INDEFINITE);
 		get.play();
 		Timeline grp = new Timeline(new KeyFrame(Duration.millis(1500), new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
+				// TODO
 				getGroupList();
+				// System.out.println("sss");
 			}
 		}));
 		grp.setCycleCount(Timeline.INDEFINITE);
@@ -458,9 +468,12 @@ public class Chat implements Initializable {
 			String group = rmi.getGroup();
 			if (group != null) {
 				if (group != infoG) {
+					
 					infoG = group;
 					listGroup.getItems().clear();
 					List<Group> lg = GetList.groups(group);
+					//System.out.println(c);
+					amneiht.setVisible(lg.size()>0);
 					List<String> test = new LinkedList<String>();
 					for (Group p : lg) {
 						test.add(p.getIdNhom());
@@ -474,6 +487,8 @@ public class Chat implements Initializable {
 						});
 						listGroup.getItems().add(bt);
 					}
+					if (lg.size() == 0)
+						return ;
 					if (id == null) {
 						if (lg.size() > 0) {
 							setGroup(lg.get(0).getIdNhom(), lg.get(0).getTenNhom());
@@ -481,9 +496,16 @@ public class Chat implements Initializable {
 					} else {
 						int h = test.indexOf(id);
 						if (h < 0)
-							setGroup(lg.get(0).getIdNhom(), lg.get(0).getTenNhom());
+							h = 0;
+						setGroup(lg.get(h).getIdNhom(), lg.get(h).getTenNhom());
+
 					}
 				}
+			}
+			else
+			{
+				amneiht.setVisible(false);
+				
 			}
 
 		} catch (RemoteException e) {
@@ -782,6 +804,7 @@ public class Chat implements Initializable {
 
 		id = gp;
 		try {
+			// TODO
 			refreshGroup(id);
 			ObservableList<Node> ls = khungChat.getChildren();
 			ls.clear();

@@ -8,9 +8,8 @@ import java.io.ObjectOutputStream;
 
 public class Convert {
 
-	public static byte[] encrypt(byte[] des, String kes) {
+	public static byte[] encrypt(byte[] des, byte[] key) {
 		int lg = des.length;
-		byte[] key = kes.getBytes();
 		int route = key.length;
 		byte[] res = new byte[lg];
 		for (int i = 0; i < lg; i++) {

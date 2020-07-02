@@ -7,8 +7,6 @@ import java.util.LinkedList;
 
 import org.mobicents.media.server.impl.dsp.audio.g729.Decoder;
 
-import amneiht.media.NetAudioFormat;
-import amneiht.media.PlayMedia;
 import amneiht.media.buffer.Pack;
 import amneiht.media.buffer.StackList;
 import net.help.Convert;
@@ -16,12 +14,12 @@ import net.packet.io.PRead;
 
 public class Sound implements Runnable {
 
-	private String key;
+	private byte[] key;
 
 	LinkedList<byte[]> lp = new LinkedList<byte[]>();
 
 	public Sound(String key) {
-		this.key = key;
+		this.key = key.getBytes();
 	}
 
 	class Loa implements Runnable {
@@ -31,9 +29,9 @@ public class Sound implements Runnable {
 			try {
 				Decoder dec = new Decoder();
 				StackList sl = new StackList();
-//				PlayMedia pm = new PlayMedia(NetAudioFormat.getG729AudioFormat());
 				new Thread(sl).start();
-				while (RtpSystem.run) {
+				
+				while (RtpSystem.isRun()) {
 					byte data[] = null;
 					synchronized (lp) {
 						if (!lp.isEmpty())
@@ -46,12 +44,12 @@ public class Sound implements Runnable {
 						sound = Convert.encrypt(sound, key);
 						sound = dec.process(sound);
 						sl.add(id, new Pack(time, sound));
-					}else
-					{
+					} else {
 						Thread.sleep(9);
 					}
 				}
 				sl.close();
+				System.out.println("end sound");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -65,14 +63,21 @@ public class Sound implements Runnable {
 		new Thread(new Loa()).start();
 		try {
 			DatagramPacket dp = new DatagramPacket(new byte[30], 30);
-			while (RtpSystem.run) {
-				ds.receive(dp);
-				byte[] res = dp.getData().clone();
-				synchronized (lp) {
-					lp.addLast(res);
+			ds.setSoTimeout(1000);
+			while (RtpSystem.isRun()) {
+				byte[] res = null;
+				try {
+					ds.receive(dp);
+					res = dp.getData().clone();
+					synchronized (lp) {
+						lp.addLast(res);
+					}
+				} catch (Exception e) {
+					System.out.println("time out");
 				}
 
 			}
+			System.out.println("end sound recive");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

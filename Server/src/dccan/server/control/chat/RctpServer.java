@@ -80,7 +80,7 @@ public class RctpServer implements Runnable {
 								sendid(fg);
 								break;
 							}
-							byte[] en = Convert.encrypt(PRead.getByte(res, length, 8), rm.getGroupKey(group));
+							byte[] en = Convert.encrypt(PRead.getByte(res, length, 8), rm.getGroupKey(group).getBytes());
 
 							String ck = rm.checkUserKey(gid, en);
 							System.out.println("user ket noi" + ck);
@@ -133,7 +133,7 @@ public class RctpServer implements Runnable {
 			PWrite._32bitToArray(res, System.currentTimeMillis(), 2);
 			PWrite._32bitToArray(res, gp, 6);
 			PWrite._32bitToArray(res, id, 10);
-			byte[] dta = Convert.encrypt(res, key);
+			byte[] dta = Convert.encrypt(res, key.getBytes());
 			PWrite._16bitToArray(dta, 2000, 0);
 			DatagramPacket dp = new DatagramPacket(dta, dta.length, fg.inet, fg.port);
 			try {

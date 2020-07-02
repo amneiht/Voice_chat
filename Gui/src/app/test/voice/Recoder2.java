@@ -14,9 +14,6 @@ import javax.sound.sampled.AudioSystem;
 
 import org.mobicents.media.server.impl.dsp.audio.g729.Encoder;
 
-import amneiht.media.NetAudioFormat;
-import amneiht.media.PlayMedia;
-import app.dccan.voice.RtpSystem;
 import dccan.remote.Client;
 import dccan.suport.GetList;
 import dccan.suport.Member;
@@ -44,7 +41,7 @@ public class Recoder2 implements Runnable {
 				socket = new DatagramSocket();
 				SendRtp pack = new SendRtp(gp, id, GetVoice.key);
 				long tm2, tm = System.currentTimeMillis() ;
-				while (RtpSystem.run) {
+				while (GetVoice.run) {
 					byte[] dat = null;
 					synchronized (lp) {
 						if (!lp.isEmpty())
@@ -124,7 +121,7 @@ public class Recoder2 implements Runnable {
 				e.printStackTrace();
 				System.exit(1);
 			}
-			PlayMedia pm = new PlayMedia(NetAudioFormat.getG729AudioFormat());
+		
 			while (true) {
 				audioStream = AudioSystem.getAudioInputStream(soundFile);
 				af = audioStream.getFormat();

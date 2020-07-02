@@ -40,8 +40,8 @@ public class RemoteObj implements Communication {
 	}
 
 	@Override
-	public void register(String user, String pass, String hoten, String email) throws RemoteException {
-		UserToken.addNew(user, pass, hoten, email);
+	public boolean register(String user, String pass, String hoten, String email) throws RemoteException {
+		return UserToken.addNew(user, pass, hoten, email);
 	}
 
 	@Override

@@ -13,7 +13,7 @@ public class Client {
 	static {
 		workPath = new File("").getAbsolutePath();
 		System.out.println("path : "+workPath);
-		Client.init("localhost");
+		//Client.init("localhost");
 
 	}
 

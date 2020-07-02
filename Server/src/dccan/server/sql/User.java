@@ -98,6 +98,24 @@ public class User {
 		}
 	}
 
+	public static boolean checkUser(String user) {
+		Connection con = Info.getCon();
+		boolean res = false;
+		try {
+			String sql = "select matKhau from thongtin where ten = ? ";
+			PreparedStatement ps = con.prepareStatement(sql);
+			ps.setString(1, user);
+			ResultSet rs = ps.executeQuery();
+			rs.beforeFirst();// dich con tro
+			if (rs.next())
+				res = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		Info.give(con);
+		return res;
+	}
+
 	public static boolean changName(String user, String newName) {
 		boolean res = false;
 		Connection con = Info.getCon();

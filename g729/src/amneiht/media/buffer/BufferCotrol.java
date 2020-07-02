@@ -41,20 +41,20 @@ public class BufferCotrol extends Voice {
 
 	public void addList(Pack con) {
 		live = System.currentTimeMillis();
-		// int z = dem * pack;
-		// if (con.sq > pre) {
-		// pre = con.sq;
-		// PWrite.copyArray(con.data, data, z);
-		// dem++;
-		// }
-		// if (dem >= size) {
-		// pm.play(data);
-		// dem = 0;
-		// }
+		int z = dem * pack;
 		if (con.sq > pre) {
 			pre = con.sq;
-			pm.play(con.data);
+			PWrite.copyArray(con.data, data, z);
+			dem++;
 		}
+		if (dem >= size) {
+			pm.play(data);
+			dem = 0;
+		}
+//		if (con.sq > pre) {
+//			pre = con.sq;
+//			pm.play(con.data);
+//		}
 
 	}
 

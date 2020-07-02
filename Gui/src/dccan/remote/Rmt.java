@@ -7,7 +7,7 @@ import java.util.List;
 public interface Rmt extends Remote {
 	public String login(String user, String pass) throws RemoteException;
 
-	public void register(String user, String pass, String hoten, String email) throws RemoteException;
+	public boolean register(String user, String pass, String hoten, String email) throws RemoteException;
 
 	public boolean confirmRegister(String au) throws RemoteException;
 

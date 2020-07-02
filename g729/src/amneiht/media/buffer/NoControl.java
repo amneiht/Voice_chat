@@ -6,7 +6,6 @@ import java.util.LinkedList;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.LineUnavailableException;
 
-import amneiht.media.NetAudioFormat;
 import amneiht.media.PlayMedia;
 
 public class NoControl extends Voice implements Closeable {
@@ -26,17 +25,6 @@ public class NoControl extends Voice implements Closeable {
 		disconnect = siz * time;
 		System.out.println(lose);
 	}
-
-	public static void main(String[] args) {
-		try {
-			new NoControl(NetAudioFormat.getG729AudioFormat(), 160);
-
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
 	int dem = 0;
 	int spl = 500;
 	long disconnect;

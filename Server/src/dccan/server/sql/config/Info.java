@@ -6,6 +6,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 
 public class Info {
+	public static String key = "thien duong ko loi";
+	public static byte[] bkey = key.getBytes();
 	static DbPool dp = new DbPool();
 	public static final String HOST_NAME = "localhost";
 	public static final String DB_NAME = "chat";
@@ -29,13 +31,14 @@ public class Info {
 	}
 
 	// dung trong thuc te
-	public static Connection getCon(){
+	public static Connection getCon() {
 		return dp.getConnection();
 	}
-	public static void give(Connection con)
-	{
+
+	public static void give(Connection con) {
 		dp.give(con);
 	}
+
 	// test hoat dong
 	public static Connection getCon1() {
 		try {

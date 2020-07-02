@@ -5,13 +5,13 @@ import net.packet.io.PWrite;
 
 public class SendRtp {
 	byte[] header = new byte[8];
-	String key;
+	byte[] key;
 	int type = 800;
 
 	// type :0 ; ntp : 2 ; group 6 ,id :10 , data :14
 	public SendRtp(long group, long id, String key) {
 		try {
-			this.key = key;
+			this.key = key.getBytes();
 			createHeader(group, id);
 		} catch (Exception e) {
 			e.printStackTrace();

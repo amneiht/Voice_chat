@@ -67,7 +67,7 @@ public class GetVoice {
 				} else if (type == 2000) {
 					byte[] data = new byte[dp.getLength()];
 					copyData(data, dp.getData(), dp.getLength());
-					data = Convert.encrypt(data, key);
+					data = Convert.encrypt(data, key.getBytes());
 					long id = PRead.getLong(data, 10, 4);
 					long gps = PRead.getLong(data, 6, 4);
 					System.out.println(cls.getLocalPort());

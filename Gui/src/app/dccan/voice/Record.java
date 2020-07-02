@@ -55,7 +55,7 @@ public class Record implements Runnable {
 
 				SendRtp pack = new SendRtp(gp, id, RtpSystem.key);
 
-				while (RtpSystem.run) {
+				while (RtpSystem.isRun()) {
 					byte[] dat = null;
 					synchronized (lp) {
 						if (!lp.isEmpty())
@@ -66,13 +66,20 @@ public class Record implements Runnable {
 						data = pack.send(data);
 						synchronized (clp) {
 							for (Member mp : clp) {
-								DatagramPacket dp = new DatagramPacket(data, data.length, mp.getIna(), mp.getPort());
-								socket.send(dp);
+								if (mp.getId() != id) 
+								{
+									DatagramPacket dp = new DatagramPacket(data, data.length, mp.getIna(),
+											mp.getPort());
+									socket.send(dp);
+								}
 							}
 						}
 
+					} else {
+						Thread.sleep(10);
 					}
 				}
+				System.out.println("end send packet");
 			} catch (Exception e) {
 
 				e.printStackTrace();
@@ -94,15 +101,16 @@ public class Record implements Runnable {
 		try {
 			Recorder rd = new Recorder(NetAudioFormat.getG729AudioFormat());
 			new Thread(new Send()).start();
-			while (RtpSystem.run) {
-				if (!RtpSystem.mute) {
-					byte[] rc = rd.getSound(160);
+			while (RtpSystem.isRun()) {
+				byte[] rc = rd.getSound(160);
+				if (!RtpSystem.isMute()) {
 					synchronized (lp) {
 						lp.addLast(rc);
 					}
 
 				}
 			}
+			System.out.println("end record");
 			rd.close();
 		} catch (Exception e) {
 			e.printStackTrace();

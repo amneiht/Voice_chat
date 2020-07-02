@@ -4,9 +4,14 @@ import java.sql.Timestamp;
 
 public class Comment {
 	private String idNhan, idGui, noiDung, idFile;
-	private long ngayGui ;
+	private long ngayGui;
+
 	public String getIdNhan() {
 		return idNhan;
+	}
+
+	public void setNoiDung(String s) {
+		noiDung = s;
 	}
 
 	public String getIdGui() {

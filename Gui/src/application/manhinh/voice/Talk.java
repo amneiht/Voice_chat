@@ -54,6 +54,7 @@ public class Talk implements Initializable {
 	NoToken rmi;
 	Map<String, ImageView> mp = new HashMap<String, ImageView>();
 	List<String> user = new ArrayList<String>();
+	boolean sound = false;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -80,7 +81,16 @@ public class Talk implements Initializable {
 			}));
 			get.setCycleCount(Timeline.INDEFINITE);
 			get.play();
-
+			mute.setOnAction(e -> {
+				if (sound) {
+					RtpSystem.mute();
+					mute.setText("UnMute");
+				} else {
+					RtpSystem.talk();
+					mute.setText("mute");
+				}
+				sound = !sound;
+			});
 			RtpSystem.Connect(id);
 
 		} catch (RemoteException e) {
