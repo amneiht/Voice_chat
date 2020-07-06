@@ -50,7 +50,7 @@ public class Login implements Initializable {
 				fxmlLoader.setResources(ResourceBundle.getBundle("app.lang.vn"));
 				Parent root = fxmlLoader.load(getClass().getResource(LinkScense.chat).openStream());
 				Scene sen = new Scene(root);
-				sen.getStylesheets().add("/application/manhinh/boder.css");
+				sen.getStylesheets().add(LinkScense.boderCSS);
 				primaryStage.setScene(sen);
 				primaryStage.show();
 

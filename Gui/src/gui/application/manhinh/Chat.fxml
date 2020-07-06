@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane fx:id="ap" prefHeight="571.0" prefWidth="989.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.manhinh.control.Chat">
+	<children>
+		<BorderPane prefHeight="597.0" prefWidth="989.0">
+			<top>
+				<MenuBar BorderPane.alignment="CENTER">
+					<menus>
+						<Menu mnemonicParsing="false" text="User">
+							<items>
+								<MenuItem mnemonicParsing="false" text="Close" />
+								<MenuItem mnemonicParsing="false" onAction="#showInfo" text="Thông tin" />
+								<MenuItem mnemonicParsing="false" onAction="#newInfo" text="chinh sua" />
+								<MenuItem mnemonicParsing="false" onAction="#openLogout" text="Đăng Xuất" />
+							</items>
+						</Menu>
+						<Menu mnemonicParsing="false" text="%group">
+							<items>
+								<MenuItem mnemonicParsing="false" onAction="#onCreateGroup" text="%crtGroup" />
+								<MenuItem mnemonicParsing="false" onAction="#openJoinGroup" text="%jon_group" />
+							</items>
+						</Menu>
+						<Menu mnemonicParsing="false" text="%help">
+							<items>
+								<MenuItem mnemonicParsing="false" text="About" />
+								<Menu mnemonicParsing="false" text="%lang">
+									<items>
+										<MenuItem mnemonicParsing="false" text="vn" />
+										<MenuItem mnemonicParsing="false" text="en" />
+									</items>
+								</Menu>
+							</items>
+						</Menu>
+						<Menu mnemonicParsing="false" text="%friend">
+							<items>
+								<MenuItem mnemonicParsing="false" onAction="#openFriendList" text="%fmanager" />
+								<MenuItem mnemonicParsing="false" onAction="#openAddFriend" text="%fadd" />
+                        <MenuItem mnemonicParsing="false" onAction="#openFriendChat" text="Chat" />
+								<MenuItem mnemonicParsing="false" onAction="#openFriendRq" text="Yêu cầu" />
+							</items>
+						</Menu>
+					</menus>
+				</MenuBar>
+			</top>
+			<center>
+				<BorderPane fx:id="amneiht" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="571.0" prefWidth="989.0" BorderPane.alignment="CENTER">
+					<center>
+						<BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+							<center>
+								<ScrollPane fx:id="schat" fitToHeight="true" fitToWidth="true" onScroll="#getOldComment" BorderPane.alignment="CENTER">
+									<content>
+										<VBox fx:id="khungChat" prefHeight="472.0" prefWidth="708.0" />
+									</content>
+								</ScrollPane>
+							</center>
+							<bottom>
+								<FlowPane prefHeight="26.0" prefWidth="864.0" BorderPane.alignment="CENTER">
+									<children>
+										<Button fx:id="call" mnemonicParsing="false" onAction="#openVoiceCall" text="%call" />
+										<Button mnemonicParsing="false" onAction="#openFile" text="%file" />
+										<TextField fx:id="text" onKeyPressed="#checkEnter" prefHeight="25.0" prefWidth="551.0" />
+										<Button mnemonicParsing="false" onAction="#sendComment" prefHeight="25.0" prefWidth="79.0" text="%send" />
+									</children>
+								</FlowPane>
+							</bottom>
+                     <top>
+								<Label fx:id="vilgax" text="Label" BorderPane.alignment="CENTER" />
+                     </top>
+						</BorderPane>
+					</center>
+					<left>
+						<BorderPane prefHeight="542.0" prefWidth="125.0" BorderPane.alignment="CENTER">
+							<center>
+								<ScrollPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+									<content>
+										<ListView fx:id="listGroup" prefHeight="552.0" prefWidth="130.0" />
+									</content>
+								</ScrollPane>
+							</center>
+						</BorderPane>
+					</left>
+					<right>
+						<BorderPane prefHeight="542.0" prefWidth="145.0" BorderPane.alignment="CENTER">
+							<center>
+								<ScrollPane hbarPolicy="NEVER" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+									<content>
+										<ListView fx:id="member" prefHeight="247.0" prefWidth="142.0" />
+									</content>
+								</ScrollPane>
+							</center>
+							<bottom>
+								<Button mnemonicParsing="false" onAction="#getIdGroup" text="Lấy mã mời" BorderPane.alignment="CENTER" />
+							</bottom>
+							<top>
+								<ScrollPane prefHeight="267.0" prefWidth="145.0" BorderPane.alignment="CENTER">
+									<content>
+										<VBox fx:id="admin" prefHeight="265.0" prefWidth="141.0" spacing="5.0">
+											<children>
+												<Button mnemonicParsing="false" onAction="#showRequestList" prefHeight="25.0" prefWidth="134.0" text="Yêu Cầu" />
+												<Button mnemonicParsing="false" onAction="#openDelAdmin" prefHeight="25.0" prefWidth="135.0" text="Xóa quản trị viên" />
+												<Button mnemonicParsing="false" onAction="#openSetAdmin" prefHeight="25.0" prefWidth="135.0" text="Đặt Quản trị viên" />
+												<Button mnemonicParsing="false" onAction="#openDeleteMember" prefHeight="25.0" prefWidth="135.0" text="Xóa thành viên" />
+												<Button mnemonicParsing="false" onAction="#openAddMember" prefHeight="25.0" prefWidth="133.0" text="Thêm Thành viên" />
+												<Button mnemonicParsing="false" onAction="#openChangeGroupName" prefHeight="25.0" prefWidth="134.0" text="Đổi tên nhóm" />
+												<Button mnemonicParsing="false" onAction="#openDelGroup" prefHeight="25.0" prefWidth="135.0" text="Xóa nhóm" />
+											</children>
+											<opaqueInsets>
+												<Insets />
+											</opaqueInsets>
+											<padding>
+												<Insets top="10.0" />
+											</padding>
+										</VBox>
+									</content>
+								</ScrollPane>
+							</top>
+						</BorderPane>
+					</right>
+				</BorderPane>
+			</center>
+		</BorderPane>
+	</children>
+</AnchorPane>

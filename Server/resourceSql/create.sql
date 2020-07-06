@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: db
--- Generation Time: May 28, 2020 at 02:07 PM
+-- Generation Time: Jul 06, 2020 at 01:19 PM
 -- Server version: 5.7.29
 -- PHP Version: 7.4.3
 
@@ -66,7 +66,8 @@ DELIMITER ;
 
 CREATE TABLE `banBe` (
   `id1` varchar(35) COLLATE utf8_unicode_ci NOT NULL,
-  `id2` varchar(35) COLLATE utf8_unicode_ci NOT NULL
+  `id2` varchar(35) COLLATE utf8_unicode_ci NOT NULL,
+  `idLink` varchar(35) COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -106,7 +107,7 @@ CREATE TABLE `thongtin` (
   `nguoiDung` varchar(70) COLLATE utf8_unicode_ci NOT NULL,
   `email` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `ten` varchar(35) COLLATE utf8_unicode_ci NOT NULL,
-  `matKhau` varchar(500) COLLATE utf8_unicode_ci NOT NULL,
+  `matKhau` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
   `idAnh` varchar(35) COLLATE utf8_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -181,7 +182,7 @@ ALTER TABLE `thongtin`
 -- Indexes for table `tinNhan`
 --
 ALTER TABLE `tinNhan`
-  ADD KEY `idNhan` (`idNhan`);
+  ADD UNIQUE KEY `idNhan` (`idNhan`);
 
 --
 -- Indexes for table `tvNhom`
@@ -207,12 +208,6 @@ ALTER TABLE `yeuCau`
 ALTER TABLE `banBe`
   ADD CONSTRAINT `banBe_ibfk_1` FOREIGN KEY (`id1`) REFERENCES `thongtin` (`ten`),
   ADD CONSTRAINT `banBe_ibfk_2` FOREIGN KEY (`id2`) REFERENCES `thongtin` (`ten`);
-
---
--- Constraints for table `tinNhan`
---
-ALTER TABLE `tinNhan`
-  ADD CONSTRAINT `tinNhan_ibfk_1` FOREIGN KEY (`idNhan`) REFERENCES `nhom` (`idNhom`);
 
 --
 -- Constraints for table `tvNhom`

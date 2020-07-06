@@ -1,9 +1,11 @@
 package application;
 
+import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.ResourceBundle;
 
 import application.manhinh.LinkScense;
+import application.manhinh.control.FriendChat;
 import application.manhinh.control.Login;
 import dccan.remote.Client;
 import javafx.application.Application;
@@ -15,7 +17,7 @@ import javafx.stage.Stage;
 public class MyApplication extends Application {
 
 	// @Override
-	public void start2(Stage primaryStage) {
+	public void start(Stage primaryStage) {
 		try {
 
 			FXMLLoader fxmlLoader = new FXMLLoader();
@@ -32,16 +34,20 @@ public class MyApplication extends Application {
 		}
 	}
 
-	public void start(Stage primaryStage) {
+	public void start1(Stage primaryStage) {
+		FXMLLoader fxmlLoader = new FXMLLoader();
+		// fxmlLoader.setResources(ResourceBundle.getBundle("app.lang.vn"));
+		Parent root;
 		try {
-			FXMLLoader fxmlLoader = new FXMLLoader();
-			fxmlLoader.setResources(ResourceBundle.getBundle("app.lang.vn"));
-			Parent root = fxmlLoader.load(getClass().getResource(LinkScense.chat).openStream());
+			fxmlLoader.setController(new FriendChat());
+			root = fxmlLoader.load(getClass().getResource(LinkScense.Friendchat).openStream());
 			Scene sen = new Scene(root);
-			sen.getStylesheets().add("/application/manhinh/boder.css");
-			primaryStage.setScene(sen);
-			primaryStage.show();
-		} catch (Exception e) {
+			Stage pr = new Stage();
+			sen.getStylesheets().add(LinkScense.boderCSS);
+			pr.setTitle("Chat với bạn bè");
+			pr.setScene(sen);
+			pr.show();
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}

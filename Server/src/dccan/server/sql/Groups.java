@@ -100,6 +100,27 @@ public class Groups {
 		return res;
 	}
 
+	public static boolean checkFriend(String user, String id) {
+		boolean res = false;
+		Connection con = Info.getCon();
+		try {
+			String sql = "select * from banBe where  idLink = ? and ( id1=? or id2=?)";
+			PreparedStatement ps = con.prepareStatement(sql);
+			ps.setString(1, id);
+			ps.setString(2, user);
+			ps.setString(3, user);
+			ResultSet rs = ps.executeQuery();
+			rs.beforeFirst();
+			res = rs.next();
+			rs.close();
+			ps.close();
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		Info.give(con);
+		return res;
+	}
+
 	private static final String addSql1 = "insert into nhom(idNhom,nguoiTao,tenNhom) values(?,?,?) ";
 	private static final String addSql2 = "insert into tvNhom(idNhom,idTV,quyen,idAdd) values(?,?,?,?) ";
 
@@ -260,19 +281,36 @@ public class Groups {
 		Connection con = Info.getCon();
 		String gson = null;
 		try {
-
 			PreparedStatement ps = con.prepareStatement(getFlist);
 			ps.setString(1, id);
 			ps.setString(2, id);
 			ResultSet rs = ps.executeQuery();
-
 			ArrayList<Friend> ap = new ResultToList<Friend>(Friend.class).progess(rs);
 			gson = new Gson().toJson(ap);
 			rs.close();
 			ps.close();
 		} catch (Exception e) {
 			System.err.println(e);
+		}
+		Info.give(con);
+		return gson;
+	}
 
+	public static String getChatFrendList(String id) {
+		Connection con = Info.getCon();
+		String gson = null;
+		try {
+			String getFlist = "SELECT ten tenNhom ,idLink idNhom FROM banBe , thongtin where id1 = ? and id2 = ten UNION SELECT ten, idLink FROM banBe , thongtin where id2 = ? and id1 = ten ";
+			PreparedStatement ps = con.prepareStatement(getFlist);
+			ps.setString(1, id);
+			ps.setString(2, id);
+			ResultSet rs = ps.executeQuery();
+			ArrayList<Group> ap = new ResultToList<Group>(Group.class).progess(rs);
+			gson = new Gson().toJson(ap);
+			rs.close();
+			ps.close();
+		} catch (Exception e) {
+			System.err.println(e);
 		}
 		Info.give(con);
 		return gson;

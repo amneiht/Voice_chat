@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.commons.lang3.RandomStringUtils;
+
 import com.google.gson.Gson;
 
 import dccan.server.sql.config.Info;
@@ -153,7 +155,7 @@ public class Requests {
 	static final String getFlist = "SELECT id2 as ten FROM banBe where id1 = ? UNION SELECT id1 as ten FROM banBe where id2 = ?";
 
 	public static boolean acceptFriend(String user, List<String> member) {
-		String sql = "insert into banBe(id1,id2) values(?,?)";
+		String sql = "insert into banBe(id1,id2,idLink) values(?,?,?)";
 		String dsql = "delete from yeuCau where idNhom = ? and idTv = ?";
 		Connection con = Info.getCon();
 		boolean res = false;
@@ -164,7 +166,8 @@ public class Requests {
 			for (String p : member) {
 				int h = lp.indexOf(p);
 				if (h < 0) {
-					st.setString(2, p);
+					st.setString(2, p);st.setString(3, RandomStringUtils.randomAlphanumeric(30));
+					
 					st.executeUpdate();
 				}
 			}

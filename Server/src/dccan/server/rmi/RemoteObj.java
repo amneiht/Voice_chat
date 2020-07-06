@@ -88,6 +88,14 @@ public class RemoteObj implements Communication {
 		return rs;
 	}
 
+	public String getChatFriendList(String token) throws RemoteException {
+		String user = ListUser2.getUserByToken(token);
+		if (user == null)
+			return null;
+		String rs = Groups.getChatFrendList(user);
+		return rs;
+	}
+
 	@Override
 	public String getCommentList(String token, String group, long date, boolean status) throws RemoteException {
 		String user = ListUser2.getUserByToken(token);
@@ -96,8 +104,8 @@ public class RemoteObj implements Communication {
 		if (date == -1)
 			date = System.currentTimeMillis();
 		if (!Groups.checkMember(group, user)) {
-
-			return null;
+			if (!Groups.checkFriend(user, group))
+				return null;
 		}
 		String res = null;
 		if (status) {
@@ -133,13 +141,14 @@ public class RemoteObj implements Communication {
 			return null;
 		}
 	}
-	public String getFrendListNotOnGroup(String token, String group) throws RemoteException
-	{
+
+	public String getFrendListNotOnGroup(String token, String group) throws RemoteException {
 		String user = ListUser2.getUserByToken(token);
 		if (user == null)
-			return null ;
+			return null;
 		return Groups.getFrendListNotOnGroup(token, group);
 	}
+
 	@Override
 	public boolean upload(String token, String name, byte[] data, String group) throws RemoteException {
 		String user = ListUser2.getUserByToken(token);
@@ -348,7 +357,7 @@ public class RemoteObj implements Communication {
 		String user = ListUser2.getUserByToken(token);
 		if (user == null)
 			return null;
-		return User.getLimitName(name,user);
+		return User.getLimitName(name, user);
 
 	}
 

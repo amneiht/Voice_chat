@@ -251,4 +251,9 @@ public class NoToken implements Rmt {
 		return rmi.getFrendListNotOnGroup(token, group);
 	}
 
+	@Override
+	public String getChatFriendList() throws RemoteException {
+		return rmi.getChatFriendList(token);
+	}
+
 }

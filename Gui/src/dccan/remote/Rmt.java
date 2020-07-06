@@ -17,6 +17,8 @@ public interface Rmt extends Remote {
 
 	public boolean addFriend(String id) throws RemoteException;
 
+	public String getChatFriendList() throws RemoteException;
+
 	public String getFrendListNotOnGroup(String group) throws RemoteException;
 
 	public String getFriendList() throws RemoteException;

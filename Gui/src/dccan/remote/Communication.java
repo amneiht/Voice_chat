@@ -9,13 +9,15 @@ public interface Communication extends Remote {
 
 	public boolean register(String user, String pass, String hoten, String email) throws RemoteException;
 
-	public boolean confirmRegister(String au) throws RemoteException ;
+	public boolean confirmRegister(String au) throws RemoteException;
 
 	public String getMember(String token, String group) throws RemoteException;
 
 	public String getGroup(String token) throws RemoteException;
 
 	public boolean addFriend(String token, String id) throws RemoteException;
+
+	public String getChatFriendList(String token) throws RemoteException;
 
 	public String getFriendList(String token) throws RemoteException;
 
@@ -36,7 +38,9 @@ public interface Communication extends Remote {
 	public boolean addMember(String token, String group, List<String> id) throws RemoteException;
 
 	public boolean logout(String token) throws RemoteException;
+
 	public String getFrendListNotOnGroup(String token, String group) throws RemoteException;
+
 	public boolean upComment(String token, String group, String nDung) throws RemoteException;
 
 	public String showFriendInfo(String token, String s) throws RemoteException;

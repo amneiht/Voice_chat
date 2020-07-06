@@ -75,8 +75,8 @@ import javafx.util.Duration;
 public class Chat implements Initializable {
 	long odate = -1, ndate = -1;
 	NoToken rmi = Client.getRmi();
-	static final boolean lold = false;
-	static final boolean lnew = true;
+	final boolean lold = false;
+	final boolean lnew = true;
 	EventHandler<Event> enter, exit;
 	private String id = null;
 
@@ -467,16 +467,14 @@ public class Chat implements Initializable {
 		try {
 			String group = rmi.getGroup();
 			if (group != null) {
-				if (group != infoG) {
-
+				if (!group.equals(infoG)) {
+					List<Group> lg = GetList.groups(group);
 					infoG = group;
 					listGroup.getItems().clear();
-					List<Group> lg = GetList.groups(group);
-					// System.out.println(c);
 					amneiht.setVisible(lg.size() > 0);
 					List<String> test = new LinkedList<String>();
 					for (Group p : lg) {
-						test.add(p.getIdNhom());
+						test.add(p.getIdNhom().trim());
 						Label bt = new Label(p.getTenNhom());
 						bt.setOnMouseClicked(e -> {
 							if (e.getButton() == MouseButton.PRIMARY)
@@ -494,18 +492,18 @@ public class Chat implements Initializable {
 							setGroup(lg.get(0).getIdNhom(), lg.get(0).getTenNhom());
 						}
 					} else {
-						int h = test.indexOf(id);
+						int h = test.indexOf(id.trim());
 						if (h < 0)
-							h = 0;
-						setGroup(lg.get(h).getIdNhom(), lg.get(h).getTenNhom());
-
+							setGroup(lg.get(0).getIdNhom(), lg.get(0).getTenNhom());
+						else {
+							refreshGroup(id);
+						}
 					}
+				} else {
+					refreshGroup(id);
 				}
-			} else {
-				amneiht.setVisible(false);
 
 			}
-
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
@@ -672,7 +670,7 @@ public class Chat implements Initializable {
 
 	Comment cold = new Comment(lold);
 	Comment cnew = new Comment(lnew);
-	static long time = 5 * 1000;// 5s
+	static long time = 30 * 1000;// 30s
 
 	private void addComment(Comment cp, boolean vt, ObservableList<Node> ls) {
 		int size = 100;
@@ -807,7 +805,6 @@ public class Chat implements Initializable {
 
 		id = gp;
 		try {
-			// TODO
 			refreshGroup(id);
 			ObservableList<Node> ls = khungChat.getChildren();
 			ls.clear();
@@ -838,6 +835,27 @@ public class Chat implements Initializable {
 
 			e.printStackTrace();
 		}
+	}
+
+	@FXML
+	private void openFriendChat() {
+		// TODO
+		FXMLLoader fxmlLoader = new FXMLLoader();
+		// fxmlLoader.setResources(ResourceBundle.getBundle("app.lang.vn"));
+		Parent root;
+		try {
+			fxmlLoader.setController(new FriendChat());
+			root = fxmlLoader.load(getClass().getResource(LinkScense.Friendchat).openStream());
+			Scene sen = new Scene(root);
+			Stage pr = new Stage();
+			sen.getStylesheets().add(LinkScense.boderCSS);
+			pr.setTitle("Chat với bạn bè");
+			pr.setScene(sen);
+			pr.show();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	@FXML

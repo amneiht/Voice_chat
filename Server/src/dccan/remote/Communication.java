@@ -18,6 +18,8 @@ public interface Communication extends Remote {
 	public boolean addFriend(String token, String id) throws RemoteException;
 
 	public String getFriendList(String token) throws RemoteException;
+	
+	public String getChatFriendList(String token) throws RemoteException;
 
 	public String getCommentList(String token, String group, long date, boolean status) throws RemoteException;
 
