@@ -468,12 +468,12 @@ public class Chat implements Initializable {
 			String group = rmi.getGroup();
 			if (group != null) {
 				if (group != infoG) {
-					
+
 					infoG = group;
 					listGroup.getItems().clear();
 					List<Group> lg = GetList.groups(group);
-					//System.out.println(c);
-					amneiht.setVisible(lg.size()>0);
+					// System.out.println(c);
+					amneiht.setVisible(lg.size() > 0);
 					List<String> test = new LinkedList<String>();
 					for (Group p : lg) {
 						test.add(p.getIdNhom());
@@ -488,7 +488,7 @@ public class Chat implements Initializable {
 						listGroup.getItems().add(bt);
 					}
 					if (lg.size() == 0)
-						return ;
+						return;
 					if (id == null) {
 						if (lg.size() > 0) {
 							setGroup(lg.get(0).getIdNhom(), lg.get(0).getTenNhom());
@@ -501,11 +501,9 @@ public class Chat implements Initializable {
 
 					}
 				}
-			}
-			else
-			{
+			} else {
 				amneiht.setVisible(false);
-				
+
 			}
 
 		} catch (RemoteException e) {
@@ -693,9 +691,7 @@ public class Chat implements Initializable {
 			cnew = cp;
 		} else {
 			if (!cp.getIdGui().equals(cold.getIdGui())) {
-
 				ls.add(0, user);
-
 			} else {
 				if (cold.lgetNgayGui() - cp.lgetNgayGui() > time) {
 					ls.add(0, user);
@@ -707,6 +703,10 @@ public class Chat implements Initializable {
 			Text tx = new Text(cp.getNoiDung());
 			tx.getStyleClass().add("cmt");
 			TextFlow tf = new TextFlow(tx);
+			tf.setOnMouseClicked(e -> {
+				if (e.getButton() == MouseButton.SECONDARY)
+					CopyPopup.openPop(e, cp.getNoiDung());
+			});
 			if (vt)
 				ls.add(tf);
 			else
@@ -748,7 +748,10 @@ public class Chat implements Initializable {
 				file.setOnMouseEntered(enter);
 				file.setOnMouseExited(exit);
 				file.setOnMouseClicked(e -> {
-					download(cp.getNoiDung(), cp.getIdFile());
+					if (e.getButton() == MouseButton.SECONDARY)
+						CopyPopup.openPop(file, cp.getNoiDung());
+					else if (e.getButton() == MouseButton.PRIMARY)
+						download(cp.getNoiDung(), cp.getIdFile());
 				});
 				if (vt)
 					ls.add(file);
