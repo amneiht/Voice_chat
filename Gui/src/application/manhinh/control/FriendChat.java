@@ -36,6 +36,7 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -125,7 +126,37 @@ public class FriendChat implements Initializable {
 			text.clear();
 		}
 	}
+	@FXML
+	private void getOldComment(ScrollEvent evt) {
+		try {
+			if (id != null) {
 
+				if (evt.getDeltaY() < 0)
+					return;
+				double d = khungChat.getHeight();
+				ObservableList<Node> ls = khungChat.getChildren();
+				String cmt = rmi.getCommentList(id, odate, lold);
+				if (cmt != null) {
+					List<Comment> lp = GetList.cmts(cmt);
+					for (Comment cp : lp) {
+						addComment(cp, lold, ls);
+					}
+					if (lp.size() > 0) {
+						odate = lp.get(lp.size() - 1).lgetNgayGui();
+						khungChat.applyCss();
+						schat.layout();
+						double sp = 1.0 - d / khungChat.getHeight();
+						schat.setVvalue(sp);
+
+					}
+				}
+
+			}
+		} catch (RemoteException e) {
+
+			e.printStackTrace();
+		}
+	}
 	NoToken rmi;
 
 	@Override
@@ -187,8 +218,9 @@ public class FriendChat implements Initializable {
 			}));
 			grp.setCycleCount(Timeline.INDEFINITE);
 			grp.play();
+			schat.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+			schat.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
 		} catch (Exception e) {
-			// TODO: handle exception
 		}
 	}
 

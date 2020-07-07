@@ -29,8 +29,9 @@ public class Sound implements Runnable {
 			try {
 				Decoder dec = new Decoder();
 				StackList sl = new StackList();
-				new Thread(sl).start();
-				
+				Thread lol =new Thread(sl);
+				lol.start();
+
 				while (RtpSystem.isRun()) {
 					byte data[] = null;
 					synchronized (lp) {
@@ -60,23 +61,38 @@ public class Sound implements Runnable {
 	@Override
 	public void run() {
 		DatagramSocket ds = RtpSystem.rctp;
-		new Thread(new Loa()).start();
+		// new Thread(new Loa()).start();
 		try {
 			DatagramPacket dp = new DatagramPacket(new byte[30], 30);
 			ds.setSoTimeout(1000);
+
+			Decoder dec = new Decoder();
+			StackList sl = new StackList();
+			new Thread(sl).start();
+
 			while (RtpSystem.isRun()) {
-				byte[] res = null;
+				byte[] data;
 				try {
 					ds.receive(dp);
-					res = dp.getData().clone();
-					synchronized (lp) {
-						lp.addLast(res);
+					data = dp.getData().clone();
+					// synchronized (lp) {
+					// lp.addLast(data);
+					// }
+					if (true) {
+						long id = PRead.getLong(data, 10, 4);
+						long time = PRead.getLong(data, 2, 4);
+						byte[] sound = PRead.getByte(data, 14, 10);
+						sound = Convert.encrypt(sound, key);
+						sound = dec.process(sound);
+						sl.add(id, new Pack(time, sound));
+						System.out.println(id);
 					}
 				} catch (Exception e) {
-					System.out.println("time out");
+					//e.printStackTrace();
+					//System.out.println("timeout");
 				}
-
 			}
+			sl.close();
 			System.out.println("end sound recive");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

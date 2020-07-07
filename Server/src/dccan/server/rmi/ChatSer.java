@@ -1,5 +1,6 @@
 package dccan.server.rmi;
 
+import java.io.File;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
@@ -10,12 +11,12 @@ import dccan.server.sql.config.Info;
 public class ChatSer {
 
 	public static void main(String[] args) {
-		String host = "localhost";
+		String host = "192.168.1.100";
 		if (args.length > 0) {
 			host = args[0];
 		}
 		try {
-			// setSettings();
+			//setSettings();
 			new Thread(new RctpServer()).start();
 			// new Thread(new RtpServer()).start();
 			System.setProperty("java.rmi.server.hostname", host);
@@ -25,6 +26,7 @@ public class ChatSer {
 			// Registry registry = LocateRegistry.getRegistry(host, 8888, new
 			// SslRMIClientSocketFactory());
 			System.out.println(Info.CONNECTION_URL);
+			//
 			LocateRegistry.createRegistry(8888);
 			Registry registry = LocateRegistry.getRegistry(host, 8888);
 			UnicastRemoteObject.exportObject(call, 0);
@@ -39,8 +41,8 @@ public class ChatSer {
 	}
 
 	protected static void setSettings() {
-		String path = System.getenv("CHAT");
-		System.out.println("chat:" + path);
+		String path = new File(ChatSer.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getParent();
+		System.out.println("chat: " + path);
 		String pass = "dangcongcan"; // ko duoc tu tien thay doi
 		System.setProperty("javax.net.ssl.debug", "all");
 		System.out.println(path + "/ssl/server/KeyStore.jks");

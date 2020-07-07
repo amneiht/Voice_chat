@@ -7,11 +7,13 @@ import dccan.remote.Client;
 import dccan.remote.NoToken;
 
 public class TestRecv {
-	static String gp = "6oSA7wthxFrYq0wgwwR5YW3WQ8bS9JnS";
+	static String gp = "8zsS84wM0yzhj78Kb0xkGAq0dwSq9oUf";
 	public static void main(String[] args) {
+		Client.init("192.168.1.100");
 		NoToken rmi = Client.getRmi();
+		
 		try {
-			rmi.login("test1", "1");
+			rmi.login("can", "1");
 			RtpSystem.Connect(gp);
 			RtpSystem.mute();
 		} catch (RemoteException e) {

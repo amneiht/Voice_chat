@@ -10,12 +10,6 @@ public class Client {
 	static Registry registry;
 	public static String host = null;
 	public static String workPath;
-	static {
-		workPath = new File("").getAbsolutePath();
-		System.out.println("path : "+workPath);
-		//Client.init("localhost");
-
-	}
 
 	public static void init(String hosts) {
 		try {
@@ -25,6 +19,7 @@ public class Client {
 			host = hosts;
 			registry = LocateRegistry.getRegistry(host, 8888);
 			connect = (Communication) registry.lookup("Hello");
+
 			rmi = new NoToken(connect);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -36,8 +31,12 @@ public class Client {
 		return rmi;
 	}
 
+	public static void main(String[] args) {
+		System.out.println(Client.class.getResource("").getPath());
+	}
+
 	protected static void setSettings() {
-		String path = new File("").getAbsolutePath();
+		String path = new File(Client.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getParent();
 		String pass = "dangcongcan"; // ko duoc tu tien thay doi
 		System.setProperty("javax.net.ssl.debug", "all");
 		System.out.println(path + "/ssl/server/KeyStore.jks");

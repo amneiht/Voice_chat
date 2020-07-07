@@ -24,16 +24,12 @@ public class PlayMedia {
 			sample = (FloatControl) speakers.getControl(FloatControl.Type.SAMPLE_RATE);
 		}
 		speakers.start();
-		System.out.println(speakers.getBufferSize());
-
 	}
 
 	public PlayMedia(AudioFormat format) throws LineUnavailableException {
 		DataLine.Info dataLineInfo = new DataLine.Info(SourceDataLine.class, format);
 		speakers = (SourceDataLine) AudioSystem.getLine(dataLineInfo);
-
-		speakers.open(format);
-
+		speakers.open(format , 160*100) ;
 		support = speakers.isControlSupported(FloatControl.Type.SAMPLE_RATE);
 		if (support) {
 			sample = (FloatControl) speakers.getControl(FloatControl.Type.SAMPLE_RATE);
@@ -53,6 +49,7 @@ public class PlayMedia {
 	}
 
 	public void stop() {
+		
 		speakers.drain();
 		speakers.close();
 	}

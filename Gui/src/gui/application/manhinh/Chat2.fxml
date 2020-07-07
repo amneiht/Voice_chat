@@ -17,9 +17,9 @@
 	<center>
 		<BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
 			<center>
-				<ScrollPane fx:id="schat" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+				<ScrollPane fx:id="schat" onScroll="#getOldComment" prefHeight="500.0" prefWidth="590.0" BorderPane.alignment="CENTER">
 					<content>
-						<VBox fx:id="khungChat" prefHeight="509.0" prefWidth="566.0" />
+						<VBox fx:id="khungChat" prefHeight="520.0" prefWidth="586.0" />
 					</content>
 				</ScrollPane>
 			</center>

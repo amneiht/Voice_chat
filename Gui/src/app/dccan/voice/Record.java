@@ -47,9 +47,8 @@ public class Record implements Runnable {
 		@Override
 		public void run() {
 
-			DatagramSocket socket;
 			try {
-				socket = new DatagramSocket();
+				DatagramSocket socket = new DatagramSocket();
 
 				Encoder en = new Encoder();
 
@@ -66,8 +65,7 @@ public class Record implements Runnable {
 						data = pack.send(data);
 						synchronized (clp) {
 							for (Member mp : clp) {
-								if (mp.getId() != id) 
-								{
+								if (mp.getId() != id) {
 									DatagramPacket dp = new DatagramPacket(data, data.length, mp.getIna(),
 											mp.getPort());
 									socket.send(dp);
@@ -75,10 +73,9 @@ public class Record implements Runnable {
 							}
 						}
 
-					} else {
-						Thread.sleep(10);
 					}
 				}
+				socket.close();
 				System.out.println("end send packet");
 			} catch (Exception e) {
 
@@ -100,16 +97,34 @@ public class Record implements Runnable {
 	public void run() {
 		try {
 			Recorder rd = new Recorder(NetAudioFormat.getG729AudioFormat());
-			new Thread(new Send()).start();
+			// new Thread(new Send()).start();
+			DatagramSocket socket = new DatagramSocket();
+
+			Encoder en = new Encoder();
+
+			SendRtp pack = new SendRtp(gp, id, RtpSystem.key);
+
 			while (RtpSystem.isRun()) {
 				byte[] rc = rd.getSound(160);
 				if (!RtpSystem.isMute()) {
-					synchronized (lp) {
-						lp.addLast(rc);
+					// synchronized (lp) {
+					// lp.addLast(rc);
+					// }
+					
+					System.out.println("sound send");
+					byte[] data = en.process(rc);
+					data = pack.send(data);
+					synchronized (clp) {
+						for (Member mp : clp) {
+							if (mp.getId() != id) {
+								DatagramPacket dp = new DatagramPacket(data, data.length, mp.getIna(), mp.getPort());
+								socket.send(dp);
+							}
+						}
 					}
-
 				}
 			}
+			socket.close();
 			System.out.println("end record");
 			rd.close();
 		} catch (Exception e) {

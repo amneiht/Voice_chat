@@ -7,5 +7,7 @@ public class Xm {
 		System.out.println(loader.getResource(""));
 		final File f = new File(Xm.class.getProtectionDomain().getCodeSource().getLocation().getPath());
 		System.out.println(f.getPath());
+		String lts = Xm.class.getResource("").getPath();
+		System.out.println(lts);
 	}
 }

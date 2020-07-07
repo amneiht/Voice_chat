@@ -8,7 +8,7 @@ import javax.sound.sampled.LineUnavailableException;
 
 import amneiht.media.PlayMedia;
 
-public class NoControl extends Voice implements Closeable {
+public class SimpleControl extends Voice implements Closeable {
 	public static int siz = 15;
 	boolean status = false;
 	PlayMedia pm;
@@ -18,7 +18,7 @@ public class NoControl extends Voice implements Closeable {
 	Long live;
 	int packetsize;
 
-	public NoControl(AudioFormat af, int packetsize) throws LineUnavailableException {
+	public SimpleControl(AudioFormat af, int packetsize) throws LineUnavailableException {
 		pm = new PlayMedia(af);
 		this.packetsize = packetsize;
 		int time = (int) ((packetsize * 8000) / (af.getSampleRate() * af.getSampleSizeInBits()));

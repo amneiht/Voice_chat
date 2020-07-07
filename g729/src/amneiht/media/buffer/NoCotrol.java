@@ -6,9 +6,8 @@ import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.LineUnavailableException;
 
 import amneiht.media.PlayMedia;
-import net.packet.io.PWrite;
 
-public class BufferCotrol extends Voice {
+public class NoCotrol extends Voice {
 	PlayMedia pm;
 	int size = 15;
 	int length, dem = 0;
@@ -18,7 +17,7 @@ public class BufferCotrol extends Voice {
 	byte[] data;
 	long live = 0;
 
-	public BufferCotrol(AudioFormat af, int packet) throws LineUnavailableException {
+	public NoCotrol(AudioFormat af, int packet) throws LineUnavailableException {
 		pm = new PlayMedia(af);
 		length = size * packet;
 		pack = packet;
@@ -41,21 +40,10 @@ public class BufferCotrol extends Voice {
 
 	public void addList(Pack con) {
 		live = System.currentTimeMillis();
-		int z = dem * pack;
 		if (con.sq > pre) {
 			pre = con.sq;
-			PWrite.copyArray(con.data, data, z);
-			dem++;
+			pm.play(con.data);
 		}
-		if (dem >= size) {
-			pm.play(data);
-			dem = 0;
-		}
-//		if (con.sq > pre) {
-//			pre = con.sq;
-//			pm.play(con.data);
-//		}
-
 	}
 
 	long lose = 1 * 1000 * 60;// 1 p

@@ -25,16 +25,6 @@ public class RctpServer implements Runnable {
 		rm = StaticMap.getRm();
 		System.out.println("create Rctp server on port 8890\n");
 	}
-
-	public static void main(String[] args) {
-		try {
-			new Thread(new RctpServer()).start();
-		} catch (SocketException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
 	public void run() {
 
 		System.out.println("Rctp server run");
@@ -57,7 +47,7 @@ public class RctpServer implements Runnable {
 
 	private class Handle implements Runnable {
 		public void run() {
-			// System.out.println("Rctp handle server run : ");
+			System.out.println("Rctp handle server run : ");
 			while (run) {
 				try {
 					Flagment fg = null;
@@ -83,7 +73,7 @@ public class RctpServer implements Runnable {
 							byte[] en = Convert.encrypt(PRead.getByte(res, length, 8), rm.getGroupKey(group).getBytes());
 
 							String ck = rm.checkUserKey(gid, en);
-							System.out.println("user ket noi" + ck);
+							System.out.println("user ket noi " + ck);
 							System.out.println();
 							if (ck == null) {
 								sendid(fg);
@@ -135,6 +125,8 @@ public class RctpServer implements Runnable {
 			PWrite._32bitToArray(res, id, 10);
 			byte[] dta = Convert.encrypt(res, key.getBytes());
 			PWrite._16bitToArray(dta, 2000, 0);
+			System.out.println("port "+ fg.port );
+			System.out.println("inet " + fg.inet);
 			DatagramPacket dp = new DatagramPacket(dta, dta.length, fg.inet, fg.port);
 			try {
 				clients.send(dp);

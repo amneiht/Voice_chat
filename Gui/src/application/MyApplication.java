@@ -1,7 +1,6 @@
 package application;
 
 import java.io.IOException;
-import java.rmi.RemoteException;
 import java.util.ResourceBundle;
 
 import application.manhinh.LinkScense;
@@ -15,9 +14,8 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class MyApplication extends Application {
-
 	// @Override
-	public void start(Stage primaryStage) {
+	public void start1(Stage primaryStage) {
 		try {
 
 			FXMLLoader fxmlLoader = new FXMLLoader();
@@ -34,7 +32,7 @@ public class MyApplication extends Application {
 		}
 	}
 
-	public void start1(Stage primaryStage) {
+	public void start(Stage primaryStage) {
 		FXMLLoader fxmlLoader = new FXMLLoader();
 		// fxmlLoader.setResources(ResourceBundle.getBundle("app.lang.vn"));
 		Parent root;
@@ -56,15 +54,14 @@ public class MyApplication extends Application {
 		if (args.length > 0) {
 			Client.init(args[0]);
 		} else {
-			// test mode
-			Client.init("localhost");
+			Client.init("192.168.1.100");
 			try {
 				Client.getRmi().login("can", "1");
-			} catch (RemoteException e) {
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 		launch(args);
 	}
-
 }

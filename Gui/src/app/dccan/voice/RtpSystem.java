@@ -34,6 +34,7 @@ public class RtpSystem {
 		synchronized (lock) {
 			run = false;
 			mute = true;
+			rctp.close();
 		}
 
 	}
@@ -56,7 +57,8 @@ public class RtpSystem {
 				List<String> ls = GetList.listString(lp);
 				run = true;
 				mute = false;
-				rctp = new DatagramSocket();
+				rctp = new DatagramSocket((int) (2000 * (Math.random() + 1))); // noi voi 1 cong
+				rctp.setReuseAddress(true); // cho phep tai su dung cong
 				port = rctp.getLocalPort();
 				String host = Client.host;
 				key = ls.get(0);

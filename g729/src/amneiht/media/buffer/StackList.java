@@ -11,13 +11,17 @@ import amneiht.media.NetAudioFormat;
 
 public class StackList implements Runnable, Closeable {
 	Map<Long, Voice> mp = new HashMap<Long, Voice>();
-	Boolean run = true;
+	boolean run = true;
 
 	public void close() throws IOException {
-		run = false;
-		Set<Long> key = mp.keySet();
-		for (long id : key) {
-			mp.get(id).close();
+		synchronized (mp) {
+			run = false;
+			Set<Long> key = mp.keySet();
+			for (long id : key) {
+				mp.get(id).close();
+			}
+			System.out.println("close statck list");
+			Thread.currentThread().interrupt();
 		}
 	}
 
@@ -28,7 +32,7 @@ public class StackList implements Runnable, Closeable {
 		} else {
 			try {
 				// Voice nc = new NoControl(NetAudioFormat.getG729AudioFormat(),160);
-				Voice nc = new BufferCotrol(NetAudioFormat.getG729AudioFormat(), 160);
+				Voice nc = new NoCotrol(NetAudioFormat.getG729AudioFormat(), 160);
 				nc.addList(p);
 				mp.put(id, nc);
 			} catch (Exception e) {
@@ -42,14 +46,20 @@ public class StackList implements Runnable, Closeable {
 	@Override
 	public void run() {
 		try {
-			while (run) {
-				Thread.sleep(5 * 60 * 1000);// ngu 2 phut roi xoa cac luong khong ton tai
-				Iterator<Map.Entry<Long, Voice>> it = mp.entrySet().iterator();
-				for (; it.hasNext();) {
-					Map.Entry<Long, Voice> x = it.next();
-					if (x.getValue().isrun())
-						it.remove();
+			while (true) {
+				Thread.sleep(1 * 1000);// ngu 10s phut roi xoa cac luong khong ton tai
+				synchronized (mp) {
+				
+					if (!run)
+						break;
+					Iterator<Map.Entry<Long, Voice>> it = mp.entrySet().iterator();
+					for (; it.hasNext();) {
+						Map.Entry<Long, Voice> x = it.next();
+						if (!x.getValue().isrun())
+							it.remove();
+					}
 				}
+	
 			}
 		} catch (Exception e) {
 		}
