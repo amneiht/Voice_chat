@@ -16,7 +16,7 @@ public class ChatSer {
 			host = args[0];
 		}
 		try {
-			//setSettings();
+			setSettings();
 			new Thread(new RctpServer()).start();
 			// new Thread(new RtpServer()).start();
 			System.setProperty("java.rmi.server.hostname", host);

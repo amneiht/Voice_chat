@@ -29,7 +29,7 @@ public class GetVoice {
 		try {
 			NoToken rmi = Client.getRmi();
 			rmi.login("can", "1");
-			//Connect(gp);
+			// Connect(gp);
 			RtpSystem.Connect(gp);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -71,7 +71,7 @@ public class GetVoice {
 					long id = PRead.getLong(data, 10, 4);
 					long gps = PRead.getLong(data, 6, 4);
 					System.out.println(cls.getLocalPort());
-					Live lv = new Live(id, gps);
+					Live lv = new Live(id, gps, key);
 					byte[] res = lv.toPacket();
 					dp = new DatagramPacket(res, res.length, inet, rctport);
 					cls.send(dp);

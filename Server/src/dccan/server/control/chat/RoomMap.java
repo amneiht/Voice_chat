@@ -37,13 +37,18 @@ public class RoomMap implements Runnable {
 	 * @param user
 	 *            d cua user
 	 */
+	public void live(long id, long user ,Flagment fg , byte [] key) {
+		Room rm = lp.get(id);
+		if (rm == null)
+			return;
+		rm.live(user,fg , key);
+	}
 	public void live(long id, long user ,Flagment fg) {
 		Room rm = lp.get(id);
 		if (rm == null)
 			return;
-		rm.live(user,fg);
+		rm.live(user,fg );
 	}
-
 	/**
 	 * xoa 1 client ra khoi danh sanh
 	 * 

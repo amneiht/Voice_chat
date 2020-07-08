@@ -110,8 +110,6 @@ public class Record implements Runnable {
 					// synchronized (lp) {
 					// lp.addLast(rc);
 					// }
-					
-					System.out.println("sound send");
 					byte[] data = en.process(rc);
 					data = pack.send(data);
 					synchronized (clp) {

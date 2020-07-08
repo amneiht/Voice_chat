@@ -25,6 +25,7 @@ public class RctpServer implements Runnable {
 		rm = StaticMap.getRm();
 		System.out.println("create Rctp server on port 8890\n");
 	}
+
 	public void run() {
 
 		System.out.println("Rctp server run");
@@ -61,7 +62,7 @@ public class RctpServer implements Runnable {
 						switch (type) {
 						case 1000: // goi tin create of join
 							int length = (int) PRead.getLong(res, 2, 2);
-							//int pos = (int) PRead.getLong(res, 12, 2);
+							// int pos = (int) PRead.getLong(res, 12, 2);
 							int z = length - 16;
 							String group = PRead.getString(res, 16, z);
 							long gid = rm.getRoomId(group);
@@ -70,7 +71,8 @@ public class RctpServer implements Runnable {
 								sendid(fg);
 								break;
 							}
-							byte[] en = Convert.encrypt(PRead.getByte(res, length, 8), rm.getGroupKey(group).getBytes());
+							byte[] en = Convert.encrypt(PRead.getByte(res, length, 8),
+									rm.getGroupKey(group).getBytes());
 
 							String ck = rm.checkUserKey(gid, en);
 							System.out.println("user ket noi " + ck);
@@ -87,10 +89,16 @@ public class RctpServer implements Runnable {
 							sendid(id, gid, fg, rm.getGroupKey(group));
 							break;
 						case 1001:
-							//System.out.println("s");
+
 							long gid1 = PRead.getLong(res, 12, 4);
 							long live = PRead.getLong(res, 16, 4);
-							rm.live(gid1, live ,fg);
+							rm.live(gid1, live, fg);
+							// long gid1 = PRead.getLong(res, 12, 4);
+							// long live = PRead.getLong(res, 16, 4);
+							// int lg2 =(int) PRead.getLong(res, 2, 2);
+							// byte [] infokey = PRead.getByte(res, 20, lg2-20);
+							// rm.live(gid1, live ,fg , infokey);
+							
 							break;
 						case 1111:
 							long byegroup = PRead.getLong(res, 12, 4);
@@ -125,7 +133,7 @@ public class RctpServer implements Runnable {
 			PWrite._32bitToArray(res, id, 10);
 			byte[] dta = Convert.encrypt(res, key.getBytes());
 			PWrite._16bitToArray(dta, 2000, 0);
-			System.out.println("port "+ fg.port );
+			System.out.println("port " + fg.port);
 			System.out.println("inet " + fg.inet);
 			DatagramPacket dp = new DatagramPacket(dta, dta.length, fg.inet, fg.port);
 			try {

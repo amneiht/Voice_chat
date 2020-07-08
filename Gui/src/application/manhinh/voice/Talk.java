@@ -31,10 +31,11 @@ import javafx.scene.control.TitledPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class Talk implements Initializable {
-	static String no_img = Client.workPath + "/Img/no_img.png";
+	static String no_img = Client.path + "/Img/no_img.png";
 	String id;
 
 	public Talk(String gp) {
@@ -61,6 +62,12 @@ public class Talk implements Initializable {
 		// TODO Auto-generated method stub
 		rmi = Client.getRmi();
 		try {
+			rc.setText("out");
+			rc.setOnAction(e -> {
+				RtpSystem.end();
+				Stage st = (Stage) (fp.getScene().getWindow());
+				st.close();
+			});
 			String lt = rmi.getMember(id);
 			if (lt != null) {
 				mem = GetList.friendList(lt);

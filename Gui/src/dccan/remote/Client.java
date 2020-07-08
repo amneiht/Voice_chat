@@ -1,6 +1,5 @@
 package dccan.remote;
 
-import java.io.File;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
@@ -9,17 +8,22 @@ public class Client {
 	public static Communication connect;
 	static Registry registry;
 	public static String host = null;
-	public static String workPath;
+	public static String path;
+	static {
+//		path = new File(Client.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getParent();
+		path = "/home/dccan/app/software/Chat";
+	}
 
 	public static void init(String hosts) {
 		try {
-			// setSettings();
+			host = hosts;
+			setSettings();
+			// normal
+			registry = LocateRegistry.getRegistry(host, 8888);
+			// ssl
 			// registry = LocateRegistry.getRegistry(host, 8888, new
 			// SslRMIClientSocketFactory());
-			host = hosts;
-			registry = LocateRegistry.getRegistry(host, 8888);
 			connect = (Communication) registry.lookup("Hello");
-
 			rmi = new NoToken(connect);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -36,10 +40,8 @@ public class Client {
 	}
 
 	protected static void setSettings() {
-		String path = new File(Client.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getParent();
 		String pass = "dangcongcan"; // ko duoc tu tien thay doi
 		System.setProperty("javax.net.ssl.debug", "all");
-		System.out.println(path + "/ssl/server/KeyStore.jks");
 		System.setProperty("javax.net.ssl.keyStore", path + "/ssl/client/KeyStore.jks");
 		System.setProperty("javax.net.ssl.trustStore", path + "/ssl/client/truststore.jks");
 		System.setProperty("javax.net.ssl.keyStorePassword", pass);

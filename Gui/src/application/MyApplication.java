@@ -15,7 +15,7 @@ import javafx.stage.Stage;
 
 public class MyApplication extends Application {
 	// @Override
-	public void start1(Stage primaryStage) {
+	public void start(Stage primaryStage) {
 		try {
 
 			FXMLLoader fxmlLoader = new FXMLLoader();
@@ -32,7 +32,7 @@ public class MyApplication extends Application {
 		}
 	}
 
-	public void start(Stage primaryStage) {
+	public void start1(Stage primaryStage) {
 		FXMLLoader fxmlLoader = new FXMLLoader();
 		// fxmlLoader.setResources(ResourceBundle.getBundle("app.lang.vn"));
 		Parent root;

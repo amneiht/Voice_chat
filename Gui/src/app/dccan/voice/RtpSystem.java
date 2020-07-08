@@ -34,7 +34,6 @@ public class RtpSystem {
 		synchronized (lock) {
 			run = false;
 			mute = true;
-			rctp.close();
 		}
 
 	}

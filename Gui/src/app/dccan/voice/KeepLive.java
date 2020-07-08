@@ -16,7 +16,6 @@ public class KeepLive implements Runnable {
 		DatagramPacket dp = new DatagramPacket(new byte[20], 20);
 		try {
 			cls.receive(dp);
-
 			long type = PRead.getLong(dp.getData(), 0, 2);
 			if (type == 2001)
 				return;
@@ -26,7 +25,7 @@ public class KeepLive implements Runnable {
 				data = Convert.encrypt(data, RtpSystem.key.getBytes());
 				long group = PRead.getLong(data, 6, 4);
 				long id = PRead.getLong(data, 10, 4);
-				Live lv = new Live(id, group);
+				Live lv = new Live(id, group, RtpSystem.key);
 				byte[] res = lv.toPacket();
 				dp = new DatagramPacket(res, res.length, RtpSystem.inet, RtpSystem.rctport);
 				new Thread(new Record(id, group)).start();
@@ -45,6 +44,7 @@ public class KeepLive implements Runnable {
 				byte[] bby = bt.toPacket();
 				dp = new DatagramPacket(bby, bby.length, RtpSystem.inet, RtpSystem.rctport);
 				cls.send(dp);
+				cls.close();
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
