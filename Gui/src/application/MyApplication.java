@@ -54,7 +54,7 @@ public class MyApplication extends Application {
 		if (args.length > 0) {
 			Client.init(args[0]);
 		} else {
-			Client.init("192.168.1.100");
+			Client.init("localhost");
 			try {
 				Client.getRmi().login("can", "1");
 			} catch (Exception e) {

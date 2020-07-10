@@ -11,7 +11,7 @@ import dccan.server.sql.config.Info;
 public class ChatSer {
 
 	public static void main(String[] args) {
-		String host = "192.168.1.100";
+		String host = "localhost";
 		if (args.length > 0) {
 			host = args[0];
 		}

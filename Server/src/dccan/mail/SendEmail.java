@@ -33,7 +33,7 @@ public class SendEmail {
 		MimeMessage message = new MimeMessage(session);
 		try {
 			message.setSubject("Demo Đồ án : khôi phục mật khâu");
-			message.setContent("Mã token khôi phục của đồng chí là :<b><H1> " + id + "</H1></b>",
+			message.setContent("Mã token khôi phục của ban là :<b><H1> " + id + "</H1></b>",
 					"text/html; charset=utf-8");
 			message.addRecipient(Message.RecipientType.TO, new InternetAddress(email));
 			Transport.send(message);
