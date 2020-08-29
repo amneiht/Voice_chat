@@ -1,5 +1,6 @@
 package dccan.remote;
 
+import java.io.File;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
@@ -10,8 +11,8 @@ public class Client {
 	public static String host = null;
 	public static String path;
 	static {
-//		path = new File(Client.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getParent();
-		path = "/home/dccan/app/software/Chat";
+		path = new File(Client.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getParent();
+//		path = "/home/dccan/app/software/Chat";
 	}
 
 	public static void init(String hosts) {

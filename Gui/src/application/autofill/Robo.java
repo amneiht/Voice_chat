@@ -1,20 +1,16 @@
 package application.autofill;
 
-import com.sun.glass.events.KeyEvent;
-import com.sun.glass.ui.Application;
-import com.sun.glass.ui.Robot;
-
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.KeyCode;
+import javafx.scene.robot.Robot;
 
-@SuppressWarnings("restriction")
 public class Robo {
 	Robot robot;
 
 	public Robo() {
 		try {
-			robot = Application.GetApplication().createRobot();
-			;
+			robot = new Robot();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -26,10 +22,10 @@ public class Robo {
 		ClipboardContent content = new ClipboardContent();
 		content.putString(ps);
 		clipboard.setContent(content);
-		robot.keyPress(KeyEvent.VK_CONTROL);
-		robot.keyPress(KeyEvent.VK_V);
-		robot.keyRelease(KeyEvent.VK_V);
-		robot.keyRelease(KeyEvent.VK_CONTROL);
+		robot.keyPress(KeyCode.CONTROL);
+		robot.keyPress(KeyCode.V);
+		robot.keyRelease(KeyCode.V);
+		robot.keyRelease(KeyCode.CONTROL);
 	}
 
 	public static void copy(String ps) {

@@ -1,21 +1,20 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.1
+-- version 5.0.2
 -- https://www.phpmyadmin.net/
 --
 -- Host: db
--- Generation Time: Jul 06, 2020 at 01:19 PM
--- Server version: 5.7.29
--- PHP Version: 7.4.3
+-- Generation Time: Aug 29, 2020 at 04:09 AM
+-- Server version: 5.7.31
+-- PHP Version: 7.4.8
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
 --
 -- Database: `chat`
 --
-CREATE DATABASE IF NOT EXISTS `chat` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+CREATE DATABASE IF NOT EXISTS `chat` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
 USE `chat`;
 
 DELIMITER $$
@@ -179,12 +178,6 @@ ALTER TABLE `thongtin`
   ADD PRIMARY KEY (`ten`);
 
 --
--- Indexes for table `tinNhan`
---
-ALTER TABLE `tinNhan`
-  ADD UNIQUE KEY `idNhan` (`idNhan`);
-
---
 -- Indexes for table `tvNhom`
 --
 ALTER TABLE `tvNhom`
@@ -222,3 +215,4 @@ ALTER TABLE `tvNhom`
 ALTER TABLE `yeuCau`
   ADD CONSTRAINT `yeuCau_ibfk_2` FOREIGN KEY (`idTv`) REFERENCES `thongtin` (`ten`);
 COMMIT;
+

@@ -85,7 +85,7 @@ public class Sound implements Runnable {
 						sound = Convert.encrypt(sound, key);
 						sound = dec.process(sound);
 						sl.add(id, new Pack(time, sound));
-						System.out.println(id);
+//						System.out.println(id);
 					}
 				} catch (Exception e) {
 					//e.printStackTrace();

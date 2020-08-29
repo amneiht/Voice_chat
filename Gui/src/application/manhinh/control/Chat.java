@@ -802,7 +802,8 @@ public class Chat implements Initializable {
 	}
 
 	private void setGroup(String gp, String ten) {
-
+		if (gp == null)
+			return;
 		id = gp;
 		try {
 			refreshGroup(id);
